@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Đề tài 8 – Phương thức xây dựng khối đại đoàn kết dân tộc</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,700;0,800;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Bảng màu tranh Đông Hồ: giấy điệp, son, chàm, vàng hoè, than lá tre */
+  --diep:#EDE6D6; --diep2:#E3DAC6; --son:#A8261D; --cham:#1F3A5F; --hoe:#C98A12; --than:#1D1B18;
+  --ink:var(--than); --muted:#5F574C; --line:rgba(29,27,24,.18);
+  --bg:var(--diep); --panel:var(--diep2); --accent:var(--son); --accent2:var(--cham);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#13233A; --panel:#1B2F4C; --ink:#EDE6D6; --muted:#B9B2A3; --line:rgba(237,230,214,.2);
+    --accent:#E0574B; --accent2:#9DB8DD; --hoe:#E3AA3A;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#13233A; --panel:#1B2F4C; --ink:#EDE6D6; --muted:#B9B2A3; --line:rgba(237,230,214,.2);
+  --accent:#E0574B; --accent2:#9DB8DD; --hoe:#E3AA3A;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%; scroll-padding-top:env(safe-area-inset-top,0px)}
+body{height:100%; margin:0; background:#0f0e0c; overflow:hidden;
+  font-family:"Be Vietnam Pro", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; color:var(--ink)}
+.viewport{position:fixed; inset:0; display:flex; align-items:center; justify-content:center}
+.stage{width:1600px; height:900px; background:var(--bg); position:relative; overflow:hidden;
+  transform-origin:center center; flex:none}
+
+/* ---------- Slide ---------- */
+.slide{position:absolute; inset:0; padding:78px 104px 132px; display:none; flex-direction:column; gap:28px}
+.slide.active{display:flex}
+.sec{font-size:22px; font-weight:500; color:var(--muted); margin:0}
+.who{position:absolute; top:44px; right:104px; font-size:20px; color:var(--muted); display:flex; align-items:center; gap:10px}
+.who::before{content:""; width:12px; height:12px; border-radius:2px; background:var(--accent)}
+h1{font-size:84px; line-height:1.08; font-weight:800; margin:0; letter-spacing:-.01em; max-width:1200px}
+h2{font-size:54px; line-height:1.14; font-weight:800; margin:0; letter-spacing:-.005em; max-width:1300px}
+h3{font-size:27px; font-weight:700; margin:0 0 12px; color:var(--accent)}
+p{margin:0}
+.lead{font-size:32px; line-height:1.45; max-width:1250px}
+.body{font-size:26px; line-height:1.5}
+ul{margin:0; padding-left:1.1em; font-size:25px; line-height:1.5}
+li{margin:0 0 6px}
+li::marker{color:var(--accent)}
+.grow{flex:1; min-height:0}
+.cols{display:grid; gap:40px; align-items:start}
+.c2{grid-template-columns:1fr 1fr} .c3{grid-template-columns:repeat(3,1fr)}
+.panel{background:var(--panel); padding:28px 32px; border-top:5px solid var(--accent)}
+.panel.cham{border-top-color:var(--accent2)}
+.panel.hoe{border-top-color:var(--hoe)}
+.panel.cham h3{color:var(--accent2)}
+.panel.hoe h3{color:var(--hoe)}
+blockquote{margin:0; font-style:italic; font-size:31px; line-height:1.45; padding-left:28px; border-left:6px solid var(--accent); max-width:1250px}
+blockquote.sm{font-size:24px; border-left-width:4px; padding-left:20px}
+.src{display:block; margin-top:10px; font-style:normal; font-size:18px; color:var(--muted)}
+.tag{display:inline-block; font-size:19px; font-weight:700; color:var(--bg); background:var(--accent2); padding:4px 12px; margin-bottom:12px}
+.tag.son{background:var(--accent)}
+.big{font-size:120px; font-weight:800; line-height:1; color:var(--accent); letter-spacing:-.02em}
+.take{font-size:30px; font-weight:700; line-height:1.35}
+.take.accent{color:var(--accent)}
+
+/* Bìa */
+.cover h1{font-size:92px; max-width:960px}
+.cover .sub{font-size:30px; line-height:1.45; max-width:1000px; color:var(--muted)}
+.cover .meta{margin-top:auto; font-size:22px; color:var(--muted)}
+.cover-wall{position:absolute; right:84px; top:160px; width:330px}
+
+/* Bảng thành viên */
+.team{display:grid; grid-template-columns:repeat(2,1fr); gap:28px 48px}
+.team .m{border-left:6px solid var(--accent); padding:10px 0 10px 24px}
+.team .n{font-size:34px; font-weight:700}
+.team .id{font-size:20px; color:var(--muted); margin-top:2px}
+.team .r{font-size:24px; margin-top:10px; line-height:1.4}
+
+/* Dòng thời gian */
+.tl{display:grid; grid-auto-flow:column; grid-auto-columns:1fr; border-top:4px solid var(--accent); margin-top:24px}
+.tl .i{padding:20px 18px 0 0; position:relative}
+.tl .i::before{content:""; position:absolute; top:-12px; left:0; width:18px; height:18px; background:var(--accent)}
+.tl .y{font-size:30px; font-weight:800}
+.tl .t{font-size:21px; line-height:1.35; margin-top:6px}
+.tl.long .t{font-size:19px}
+.tl.long .y{font-size:26px}
+
+/* Gạch */
+.wall{display:flex; flex-direction:column; gap:8px}
+.course{display:flex; gap:8px}
+.course.off{padding-left:34px}
+.brick{height:34px; flex:0 0 70px; background:var(--accent); border-radius:2px}
+.brick.c{background:var(--accent2)} .brick.h{background:var(--hoe)}
+.brick.ghost{background:transparent; outline:3px solid var(--line); outline-offset:-3px}
+.pile{position:relative; height:260px}
+.pile .brick{position:absolute; width:70px}
+.pile .wall .brick{position:static}
+
+/* Hai chiều */
+.flow{display:grid; grid-template-columns:1fr 120px 1fr; align-items:center; gap:0}
+.flow .box{background:var(--panel); padding:24px 28px; font-size:25px; line-height:1.4}
+.flow .arrows{display:flex; flex-direction:column; align-items:center; gap:18px; font-size:22px; font-weight:700}
+.arr{width:90px; height:14px; background:var(--accent); position:relative}
+.arr::after{content:""; position:absolute; right:-14px; top:-9px; border-left:18px solid var(--accent); border-top:16px solid transparent; border-bottom:16px solid transparent}
+.arr.back{background:var(--accent2)}
+.arr.back::after{left:-14px; right:auto; border-left:none; border-right:18px solid var(--accent2)}
+
+/* Giải pháp */
+.gp-head{display:flex; align-items:flex-end; gap:32px}
+.gp-head .big{font-size:150px}
+.gp-head h2{padding-bottom:14px}
+.gp .cols .panel ul{font-size:23px}
+.gp .panel p{font-size:23px; line-height:1.45}
+
+/* Bản đồ giải pháp */
+.map{display:grid; grid-template-columns:repeat(5,1fr); gap:18px}
+.map .g{background:var(--panel); padding:22px 20px; min-height:210px; display:flex; flex-direction:column; gap:10px}
+.map .g .n{font-size:44px; font-weight:800; color:var(--accent2)}
+.map .g.link .n{color:var(--accent)}
+.map .g .t{font-size:23px; font-weight:700; line-height:1.3}
+.map .g .l{font-size:19px; color:var(--muted); margin-top:auto}
+
+/* Thanh gạch tiến độ */
+.rail{position:absolute; left:104px; right:104px; bottom:44px; display:flex; align-items:center; gap:24px}
+.rail .row{display:flex; gap:5px; flex:1}
+.rail .b{height:18px; flex:1; outline:2px solid var(--line); outline-offset:-2px; border-radius:1px}
+.rail .b.on{outline:none}
+.rail .b.on.mo{background:var(--hoe)} .rail .b.on.pt{background:var(--accent)}
+.rail .b.on.gp{background:var(--accent2)} .rail .b.on.kl{background:var(--ink)}
+.rail .num{font-size:18px; color:var(--muted); min-width:64px; text-align:right; font-variant-numeric:tabular-nums}
+
+/* Điều khiển */
+.ctrl{position:fixed; right:calc(16px + env(safe-area-inset-right,0px)); bottom:calc(16px + env(safe-area-inset-bottom,0px));
+  display:flex; gap:8px; transition:opacity .3s; z-index:5}
+.ctrl.hide{opacity:0; pointer-events:none}
+.ctrl button{font:600 15px "Be Vietnam Pro", system-ui, sans-serif; background:#2a2723; color:#EDE6D6; border:1px solid #4a453e;
+  padding:9px 14px; cursor:pointer; border-radius:3px}
+.ctrl button:hover{background:#3a362f}
+.ctrl button:focus-visible{outline:3px solid #E3AA3A; outline-offset:2px}
+@media (prefers-reduced-motion: reduce){ .ctrl{transition:none} }
+</style>
+</head>
+<body>
+<div class="viewport"><div class="stage" id="stage">
+
+<!-- 1. Bìa -->
+<section class="slide cover" data-sec="mo" data-who="Diệu Anh">
+  <p class="sec">Tư tưởng Hồ Chí Minh, đề tài 8</p>
+  <h1>Phương thức xây dựng khối đại đoàn kết dân tộc</h1>
+  <p class="sub">Phân tích tư tưởng Hồ Chí Minh và đề xuất giải pháp tăng cường khối đại đoàn kết dân tộc hiện nay</p>
+  <p class="meta">Trường Đại học Công nghệ Thông tin, Đại học Quốc gia Thành phố Hồ Chí Minh</p>
+  <div class="cover-wall wall" aria-hidden="true">
+    <div class="course"><span class="brick h"></span><span class="brick"></span><span class="brick c"></span><span class="brick"></span></div>
+    <div class="course off"><span class="brick"></span><span class="brick c"></span><span class="brick"></span><span class="brick h"></span></div>
+    <div class="course"><span class="brick c"></span><span class="brick"></span><span class="brick"></span><span class="brick c"></span></div>
+    <div class="course off"><span class="brick"></span><span class="brick h"></span><span class="brick c"></span><span class="brick"></span></div>
+  </div>
+</section>
+
+<!-- 2. Nhóm -->
+<section class="slide" data-sec="mo" data-who="Diệu Anh">
+  <p class="sec">Nhóm thực hiện</p>
+  <h2>Bốn người, bốn phần của một bức tường</h2>
+  <div class="team grow" style="margin-top:20px">
+    <div class="m"><div class="n">Nguyễn Lý Diệu Anh</div><div class="id">24520106</div><div class="r">Mở đầu, giải pháp 1 và 2, kết luận, dẫn chương trình</div></div>
+    <div class="m"><div class="n">Trần Hoàng Khánh Ngọc</div><div class="id">24521164</div><div class="r">Phương thức dân vận, giải pháp 3</div></div>
+    <div class="m"><div class="n">Phan Mai Trà Giang</div><div class="id">24520423</div><div class="r">Phương thức đoàn thể, giải pháp 4</div></div>
+    <div class="m"><div class="n">Huỳnh Hồng Hân</div><div class="id">24520447</div><div class="r">Phương thức Mặt trận, giải pháp 5</div></div>
+  </div>
+</section>
+
+<!-- 3. Diên Hồng -->
+<section class="slide" data-sec="mo" data-who="Diệu Anh">
+  <p class="sec">Mở đầu</p>
+  <div class="cols c2 grow" style="grid-template-columns:.9fr 1.1fr; align-items:center">
+    <div>
+      <div class="big">1284</div>
+      <p class="lead" style="margin-top:22px">Hội nghị Diên Hồng. Nhà Trần hỏi các bô lão khắp nơi: nên hòa hay nên đánh?</p>
+      <p class="take accent" style="margin-top:22px; font-size:44px">"Đánh!"</p>
+      <p class="body" style="margin-top:14px; color:var(--muted)">Sự đồng lòng từ dưới lên làm nên chiến thắng năm 1285 và 1288.</p>
+    </div>
+    <blockquote>Sử dạy cho ta bài học này: Lúc nào dân ta đoàn kết muôn người như một thì nước ta độc lập, tự do. Trái lại lúc nào dân ta không đoàn kết thì bị nước ngoài xâm lấn.<span class="src">Hồ Chí Minh, Toàn tập, t.3, tr.256</span></blockquote>
+  </div>
+</section>
+
+<!-- 4. Hai vai trò -->
+<section class="slide" data-sec="mo" data-who="Diệu Anh">
+  <p class="sec">Mở đầu</p>
+  <h2>Đại đoàn kết giữ hai vai trò trong tư tưởng Hồ Chí Minh</h2>
+  <div class="cols c2 grow">
+    <div class="panel">
+      <h3>Chiến lược quyết định thành bại</h3>
+      <p class="body">Cách tập hợp lực lượng có thể đổi theo từng giai đoạn. Chủ trương đại đoàn kết thì không bao giờ đổi.</p>
+      <blockquote class="sm" style="margin-top:22px">Đoàn kết, đoàn kết, đại đoàn kết<br>Thành công, thành công, đại thành công<span class="src">Toàn tập, t.13, tr.119</span></blockquote>
+    </div>
+    <div class="panel cham">
+      <h3>Mục tiêu, nhiệm vụ hàng đầu của Đảng</h3>
+      <p class="body">Ngày 3/3/1951, Đảng Lao động Việt Nam ra mắt. Mục đích của Đảng gói trong tám chữ:</p>
+      <p class="take" style="margin-top:18px; font-size:36px; color:var(--accent2)">Đoàn kết toàn dân, phụng sự Tổ quốc</p>
+      <p class="src">Toàn tập, t.7, tr.49</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5. Đống gạch -->
+<section class="slide" data-sec="mo" data-who="Diệu Anh">
+  <p class="sec">Mở đầu</p>
+  <h2>Một đống gạch chưa phải là bức tường</h2>
+  <div class="cols c2 grow" style="grid-template-columns:.8fr 1.2fr; align-items:center">
+    <div class="pile" aria-hidden="true">
+      <span class="brick" style="left:10px; top:170px; transform:rotate(-8deg)"></span>
+      <span class="brick c" style="left:90px; top:200px; transform:rotate(12deg)"></span>
+      <span class="brick h" style="left:30px; top:120px; transform:rotate(20deg)"></span>
+      <span class="brick" style="left:150px; top:150px; transform:rotate(-15deg)"></span>
+      <span class="brick c" style="left:210px; top:205px; transform:rotate(4deg)"></span>
+      <span class="brick" style="left:110px; top:95px; transform:rotate(-4deg)"></span>
+      <div class="wall" style="position:absolute; left:340px; top:60px">
+        <div class="course"><span class="brick"></span><span class="brick c"></span></div>
+        <div class="course off"><span class="brick h"></span><span class="brick"></span></div>
+        <div class="course"><span class="brick c"></span><span class="brick"></span></div>
+        <div class="course off"><span class="brick"></span><span class="brick c"></span></div>
+      </div>
+    </div>
+    <div>
+      <p class="lead">Muốn thành tường phải có vữa và có người biết cách xây. Hồ Chí Minh chỉ ra cách xây ấy: <b>phương thức</b> xây dựng khối đại đoàn kết.</p>
+      <div class="cols c2" style="margin-top:30px; gap:28px">
+        <div><span class="tag">Hôm nay vẫn thấy</span><ul><li>2021, cả nước chi viện TP.HCM chống dịch</li><li>9/2024, xe cứu trợ lên miền Bắc sau bão Yagi</li></ul></div>
+        <div><span class="tag son">Thử thách mới</span><ul><li>Lợi ích ngày càng đa dạng</li><li>Khoảng cách giàu nghèo</li><li>Một tin sai gây chia rẽ trong vài giờ</li></ul></div>
+      </div>
+    </div>
+  </div>
+  <p class="take accent">Câu hỏi hôm nay: đoàn kết bằng cách nào?</p>
+</section>
+
+<!-- 6. Bố cục -->
+<section class="slide" data-sec="mo" data-who="Diệu Anh">
+  <p class="sec">Bố cục</p>
+  <h2>Hai phần của bài trình bày</h2>
+  <div class="cols c2 grow" style="grid-template-columns:1.3fr 1fr">
+    <div class="panel">
+      <h3>Phần 1. Ba phương thức</h3>
+      <ul><li>1.1 Làm tốt công tác dân vận (Ngọc)</li><li>1.2 Thành lập đoàn thể theo từng đối tượng (Giang)</li><li>1.3 Tập hợp đoàn thể trong Mặt trận dân tộc thống nhất (Hân)</li></ul>
+    </div>
+    <div class="panel cham">
+      <h3>Phần 2. Năm giải pháp</h3>
+      <p class="body">Thảo luận cả nhóm: mỗi giải pháp có phần trình bày và một câu hỏi phản biện.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 7. 1.1 Cơ sở -->
+<section class="slide" data-sec="pt" data-who="Ngọc">
+  <p class="sec">1.1 Phương thức dân vận</p>
+  <h2>Điều gì khiến một người muốn đứng chung với người khác?</h2>
+  <div class="cols c3 grow">
+    <div class="panel">
+      <h3>Lợi ích chung</h3>
+      <p class="body">Một "mẫu số chung": phải quy đồng rồi mới cộng được.</p>
+      <blockquote class="sm" style="margin-top:18px">nếu nước độc lập mà dân không hưởng hạnh phúc tự do, thì độc lập cũng chẳng có nghĩa lý gì<span class="src">Toàn tập, t.4, tr.64</span></blockquote>
+    </div>
+    <div class="panel hoe">
+      <h3>Lòng khoan dung</h3>
+      <blockquote class="sm" style="border-left-color:var(--hoe)">Năm ngón tay cũng có ngón vắn ngón dài. Nhưng vắn dài đều họp nhau lại nơi bàn tay.<span class="src">Toàn tập, t.4, tr.280–281</span></blockquote>
+    </div>
+    <div class="panel cham">
+      <h3>Niềm tin vào dân</h3>
+      <p class="body">"Nước lấy dân làm gốc"</p>
+      <p class="body" style="margin-top:10px">"Chở thuyền và lật thuyền cũng là dân"</p>
+    </div>
+  </div>
+</section>
+
+<!-- 8. Tự giác -->
+<section class="slide" data-sec="pt" data-who="Ngọc">
+  <p class="sec">1.1 Phương thức dân vận</p>
+  <h2>Dân vận để người dân tự giác</h2>
+  <p class="lead">Vận động khác ra lệnh. Người làm theo lệnh dừng lại khi không còn ai nhắc; người làm vì đã hiểu thì tự đi tiếp.</p>
+  <div class="cols c2 grow">
+    <div class="panel hoe"><h3>Xưa: mùa thu 1945</h3><ul><li>Ngân khố gần như trống rỗng, nạn đói vừa qua</li><li>Tuần lễ Vàng: dân tự nguyện góp vàng</li><li>Hũ gạo cứu đói lan khắp các làng</li></ul></div>
+    <div class="panel cham"><h3>Nay: tinh thần ấy thành luật</h3><ul><li>Luật Thực hiện dân chủ ở cơ sở 2022: dân được biết, bàn, quyết định, giám sát</li><li>Đại hội XIII: phát huy quyền làm chủ của nhân dân</li></ul></div>
+  </div>
+  <p class="take accent">Dân có hiểu thì dân mới làm.</p>
+</section>
+
+<!-- 9. Kiên nhẫn -->
+<section class="slide" data-sec="pt" data-who="Ngọc">
+  <p class="sec">1.1 Phương thức dân vận</p>
+  <h2>Dân vận phải kiên nhẫn</h2>
+  <blockquote>cần phải chịu khó tìm đủ cách giải thích cho họ hiểu rằng: những việc đó là vì ích lợi của họ mà phải làm<span class="src">Toàn tập, t.5, tr.286</span></blockquote>
+  <div class="cols c3 grow">
+    <div class="panel"><h3>"Chịu khó"</h3><p class="body">Không nản khi dân chưa đồng tình ngay.</p><h3 style="margin-top:18px">"Đủ cách"</h3><p class="body">Cách này chưa được thì tìm cách khác.</p></div>
+    <div class="panel hoe"><h3>Bài báo "Dân vận", 15/10/1949</h3><p class="body">"Dân vận kém thì việc gì cũng kém. Dân vận khéo thì việc gì cũng thành công."</p><p class="src">15/10 nay là Ngày truyền thống công tác dân vận</p></div>
+    <div class="panel cham"><h3>Nay: giải phóng mặt bằng</h3><ul><li>Nơi đối thoại, công khai bồi thường: dân tự nguyện bàn giao sớm</li><li>Nghị quyết 25-NQ/TW (2013)</li><li>Phong trào "Dân vận khéo"</li></ul></div>
+  </div>
+</section>
+
+<!-- 10. Hợp đối tượng -->
+<section class="slide" data-sec="pt" data-who="Ngọc">
+  <p class="sec">1.1 Phương thức dân vận</p>
+  <h2>Dân vận phải hợp với từng người</h2>
+  <p class="lead">Phù hợp tâm tư, trình độ, phong tục của từng địa phương, từng đối tượng. Người thầy thuốc giỏi không kê cùng một đơn thuốc cho mọi bệnh nhân.</p>
+  <div class="cols c2 grow">
+    <div class="panel hoe"><h3>Xưa: Bình dân học vụ, 1945</h3><p class="body">Lớp học mở ngay trong làng, học buổi tối sau giờ làm đồng, người biết chữ dạy người chưa biết.</p></div>
+    <div class="panel cham"><h3>Nay</h3><ul><li>Tuyên truyền bằng tiếng dân tộc ở vùng cao</li><li>Cơ quan nhà nước mở kênh trên mạng xã hội để gặp người trẻ</li></ul></div>
+  </div>
+  <p class="take accent">Nội dung giữ nguyên, cách nói đổi theo người nghe.</p>
+</section>
+
+<!-- 11. 1.2 Cơ sở -->
+<section class="slide" data-sec="pt" data-who="Giang">
+  <p class="sec">1.2 Phương thức đoàn thể</p>
+  <h2>Khối đại đoàn kết gồm những ai?</h2>
+  <div class="cols c3 grow">
+    <div class="panel"><h3>Chủ thể: toàn dân</h3><blockquote class="sm">ai có tài, có đức, có sức, có lòng phụng sự Tổ quốc và phục vụ nhân dân thì ta đoàn kết với họ<span class="src">Toàn tập, t.9, tr.244</span></blockquote></div>
+    <div class="panel hoe"><h3>Nền gốc: công, nông, trí</h3><p class="body">"Nó cũng như cái nền của nhà, gốc của cây."</p><p class="body" style="margin-top:12px">Đại hội XII vẫn giữ nguyên nền tảng này.</p></div>
+    <div class="panel cham"><h3>Hạt nhân: đoàn kết trong Đảng</h3><p class="body">Đảng đoàn kết thì xã hội mới đoàn kết.</p></div>
+  </div>
+</section>
+
+<!-- 12. Theo từng giới -->
+<section class="slide" data-sec="pt" data-who="Giang">
+  <p class="sec">1.2 Phương thức đoàn thể</p>
+  <h2>Mỗi giới một "ngôi nhà" riêng</h2>
+  <p class="lead">Người cùng hoàn cảnh thì hiểu nhau: công nhân lo tiền lương, nông dân lo mùa màng, sinh viên lo chuyện học và việc làm.</p>
+  <div class="tl">
+    <div class="i"><div class="y">1925</div><div class="t">Hội Việt Nam Cách mạng Thanh niên</div></div>
+    <div class="i"><div class="y">1929</div><div class="t">Công hội đỏ</div></div>
+    <div class="i"><div class="y">1930</div><div class="t">Hội Nông dân, Hội Phụ nữ</div></div>
+    <div class="i"><div class="y">1931</div><div class="t">Đoàn Thanh niên</div></div>
+    <div class="i"><div class="y">1941–1945</div><div class="t">Các hội cứu quốc cho từng giới</div></div>
+  </div>
+  <div class="panel cham" style="margin-top:auto"><h3>Hôm nay</h3><p class="body">Công đoàn thương lượng với doanh nghiệp, Hội Nông dân hỗ trợ vốn và kỹ thuật, Đoàn trường và Hội Sinh viên ở UIT.</p></div>
+</section>
+
+<!-- 13. Hai chiều -->
+<section class="slide" data-sec="pt" data-who="Giang">
+  <p class="sec">1.2 Phương thức đoàn thể</p>
+  <h2>Đoàn thể làm việc hai chiều</h2>
+  <div class="flow">
+    <div class="box">Đảng, Nhà nước: chủ trương, chính sách</div>
+    <div class="arrows"><span class="arr"></span><span class="arr back"></span></div>
+    <div class="box">Hội viên: tiếng nói, quyền lợi</div>
+  </div>
+  <p class="lead">Chỉ làm một chiều thì đoàn thể giống chiếc loa phát thanh: nói được mà không nghe được.</p>
+  <div class="cols c2 grow">
+    <div class="panel hoe"><h3>Xưa: phong trào "Ba đảm đang"</h3><p class="body">Phụ nữ vừa sản xuất, vừa lo gia đình, vừa phục vụ chiến đấu.</p></div>
+    <div class="panel cham"><h3>Nay</h3><p class="body">Mùa hè xanh, Tiếp sức mùa thi. Đoàn thể trở thành hạt nhân của khối đại đoàn kết.</p></div>
+  </div>
+</section>
+
+<!-- 14. 1.3 Mặt trận -->
+<section class="slide" data-sec="pt" data-who="Hân">
+  <p class="sec">1.3 Phương thức Mặt trận</p>
+  <h2>Mặt trận là lớp vữa gắn các hàng gạch lại với nhau</h2>
+  <div class="cols c2 grow" style="grid-template-columns:1.2fr .8fr; align-items:center">
+    <p class="lead">Khối đại đoàn kết chỉ thành lực lượng to lớn khi được tổ chức thành một khối vững chắc. Mặt trận quy tụ công hội, nông hội, đoàn thanh niên, hội phụ nữ, các tổ chức tôn giáo, kể cả kiều bào.</p>
+    <div class="wall" aria-hidden="true">
+      <div class="course"><span class="brick"></span><span class="brick"></span><span class="brick"></span></div>
+      <div class="course off"><span class="brick c"></span><span class="brick c"></span><span class="brick c"></span></div>
+      <div class="course"><span class="brick h"></span><span class="brick h"></span><span class="brick h"></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 15. Tên gọi -->
+<section class="slide" data-sec="pt" data-who="Hân">
+  <p class="sec">1.3 Phương thức Mặt trận</p>
+  <h2>Tên gọi đổi theo nhiệm vụ, bản chất vẫn là một</h2>
+  <div class="tl long grow">
+    <div class="i"><div class="y">1930</div><div class="t">Hội Phản đế đồng minh</div></div>
+    <div class="i"><div class="y">1936</div><div class="t">Mặt trận Dân chủ Đông Dương</div></div>
+    <div class="i"><div class="y">1939</div><div class="t">Mặt trận Nhân dân phản đế Đông Dương</div></div>
+    <div class="i"><div class="y">1941</div><div class="t">Mặt trận Việt Minh</div></div>
+    <div class="i"><div class="y">1951</div><div class="t">Mặt trận Liên Việt</div></div>
+    <div class="i"><div class="y">1955</div><div class="t">Mặt trận Tổ quốc Việt Nam</div></div>
+    <div class="i"><div class="y">1960</div><div class="t">Mặt trận Dân tộc giải phóng miền Nam</div></div>
+    <div class="i"><div class="y">1968</div><div class="t">Liên minh các lực lượng dân tộc, dân chủ và hòa bình</div></div>
+    <div class="i"><div class="y">1976</div><div class="t">Mặt trận Tổ quốc Việt Nam</div></div>
+  </div>
+  <p class="src">Giáo trình Tư tưởng Hồ Chí Minh, tr.177–178</p>
+</section>
+
+<!-- 16. Ba nguyên tắc -->
+<section class="slide" data-sec="pt" data-who="Hân">
+  <p class="sec">1.3 Phương thức Mặt trận</p>
+  <h2>Ba nguyên tắc để khối rộng mà không lỏng</h2>
+  <div class="cols c3 grow">
+    <div class="panel"><h3>Nền tảng và sự lãnh đạo</h3><p class="body">Liên minh công, nông, trí; dưới sự lãnh đạo của Đảng. Đảng không có lợi ích riêng ngoài lợi ích dân tộc.</p></div>
+    <div class="panel hoe"><h3>Hiệp thương dân chủ</h3><p class="body">Một chiếc bàn tròn, không ghế nào cao hơn ghế nào.</p><p class="body" style="margin-top:12px">Nay: hội nghị hiệp thương giới thiệu người ứng cử.</p></div>
+    <div class="panel cham"><h3>Đoàn kết thật sự</h3><p class="body">"Cầu đồng tồn dị", như một gia đình nhiều thế hệ.</p><blockquote class="sm" style="margin-top:14px; border-left-color:var(--accent2)">vừa đoàn kết, vừa đấu tranh… phê bình trên lập trường thân ái, vì nước, vì dân<span class="src">Toàn tập, t.11, tr.362</span></blockquote></div>
+  </div>
+</section>
+
+<!-- 17. Rộng và chặt -->
+<section class="slide" data-sec="pt" data-who="Hân">
+  <p class="sec">1.3 Phương thức Mặt trận</p>
+  <h2>Mặt trận phải vừa rộng vừa chặt</h2>
+  <blockquote>Mặt trận càng rộng rãi, càng chặt chẽ, càng thống nhất bao nhiêu thì khối đại đoàn kết càng mạnh mẽ, bền vững bấy nhiêu.<span class="src">Giáo trình Tư tưởng Hồ Chí Minh, tr.183</span></blockquote>
+  <p class="lead">Như một tấm lưới: nhiều mắt mà nút lỏng thì bung, nút chắc mà lưới nhỏ thì chẳng giữ được bao nhiêu.</p>
+  <div class="cols c2 grow">
+    <div class="panel hoe"><h3>Xưa: Việt Minh</h3><p class="body">Thành lập năm 1941, gom các hội cứu quốc. Tháng 8/1945 giành chính quyền cả nước trong khoảng nửa tháng.</p></div>
+    <div class="panel cham"><h3>Nay: Hiến pháp sửa đổi 2025</h3><p class="body">Các tổ chức chính trị – xã hội trực thuộc Mặt trận Tổ quốc Việt Nam.</p></div>
+  </div>
+</section>
+
+<!-- 18. Sợi dây và ba mối đoàn kết -->
+<section class="slide" data-sec="pt" data-who="Hân">
+  <p class="sec">1.3 Phương thức Mặt trận</p>
+  <h2>Sợi dây nối Đảng với dân, và ba mối cần giữ chặt</h2>
+  <div class="cols c2 grow">
+    <div class="panel cham"><h3>Sợi dây phải giữ chắc cả hai đầu</h3><ul><li>Một đầu là đường lối đúng, đầu kia là lòng tin của dân</li><li>Đại hội XIII: giám sát, phản biện xã hội, làm cầu nối</li><li>18/11: Ngày hội Đại đoàn kết ở khu dân cư</li></ul></div>
+    <div class="panel"><h3>Ba mối đoàn kết</h3><ul><li>Các đảng phái, đoàn thể, nhân sĩ</li><li>Các dân tộc anh em</li><li>Đồng bào lương và đồng bào các tôn giáo</li></ul><p class="src">Toàn tập, t.13, tr.453</p></div>
+  </div>
+  <p class="take accent">Giữ được ba mối này thì bức tường không có vết nứt.</p>
+</section>
+
+<!-- 19. Tổng kết ba phương thức -->
+<section class="slide" data-sec="pt" data-who="Hân">
+  <p class="sec">Tổng kết Phần 1</p>
+  <h2>Ba phương thức nối thành một quy trình</h2>
+  <div class="cols c3 grow" style="align-items:end">
+    <div><div class="wall" aria-hidden="true"><div class="course"><span class="brick h"></span></div></div><h3 style="margin-top:22px; color:var(--hoe)">Dân vận</h3><p class="body">Đến với từng viên gạch, từng con người.</p></div>
+    <div><div class="wall" aria-hidden="true"><div class="course"><span class="brick h"></span><span class="brick h"></span><span class="brick h"></span></div></div><h3 style="margin-top:22px">Đoàn thể</h3><p class="body">Xếp mọi người thành từng hàng theo giới của mình.</p></div>
+    <div><div class="wall" aria-hidden="true"><div class="course"><span class="brick c"></span><span class="brick c"></span><span class="brick c"></span></div><div class="course off"><span class="brick"></span><span class="brick"></span><span class="brick"></span></div><div class="course"><span class="brick h"></span><span class="brick h"></span><span class="brick h"></span></div></div><h3 style="margin-top:22px; color:var(--accent2)">Mặt trận</h3><p class="body">Gắn tất cả các hàng thành một bức tường.</p></div>
+  </div>
+</section>
+
+<!-- 20. Phần 2 -->
+<section class="slide" data-sec="gp" data-who="Diệu Anh">
+  <p class="sec">Phần 2. Thảo luận giải pháp</p>
+  <h2>Trước đây chiến thắng giặc ngoại xâm, hiện nay chiến thắng nghèo nàn và lạc hậu</h2>
+  <p class="src" style="margin-top:-10px">Giáo trình Tư tưởng Hồ Chí Minh, tr.198</p>
+  <div class="map grow" style="margin-top:10px">
+    <div class="g"><div class="n">1</div><div class="t">Đẩy mạnh tuyên truyền</div><div class="l">Nền chung · Diệu Anh</div></div>
+    <div class="g"><div class="n">2</div><div class="t">Thể chế hóa đường lối</div><div class="l">Nền chung · Diệu Anh</div></div>
+    <div class="g link"><div class="n">3</div><div class="t">Giải quyết quan hệ lợi ích</div><div class="l">Gắn với dân vận · Ngọc</div></div>
+    <div class="g link"><div class="n">4</div><div class="t">Quan hệ mật thiết giữa dân với Đảng, Nhà nước</div><div class="l">Gắn với đoàn thể · Giang</div></div>
+    <div class="g link"><div class="n">5</div><div class="t">Đấu tranh với chia rẽ</div><div class="l">Gắn với Mặt trận · Hân</div></div>
+  </div>
+</section>
+
+<!-- 21. GP1 -->
+<section class="slide gp" data-sec="gp" data-who="Diệu Anh">
+  <div class="gp-head"><div class="big">1</div><h2>Đẩy mạnh tuyên truyền</h2></div>
+  <div class="cols c3 grow">
+    <div class="panel"><h3>Thực trạng</h3><ul><li>Người trẻ coi đoàn kết là chuyện thời chiến</li><li>Tuyên truyền nặng khẩu hiệu, băng rôn</li><li>Người trẻ xem video vài chục giây</li></ul></div>
+    <div class="panel hoe"><h3>Giải pháp</h3><p>Đổi cách tuyên truyền, không chỉ tăng số lượng. Khẩu hiệu chỉ được nhìn thấy; câu chuyện thật mới được ghi nhớ.</p></div>
+    <div class="panel cham"><h3>Việc cụ thể</h3><ul><li>Kể chuyện người thật việc thật</li><li>Video ngắn hợp từng nền tảng</li><li>Sinh viên làm dự án</li><li>Cuộc thi sáng tạo nội dung</li></ul></div>
+  </div>
+  <blockquote class="sm">Điểm này mà thực hiện tốt thì đẻ ra con cháu đều tốt: Đó là đoàn kết.<span class="src">Toàn tập, t.10, tr.589</span></blockquote>
+</section>
+
+<!-- 22. GP2 -->
+<section class="slide gp" data-sec="gp" data-who="Diệu Anh">
+  <div class="gp-head"><div class="big">2</div><h2>Tăng cường lãnh đạo của Đảng, thể chế hóa đường lối</h2></div>
+  <div class="cols c3 grow">
+    <div class="panel"><h3>Thực trạng</h3><ul><li>Nghị quyết 07 (1993), Nghị quyết 23 (2003), Kết luận 43 (2019)</li><li>Vẫn còn khoảng cách giữa nghị quyết và cuộc sống</li></ul></div>
+    <div class="panel hoe"><h3>Giải pháp</h3><p>Thể chế hóa là biến bản thiết kế thành công trình.</p></div>
+    <div class="panel cham"><h3>Việc cụ thể</h3><ul><li>Tổng kết định kỳ, xét trách nhiệm người đứng đầu</li><li>Hoàn thiện pháp luật về dân tộc, tôn giáo, kiều bào</li><li>Kiểm tra chính sách đã đến nơi chưa</li></ul></div>
+  </div>
+  <p class="take">Căn cứ: không bỏ sót một lực lượng nào. <span class="src" style="display:inline">Giáo trình, tr.173</span></p>
+</section>
+
+<!-- 23. GP3 -->
+<section class="slide gp" data-sec="gp" data-who="Ngọc">
+  <div class="gp-head"><div class="big">3</div><h2>Giải quyết tốt quan hệ lợi ích</h2></div>
+  <div class="cols c3 grow">
+    <div class="panel"><h3>Thực trạng</h3><ul><li>Doanh nghiệp và người lao động</li><li>Nông dân mất đất khi đô thị hóa</li><li>Bất bình dễ bị lợi dụng</li></ul></div>
+    <div class="panel hoe"><h3>Giải pháp</h3><p>Lấy lợi ích chung làm điểm quy tụ, tôn trọng lợi ích riêng chính đáng.</p></div>
+    <div class="panel cham"><h3>Việc cụ thể</h3><ul><li>Lấy ý kiến dân từ đầu</li><li>Công khai cách tính bồi thường</li><li>Chia sẻ lợi ích với vùng dự án</li><li>Mặt trận phản biện; sinh viên góp ý</li></ul></div>
+  </div>
+  <p class="take">Căn cứ: "mẫu số chung" và "vì ích lợi của họ".</p>
+</section>
+
+<!-- 24. GP4 -->
+<section class="slide gp" data-sec="gp" data-who="Giang">
+  <div class="gp-head"><div class="big">4</div><h2>Tăng cường quan hệ mật thiết giữa nhân dân với Đảng, Nhà nước</h2></div>
+  <div class="cols c3 grow">
+    <div class="panel"><h3>Thực trạng</h3><ul><li>Bệnh quan liêu, xa dân vẫn còn</li><li>Đoàn thể còn hình thức, sinh hoạt theo lệ</li></ul></div>
+    <div class="panel hoe"><h3>Giải pháp</h3><p>Mối liên hệ phải thường xuyên, hai chiều và có thật.</p></div>
+    <div class="panel cham"><h3>Việc cụ thể</h3><ul><li>Tiếp dân, đối thoại, trả lời đúng hạn</li><li>Chống tham nhũng, công khai kết quả</li><li>Đoàn thể lấy nhu cầu hội viên làm trung tâm</li></ul></div>
+  </div>
+  <blockquote class="sm">cách xa dân chúng, không liên hệ chặt chẽ với dân chúng, cũng như đứng lơ lửng giữa trời, nhất định thất bại<span class="src">Toàn tập, t.5, tr.326</span></blockquote>
+</section>
+
+<!-- 25. GP5 -->
+<section class="slide gp" data-sec="gp" data-who="Hân">
+  <div class="gp-head"><div class="big">5</div><h2>Kiên quyết đấu tranh với quan điểm sai trái, chia rẽ</h2></div>
+  <div class="cols c3 grow">
+    <div class="panel"><h3>Thực trạng</h3><ul><li>Tin giả lan nhanh hơn tin chính thức</li><li>Dân tộc, tôn giáo, vùng miền bị cắt ghép</li><li>Tin đồn về tiền ủng hộ</li></ul></div>
+    <div class="panel hoe"><h3>Giải pháp</h3><p>Vạch trần kịp thời và chủ động minh bạch. Không quy chụp góp ý thẳng thắn thành thù địch.</p></div>
+    <div class="panel cham"><h3>Việc cụ thể</h3><ul><li>Thông tin chính thức nhanh, chính xác</li><li>Sao kê công khai, như sau bão Yagi 2024</li><li>Sinh viên kiểm chứng trước khi chia sẻ</li></ul></div>
+  </div>
+  <p class="take">Căn cứ: "vừa đoàn kết, vừa đấu tranh" trên lập trường thân ái.</p>
+</section>
+
+<!-- 26. Kết luận 1 -->
+<section class="slide" data-sec="kl" data-who="Diệu Anh">
+  <p class="sec">Kết luận</p>
+  <h1>Đoàn kết không tự nhiên mà có, phải được xây dựng có tổ chức</h1>
+  <div class="cols c3 grow" style="align-items:end">
+    <div class="panel hoe"><h3>Dân vận</h3><p class="body">Mỗi người hiểu và tự nguyện góp sức.</p></div>
+    <div class="panel"><h3>Đoàn thể</h3><p class="body">Ai cũng có một tổ chức hiểu mình.</p></div>
+    <div class="panel cham"><h3>Mặt trận</h3><p class="body">Một khối vừa rộng vừa chặt.</p></div>
+  </div>
+</section>
+
+<!-- 27. Kết luận 2 -->
+<section class="slide" data-sec="kl" data-who="Diệu Anh">
+  <p class="sec">Kết luận</p>
+  <h2>Mỗi việc nhỏ là một viên gạch đặt đúng chỗ</h2>
+  <div class="cols c2 grow">
+    <div class="panel cham"><h3>Năm giải pháp</h3><ul><li>Tuyên truyền để hiểu</li><li>Thể chế hóa để có chỗ dựa</li><li>Lợi ích công bằng, không ai bị bỏ lại</li><li>Giữ lòng tin giữa dân với Đảng, Nhà nước</li><li>Chống chia rẽ bằng kiên quyết và minh bạch</li></ul></div>
+    <div class="panel"><h3>Với sinh viên</h3><ul><li>Tham gia Đoàn, Hội bằng hoạt động có thật</li><li>Góp ý chính sách liên quan đến mình</li><li>Kiểm chứng trước khi chia sẻ</li><li>Không miệt thị vùng miền, tôn giáo</li><li>Kể lại những câu chuyện đẹp</li></ul></div>
+  </div>
+  <blockquote>Đoàn kết là sức mạnh, là then chốt của thành công.<span class="src">Hồ Chí Minh, Toàn tập, t.14, tr.186</span></blockquote>
+</section>
+
+<!-- 28. Tài liệu tham khảo -->
+<section class="slide" data-sec="kl" data-who="Diệu Anh">
+  <p class="sec">Tài liệu tham khảo</p>
+  <ul style="font-size:21px; line-height:1.5; max-width:1350px">
+    <li>Bộ Giáo dục và Đào tạo (2021), <i>Giáo trình Tư tưởng Hồ Chí Minh</i>, Nxb. Chính trị quốc gia Sự thật, Hà Nội.</li>
+    <li>Hồ Chí Minh (2011), <i>Toàn tập</i>, Nxb. Chính trị quốc gia Sự thật, Hà Nội.</li>
+    <li>Đảng Cộng sản Việt Nam (2016), <i>Văn kiện Đại hội đại biểu toàn quốc lần thứ XII</i>, Văn phòng Trung ương Đảng, Hà Nội.</li>
+    <li>Đảng Cộng sản Việt Nam (2021), <i>Văn kiện Đại hội đại biểu toàn quốc lần thứ XIII</i>, tập I, Nxb. Chính trị quốc gia Sự thật, Hà Nội.</li>
+    <li>Bộ Chính trị: Nghị quyết 07-NQ/TW (1993); Nghị quyết 36-NQ/TW (2004); Kết luận 43-KL/TW (2019).</li>
+    <li>Ban Chấp hành Trung ương: Nghị quyết 23-NQ/TW (2003); Nghị quyết 25-NQ/TW (2013).</li>
+    <li>Quốc hội: Luật Tín ngưỡng, tôn giáo (2016); Luật Thực hiện dân chủ ở cơ sở (2022); Nghị quyết sửa đổi, bổ sung Hiến pháp (2025).</li>
+    <li>Thủ tướng Chính phủ: Quyết định 1719/QĐ-TTg (2021) phê duyệt Chương trình mục tiêu quốc gia vùng đồng bào dân tộc thiểu số và miền núi.</li>
+  </ul>
+</section>
+
+<!-- 29. Cảm ơn -->
+<section class="slide cover" data-sec="kl" data-who="Cả nhóm">
+  <p class="sec">Đề tài 8</p>
+  <h1>Cảm ơn thầy cô và các bạn đã lắng nghe</h1>
+  <p class="sub">Nguyễn Lý Diệu Anh, Trần Hoàng Khánh Ngọc, Phan Mai Trà Giang, Huỳnh Hồng Hân</p>
+  <div class="cover-wall wall" aria-hidden="true">
+    <div class="course"><span class="brick c"></span><span class="brick"></span><span class="brick h"></span><span class="brick"></span></div>
+    <div class="course off"><span class="brick"></span><span class="brick c"></span><span class="brick"></span><span class="brick c"></span></div>
+    <div class="course"><span class="brick h"></span><span class="brick"></span><span class="brick c"></span><span class="brick"></span></div>
+    <div class="course off"><span class="brick c"></span><span class="brick h"></span><span class="brick"></span><span class="brick"></span></div>
+  </div>
+</section>
+
+<div class="rail" aria-hidden="true"><div class="row" id="row"></div><div class="num" id="num"></div></div>
+</div></div>
+
+<div class="ctrl" id="ctrl">
+  <button id="prev" aria-label="Slide trước">Trước</button>
+  <button id="next" aria-label="Slide sau">Sau</button>
+  <button id="fs" aria-label="Toàn màn hình">Toàn màn hình</button>
+  <button id="theme" aria-label="Đổi nền sáng tối">Sáng / tối</button>
+</div>
+
+<script>
+(function(){
+  var stage=document.getElementById('stage');
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var row=document.getElementById('row'), num=document.getElementById('num');
+  var n=slides.length, cur=0;
+
+  slides.forEach(function(s){
+    var w=s.getAttribute('data-who');
+    if(w){var d=document.createElement('div'); d.className='who'; d.textContent=w; s.appendChild(d);}
+    var b=document.createElement('span'); b.className='b '+s.getAttribute('data-sec'); row.appendChild(b);
+  });
+  var bricks=[].slice.call(row.children);
+
+  function fit(){
+    var s=Math.min(window.innerWidth/1600, window.innerHeight/900);
+    stage.style.transform='scale('+s+')';
+  }
+  function show(i){
+    cur=Math.max(0,Math.min(n-1,i));
+    slides.forEach(function(s,k){s.classList.toggle('active',k===cur)});
+    bricks.forEach(function(b,k){b.classList.toggle('on',k<=cur)});
+    num.textContent=(cur+1)+' / '+n;
+    if(location.hash!=='#'+(cur+1)) history.replaceState(null,'','#'+(cur+1));
+  }
+  function fromHash(){var h=parseInt(location.hash.slice(1),10); return isNaN(h)?0:h-1;}
+
+  document.addEventListener('keydown',function(e){
+    var k=e.key;
+    if(k==='ArrowRight'||k==='PageDown'||k===' '||k==='Enter'){e.preventDefault(); show(cur+1);}
+    else if(k==='ArrowLeft'||k==='PageUp'||k==='Backspace'){e.preventDefault(); show(cur-1);}
+    else if(k==='Home'){show(0);} else if(k==='End'){show(n-1);}
+    else if(k==='f'||k==='F'){toggleFs();}
+  });
+  document.getElementById('prev').onclick=function(){show(cur-1)};
+  document.getElementById('next').onclick=function(){show(cur+1)};
+  function toggleFs(){
+    try{
+      if(!document.fullscreenElement){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();}
+      else{document.exitFullscreen&&document.exitFullscreen();}
+    }catch(e){}
+  }
+  document.getElementById('fs').onclick=toggleFs;
+
+  var root=document.documentElement;
+  try{var t=localStorage.getItem('dt8-theme'); if(t) root.setAttribute('data-theme',t);}catch(e){}
+  document.getElementById('theme').onclick=function(){
+    var dark=root.getAttribute('data-theme')==='dark' ||
+      (!root.getAttribute('data-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    var next=dark?'light':'dark'; root.setAttribute('data-theme',next);
+    try{localStorage.setItem('dt8-theme',next);}catch(e){}
+  };
+
+  var ctrl=document.getElementById('ctrl'), timer;
+  function wake(){ctrl.classList.remove('hide'); clearTimeout(timer); timer=setTimeout(function(){ctrl.classList.add('hide')},2500);}
+  ['mousemove','touchstart','keydown'].forEach(function(ev){document.addEventListener(ev,wake,{passive:true})});
+
+  var sx=null;
+  document.addEventListener('touchstart',function(e){sx=e.touches[0].clientX},{passive:true});
+  document.addEventListener('touchend',function(e){if(sx===null)return; var dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>50) show(cur+(dx<0?1:-1)); sx=null;});
+
+  window.addEventListener('resize',fit);
+  window.addEventListener('hashchange',function(){show(fromHash())});
+  fit(); show(fromHash()); wake();
+})();
+</script>
+</body>
+</html>
