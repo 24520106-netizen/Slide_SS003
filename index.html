@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Đề tài 8 – Phương thức xây dựng khối đại đoàn kết dân tộc</title>
+<title>Đề tài 8 – Phương thức xây dựng khối đại đoàn kết dân tộc (bản nâng cấp)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://upload.wikimedia.org">
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,700;0,800;1,400;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Lora:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
 <style>
 :root{
   /* Bảng màu tranh Đông Hồ: giấy điệp, son, chàm, vàng hoè, than lá tre */
@@ -251,13 +251,758 @@ img{display:block}
 .vs .v{padding:34px 30px; gap:16px}
 .vs b{font-size:32px} .vs p{font-size:25px}
 .vs .who2{font-size:20px}
+
+/* ================= BẢN NÂNG CẤP v3 ================= */
+/* Giấy điệp: hạt giấy + ánh xà cừ rất nhẹ */
+.grain{position:absolute; inset:0; z-index:3; pointer-events:none; opacity:.32; mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .16 0 0 0 0 .12 0 0 0 0 .07 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.grain::after{content:""; position:absolute; inset:0; background:radial-gradient(120% 80% at 15% 0%, rgba(255,255,255,.35), transparent 55%), radial-gradient(90% 70% at 100% 100%, rgba(201,138,18,.10), transparent 60%); mix-blend-mode:screen}
+.stage.on-dark .grain{opacity:.18; mix-blend-mode:overlay}
+.stage.on-dark .grain::after{display:none}
+
+/* Ảnh lịch sử chung một tông */
+img.old{filter:sepia(.32) saturate(.85) contrast(1.06)}
+.bleed img.old{filter:sepia(.35) saturate(.8) contrast(1.08) brightness(.95)}
+
+/* Ảnh mở bằng đường cắt thay vì trồi lên */
+.slide.active .photo.a,.slide.active .ocard.a{animation:imgReveal 1s cubic-bezier(.7,0,.2,1) both; animation-delay:calc(.12s + var(--i,0)*.11s)}
+@keyframes imgReveal{from{clip-path:inset(0 100% 0 0)} to{clip-path:inset(0 0 0 0)}}
+.split.r .photo.a{animation-name:imgRevealR}
+@keyframes imgRevealR{from{clip-path:inset(0 0 0 100%)} to{clip-path:inset(0 0 0 0)}}
+
+/* Tiêu đề hiện từng chữ */
+.words .w{display:inline-block; white-space:pre}
+.slide.active .words .w{animation:wordUp .7s cubic-bezier(.2,.8,.2,1) both}
+@keyframes wordUp{from{opacity:0; transform:translateY(.45em) rotate(2deg); filter:blur(6px)} to{opacity:1; transform:none; filter:none}}
+
+/* Thẻ có ảnh: ảnh giãn lấp chỗ trống */
+.cols.grow > .card:not(.row-card) .cimg{flex:1 1 auto; min-height:200px; height:auto}
+.cols.grow > .card:not(.row-card) .cbody{flex:none}
+
+/* Chuyển phần: tường gạch quét qua */
+.wipe{position:absolute; inset:0; z-index:8; pointer-events:none; display:flex; flex-direction:column-reverse; gap:6px; padding:0; overflow:hidden}
+.wipe .wr{display:flex; gap:6px; flex:1}
+.wipe .wr:nth-child(even){margin-left:-80px}
+.wipe .wb{flex:0 0 160px; background:var(--son); border-radius:2px; transform:translateY(-120vh); }
+.wipe .wb.c{background:#1F3A5F} .wipe .wb.h{background:#C98A12}
+.wipe.in .wb{animation:wbIn .42s cubic-bezier(.5,0,.6,1.25) both; animation-delay:var(--d)}
+.wipe.out .wb{transform:none; animation:wbOut .5s cubic-bezier(.6,0,.8,.4) both; animation-delay:var(--d)}
+@keyframes wbIn{from{transform:translateY(-110vh)} to{transform:none}}
+@keyframes wbOut{from{transform:none; opacity:1} to{transform:translateY(40px) scale(.9); opacity:0}}
+
+/* Thanh tiến độ: viên gạch mới rơi vào chỗ */
+.rail .b.drop{animation:railDrop .5s cubic-bezier(.3,1.5,.5,1)}
+@keyframes railDrop{from{transform:translateY(-26px) rotate(-10deg)} to{transform:none}}
+
+/* Con dấu son "Đánh!" */
+.stamp{align-self:flex-start; margin:4px 0 6px}
+.stamp span{display:inline-block; font-size:58px; font-weight:800; color:var(--son); border:5px solid var(--son); padding:2px 26px 8px; border-radius:6px; transform:rotate(-7deg); position:relative; letter-spacing:.02em;
+  background:repeating-linear-gradient(115deg, transparent 0 7px, rgba(237,230,214,.18) 7px 9px)}
+.slide.active .stamp span{animation:stamp .55s cubic-bezier(.2,.9,.3,1.3) 1.4s both}
+.stamp span::after{content:""; position:absolute; inset:-5px; border:3px solid var(--son); border-radius:8px; opacity:0}
+.slide.active .stamp span::after{animation:ring .8s ease-out 1.75s both}
+@keyframes stamp{0%{opacity:0; transform:rotate(-18deg) scale(3)} 70%{opacity:1; transform:rotate(-6deg) scale(.92)} 100%{opacity:1; transform:rotate(-7deg) scale(1)}}
+@keyframes ring{0%{opacity:.7; transform:scale(1)} 100%{opacity:0; transform:scale(1.5)}}
+.slide.active.shake{animation:shake .35s ease-in-out}
+@keyframes shake{0%,100%{transform:none} 25%{transform:translate(-5px,3px)} 50%{transform:translate(4px,-3px)} 75%{transform:translate(-2px,2px)}}
+
+/* Hàng gạch đặt nền ở bìa và trang cuối */
+.lay{display:flex; gap:8px; margin-top:8px}
+.lay i{display:block; width:74px; height:30px; background:var(--son); border-radius:2px; opacity:0}
+.lay i.c{background:#2F5A8F} .lay i.h{background:var(--hoe)}
+.slide.active .lay i{animation:drop .55s cubic-bezier(.3,1.5,.5,1) both; animation-delay:calc(1.3s + var(--b,0)*.09s)}
+.endwall{position:absolute; right:104px; bottom:120px; z-index:2; display:flex; flex-direction:column-reverse; gap:7px}
+.endwall .wrow{display:flex; gap:7px}
+.endwall .wrow:nth-child(even){padding-left:41px}
+.endwall i{display:block; width:76px; height:32px; background:var(--son); border-radius:2px; opacity:0}
+.endwall i.c{background:#2F5A8F} .endwall i.h{background:var(--hoe)}
+.slide.active .endwall i{animation:drop .5s cubic-bezier(.3,1.5,.5,1) both; animation-delay:calc(.6s + var(--b,0)*.06s)}
+.endwall i.last{background:#F3EDE0}
+.slide.active .endwall i.last{animation:lastBrick 1.1s cubic-bezier(.3,1.4,.5,1) both; animation-delay:calc(.9s + var(--b,0)*.06s)}
+@keyframes lastBrick{0%{opacity:0; transform:translateY(-320px) rotate(-25deg)} 60%{opacity:1} 100%{opacity:1; transform:none}}
+
+/* Dòng chảy hai chiều có hạt chạy */
+.flow{grid-template-columns:1fr 220px 1fr}
+.flow svg{width:220px; height:90px; display:block}
+.flow .ln{stroke-width:5; stroke-dasharray:14 12; fill:none}
+.slide.active .flow .ln.r{animation:dashR 1s linear infinite}
+.slide.active .flow .ln.l{animation:dashL 1s linear infinite}
+@keyframes dashR{to{stroke-dashoffset:-26}} @keyframes dashL{to{stroke-dashoffset:26}}
+
+/* Tấm lưới siết lại */
+.netrow{display:grid; grid-template-columns:150px 1fr; gap:22px; align-items:center}
+.net line{stroke:var(--accent2); stroke-width:2.5; stroke-dasharray:200; stroke-dashoffset:200}
+.slide.active .net line{animation:draw 1.2s ease-out both; animation-delay:calc(.8s + var(--k,0)*.06s)}
+.net circle{fill:var(--son); transform-box:fill-box; transform-origin:center; transform:scale(0)}
+.slide.active .net circle{animation:knot .5s cubic-bezier(.3,1.6,.5,1) both; animation-delay:calc(1.9s + var(--k,0)*.04s)}
+.slide.active .net g{animation:tighten 1s ease-in-out 2.6s both; transform-origin:75px 55px}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes knot{to{transform:scale(1)}}
+@keyframes tighten{0%{transform:scale(1.08)} 100%{transform:scale(.94)}}
+
+/* Năm slide giải pháp: ảnh lớn + ba bước nối nhau */
+.gp2{padding:0 104px 120px 0; flex-direction:row; gap:0}
+.gp2-grid{display:grid; grid-template-columns:560px 1fr; gap:60px; height:100%; width:100%}
+.gp-img{height:100%; box-shadow:none}
+.gp-img img.kb2{transition:transform 9s ease-out; transform:scale(1.15)}
+.slide.active .gp-img img.kb2{transform:scale(1.02)}
+.gp-img::before{content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(14,11,8,.55), transparent 40%, transparent 60%, rgba(14,11,8,.85)); z-index:1}
+.gp-img .ov{z-index:2; background:none}
+.gp-num{position:absolute; left:44px; top:36px; z-index:2; font-size:230px; line-height:.9; font-weight:800; color:transparent; -webkit-text-stroke:3px #F0B84A; letter-spacing:-.04em}
+.gp-num small{display:block; font-size:22px; -webkit-text-stroke:0; color:#F3EDE0; letter-spacing:.12em; font-weight:700; margin-top:10px}
+.slide.active .gp-num{animation:numIn 1s cubic-bezier(.2,.8,.2,1) .5s both}
+@keyframes numIn{from{opacity:0; transform:translateY(40px) scale(.8)} to{opacity:1; transform:none}}
+.gp-right{display:flex; flex-direction:column; gap:18px; padding-top:72px; min-width:0}
+.gp-right h2{font-size:44px}
+.steps3{position:relative; display:flex; flex-direction:column; gap:0; margin-top:6px}
+.steps3::before{content:""; position:absolute; left:13px; top:18px; bottom:24px; width:3px; background:linear-gradient(var(--son),var(--hoe),var(--cham)); transform-origin:top; transform:scaleY(0)}
+.slide.active .steps3::before{animation:growY 1.3s cubic-bezier(.6,0,.2,1) .5s both}
+@keyframes growY{to{transform:scaleY(1)}}
+.st{display:grid; grid-template-columns:30px 190px 1fr; gap:14px; padding:14px 0; align-items:start; border-bottom:1px solid var(--line)}
+.st:last-child{border-bottom:none}
+.st .dot{width:29px; height:29px; border-radius:50%; background:var(--bg); border:5px solid var(--son); position:relative; z-index:1; margin-top:2px}
+.st.h .dot{border-color:var(--hoe)} .st.c .dot{border-color:var(--accent2)}
+.st .lbl{font-size:24px; font-weight:800; color:var(--son); line-height:1.3}
+.st.h .lbl{color:var(--hoe)} .st.c .lbl{color:var(--accent2)}
+.st ul{font-size:22px; line-height:1.4} .st li{margin-bottom:3px}
+.st .sol{font-size:25px; line-height:1.4; font-weight:600}
+.gp-right blockquote.sm{font-size:21px}
+.gp-right .take{font-size:25px}
+
+/* Tranh luận: chia bài rồi ghép thành một hàng gạch */
+.debate .vs{align-content:start; margin-top:14px}
+.debate .vs .v{min-height:300px; position:relative}
+.debate .vs .v .q{position:absolute; right:18px; top:-6px; font-size:120px; font-weight:800; line-height:1; color:var(--line)}
+.slide.active.debate .vs .v{animation:deal .8s cubic-bezier(.2,.9,.3,1.1) both; animation-delay:calc(.4s + var(--n)*.18s)}
+@keyframes deal{from{opacity:0; transform:translate(var(--dx),220px) rotate(var(--r)) scale(.7)} to{opacity:1; transform:none}}
+.common{display:flex; align-items:center; gap:22px; margin-top:auto}
+.common .bricks{display:flex; gap:0}
+.common .bricks span{font-size:19px; font-weight:700; color:#fff; padding:12px 20px; background:var(--son); border-right:4px solid var(--bg)}
+.common .bricks span:nth-child(2){background:var(--hoe)} .common .bricks span:nth-child(3){background:var(--cham)} .common .bricks span:nth-child(4){background:#7A2E22}
+.slide.active .common .bricks span{animation:joinB .7s cubic-bezier(.3,1.3,.5,1) both; animation-delay:calc(1.6s + var(--n)*.12s)}
+.slide.active .common .bricks span{border-right-width:0}
+@keyframes joinB{from{opacity:0; transform:translateX(calc((var(--n) - 1.5)*90px)) translateY(-30px)} to{opacity:1; transform:none}}
+.common .take{font-size:27px}
+.slide.active .common .take{animation:up .7s ease-out 2.4s both}
+
+/* Số đếm */
+.big[data-count]{font-variant-numeric:tabular-nums}
+
+@media (prefers-reduced-motion: reduce){
+  .slide.active .photo.a,.slide.active .ocard.a,.slide.active .words .w,.slide.active .stamp span,.slide.active .stamp span::after,.slide.active.shake,
+  .slide.active .lay i,.slide.active .endwall i,.slide.active .flow .ln,.slide.active .net line,.slide.active .net circle,.slide.active .net g,
+  .slide.active .gp-num,.slide.active .steps3::before,.slide.active.debate .vs .v,.slide.active .common .bricks span,.slide.active .common .take,.rail .b.drop{animation:none!important}
+  .lay i,.endwall i{opacity:1} .net line{stroke-dashoffset:0} .net circle{transform:none} .steps3::before{transform:none}
+  .wipe{display:none}
+}
+/* chỉnh sau lượt kiểm tra 1 */
+.gp2{padding:0 104px 0 0}
+.gp-right{justify-content:center; padding:60px 0 110px; gap:20px}
+.gp-right h2{font-size:50px}
+.st{grid-template-columns:30px 200px 1fr; padding:20px 0}
+.st .lbl{font-size:26px}
+.st ul{font-size:24px; line-height:1.45}
+.st .sol{font-size:28px}
+.gp-right blockquote.sm{font-size:23px}
+.gp-right .take{font-size:27px}
+.stage.gp-mode .rail{left:664px}
+.debate .vs .v{min-height:250px}
+.common .bricks span{white-space:nowrap}
+.credits{columns:3; column-gap:36px; font-size:14.5px; line-height:1.35}
+.credits li{margin-bottom:4px}
+
+
+/* ================= THEME v4: sơn mài – giấy ngà – gạch nung ================= */
+:root{
+  --son:#8B1E14; --cham:#2E3C44; --hoe:#A67A2E; --than:#1C1814;
+  --bg:#F2ECE1; --panel:#E8DFCF; --ink:#1C1814; --muted:#6E6358; --line:rgba(28,24,20,.14);
+  --accent:#8B1E14; --accent2:#2E3C44; --gold:#B8904A;
+  --brick:#8A4128; --brick2:#7A3622; --brick3:#9A5233; --mortar:#3b2e26;
+  --serif:"Lora", "Noto Serif", Georgia, serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#16120F; --panel:#211A15; --ink:#EEE6D7; --muted:#B3A898; --line:rgba(238,230,215,.14);
+    --accent:#C9584A; --accent2:#9DB0B8; --hoe:#D2A65A; --son:#C9584A;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#16120F; --panel:#211A15; --ink:#EEE6D7; --muted:#B3A898; --line:rgba(238,230,215,.14);
+  --accent:#C9584A; --accent2:#9DB0B8; --hoe:#D2A65A; --son:#C9584A;
+}
+
+/* Chữ: tiêu đề có chân, trầm và trang trọng */
+h1,h2,.big,.gp-num,.team .n,.stamp span,.tl .y,.map .g .n{font-family:var(--serif)}
+h1{font-weight:700; letter-spacing:-.01em}
+h2{font-weight:700; letter-spacing:-.005em}
+.split .txt h2,.gp-head h2{font-weight:700}
+.big{font-weight:700}
+.sec{font-weight:600; letter-spacing:.16em; font-size:18px}
+.sec::before{content:""; display:inline-block; width:34px; height:2px; background:currentColor; vertical-align:middle; margin:-3px 12px 0 0; opacity:.7}
+h3{font-weight:700}
+blockquote{font-family:var(--serif); border-left-width:3px}
+blockquote.sm{border-left-width:2px}
+.take{font-family:var(--serif); font-weight:600; font-style:italic}
+
+/* Khối nội dung: mảnh, nhẹ, có đường chỉ vàng thay vì vạch màu dày */
+.panel{border-top:1px solid var(--gold); background:var(--panel); box-shadow:inset 0 3px 0 -1px rgba(184,144,74,.0)}
+.panel{position:relative}
+.panel::before{content:""; position:absolute; left:0; top:-1px; width:56px; height:3px; background:var(--accent)}
+.panel.cham::before{background:var(--accent2)} .panel.hoe::before{background:var(--hoe)}
+.card{border-bottom:1px solid var(--gold)}
+.card.hoe,.card.cham{border-bottom-color:var(--gold)}
+.vs .v{border-top:1px solid var(--gold); position:relative}
+.vs .v::before{content:""; position:absolute; left:0; top:-1px; width:56px; height:3px; background:var(--accent)}
+.vs .v.h::before{background:var(--hoe)} .vs .v.c::before{background:var(--accent2)}
+.tag{background:var(--cham); letter-spacing:.04em} .tag.son{background:var(--son)}
+.photo.tall{box-shadow:none; outline:1px solid var(--gold); outline-offset:10px}
+.ocard.banner{box-shadow:none}
+.team .m{border-left:3px solid var(--accent)} .team .m.c{border-left-color:var(--accent2)} .team .m.h{border-left-color:var(--hoe)}
+.team .ini{font-family:var(--serif); font-weight:700; background:var(--son)}
+.team .m.c .ini{background:var(--cham)} .team .m.h .ini{background:var(--hoe)}
+.tl{border-top:2px solid var(--gold)}
+.tl .i::before{width:12px; height:12px; top:-7px; border-radius:50%; background:var(--bg); border:2px solid var(--accent)}
+
+/* Bìa & slide tối: vàng thếp thay vàng tươi */
+.hero .sec{color:#D9B670}
+.ocard .ov h3{color:#D9B670}
+.hero h1,.hero h2{text-shadow:0 2px 30px rgba(0,0,0,.35)}
+.steps span{font-family:var(--serif); font-weight:600; font-size:24px; background:rgba(20,15,10,.35)!important; border:1px solid rgba(217,182,112,.7)!important; color:#F2EADC}
+.map .g .n{color:#D9B670} .map .g.link .n{color:#E39A86}
+.glass h3{color:#D9B670!important}
+.glass>div:nth-child(2) h3{color:#E39A86!important}
+.glass>div:nth-child(3) h3{color:#B8CBD3!important}
+.shade.l{background:linear-gradient(90deg, rgba(16,12,9,.94) 0%, rgba(16,12,9,.8) 45%, rgba(16,12,9,.3) 100%)}
+.gp-num{-webkit-text-stroke:2px #D9B670}
+
+/* Giấy ngà: hạt rất mịn, bỏ ánh xà cừ */
+.grain{opacity:.22}
+.grain::after{display:none}
+
+/* ===== Gạch nung: tông đất, có bóng đổ và sần ===== */
+.brick,.lay i,.endwall i,.common .bricks span,.wipe .wb{
+  background-color:var(--brick)!important;
+  background-image:linear-gradient(180deg, rgba(255,225,190,.16), rgba(255,225,190,0) 38%, rgba(0,0,0,.26)),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 .1 0 0 0 0 .05 0 0 0 0 .02 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")!important;
+  box-shadow:inset 0 1px 0 rgba(255,225,190,.18), inset 0 -2px 0 rgba(0,0,0,.22), 0 1px 0 rgba(0,0,0,.25);
+  border-radius:1.5px}
+.brick.c,.lay i.c,.endwall i.c{background-color:var(--brick2)!important}
+.brick.h,.lay i.h,.endwall i.h{background-color:var(--brick3)!important}
+.endwall i.last{background-color:#B8904A!important; box-shadow:inset 0 1px 0 rgba(255,240,200,.5), 0 0 24px rgba(217,182,112,.45)}
+.common .bricks{gap:5px; padding:5px; background:var(--mortar); border-radius:2px}
+.common .bricks span{color:#F4EADA; font-family:var(--serif); font-weight:600; letter-spacing:.02em; border-right:none!important; text-shadow:0 1px 1px rgba(0,0,0,.4)}
+.common .bricks span:nth-child(2){background-color:var(--brick3)!important}
+.common .bricks span:nth-child(3){background-color:var(--brick2)!important}
+.common .bricks span:nth-child(4){background-color:#93492D!important}
+
+/* Thanh tiến độ: gạch nung xếp dần, phần hiện tại viền vàng */
+.rail .b{height:14px; outline:1px solid var(--line)}
+.rail .b.on{background-color:var(--brick)!important;
+  background-image:linear-gradient(180deg, rgba(255,225,190,.18), rgba(0,0,0,.22))}
+.rail .b.on.mo{background-color:#9A5233!important} .rail .b.on.pt{background-color:#8A4128!important}
+.rail .b.on.gp{background-color:#7A3622!important} .rail .b.on.kl{background-color:#B8904A!important}
+.stage.on-dark .rail .b.on.kl{background-color:#B8904A!important}
+
+/* Con dấu: đỏ son trầm, mực loang */
+.stamp span{border-width:3px; font-weight:700; padding:4px 26px 8px;
+  background:none; color:var(--son); text-shadow:0 0 1px currentColor;
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1.6 1.6'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1.6 1.6'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* Hai chiều + lưới theo tông mới */
+.net line{stroke:var(--muted); stroke-width:2}
+.net circle{fill:var(--accent)}
+.steps3::before{background:linear-gradient(var(--accent),var(--gold),var(--accent2)); width:2px; left:14px}
+.st .dot{border-width:3px; border-color:var(--accent); background:var(--bg)}
+.st.h .dot{border-color:var(--gold)} .st.h .lbl{color:var(--hoe)}
+.st .lbl{font-family:var(--serif)}
+
+/* ===== Chuyển phần: một bức tường gạch trượt liền mạch ===== */
+.wall2{position:absolute; left:0; top:0; width:1600px; height:1720px; z-index:8; pointer-events:none;
+  background-size:1600px 1720px; will-change:transform; transform:translate3d(0,920px,0);
+  filter:none}
+.wall2-none::before{content:""; position:absolute; left:0; right:0; height:60px; pointer-events:none}
+.wall2-x{top:-60px; background:linear-gradient(transparent, rgba(0,0,0,.28))}
+.wall2-y{bottom:-60px; background:linear-gradient(rgba(0,0,0,.28), transparent)}
+@media (prefers-reduced-motion: reduce){ .wall2{display:none} }
+
+/* nút điều khiển hợp tông */
+.ctrl button{background:#221B16; border-color:#4A3D33; color:#EEE6D7; font-family:"Be Vietnam Pro",system-ui,sans-serif}
+.ctrl button:focus-visible{outline-color:#D9B670}
+
+.stage.wiping .grain{display:none}
+@keyframes wordUp{from{opacity:0; transform:translateY(.45em) rotate(1.5deg)} to{opacity:1; transform:none}}
+
+
+/* ================= THEME v5: SƠN MÀI – TRỐNG ĐỒNG – KHẢM TRỨNG ================= */
+:root:root:root{
+  --bg:#130E0B; --panel:#1E1612; --panel2:#251B16; --ink:#EDE3CF; --muted:#B2A28A; --line:rgba(212,175,99,.18);
+  --son:#A3241B; --accent:#D65A49; --accent2:#9DB8AD; --hoe:#D4AF63; --gold:#C9A14A; --cham:#3A2A20;
+  --egg:#E9DEC6; --canhgian:#5A2716;
+  --brick:#9E2A1F; --brick2:#5A2716; --brick3:#B8913F; --mortar:#0D0907;
+}
+body{background:#0a0705}
+.stage{background:
+  radial-gradient(120% 90% at 18% 8%, rgba(120,52,28,.22), transparent 55%),
+  radial-gradient(90% 80% at 100% 100%, rgba(201,161,74,.07), transparent 60%),
+  var(--bg)}
+.stage.on-dark{}
+
+/* Bụi vàng thếp rắc trên nền sơn mài */
+.grain{opacity:.5; mix-blend-mode:screen;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='1' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 .85 0 0 0 0 .68 0 0 0 0 .35 0 0 0 9 -7.4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.stage.on-dark .grain{opacity:.35; mix-blend-mode:screen}
+
+/* Chữ */
+.sec{color:var(--hoe)}
+h1,h2{color:var(--ink)}
+h3{color:var(--accent)}
+.lead,.body,ul,p{color:var(--ink)}
+.src{color:var(--muted)}
+.take.accent,.big{color:var(--accent)}
+li::marker{color:var(--hoe)}
+blockquote{border-left-color:var(--gold)}
+.who{color:var(--muted)} .who::before{background:var(--gold); border-radius:50%}
+
+/* Tấm sơn mài: nền nâu đen, viền chỉ vàng thếp */
+.panel,.card,.flow .box,.team .m,.vs .v{background:linear-gradient(160deg, var(--panel2), var(--panel) 60%); box-shadow:inset 0 0 0 1px rgba(212,175,99,.16)}
+.panel{border-top:1px solid rgba(212,175,99,.55)}
+.panel::before,.vs .v::before{height:2px; background:var(--accent)}
+.panel.hoe::before,.vs .v.h::before{background:var(--hoe)} .panel.cham::before,.vs .v.c::before{background:var(--accent2)}
+.panel.cham h3,.card.cham h3,.row.c .k{color:var(--accent2)!important}
+.panel.hoe h3,.card.hoe h3,.row.h .k{color:var(--hoe)!important}
+.card{border-bottom:1px solid rgba(212,175,99,.45)}
+.tag{background:var(--canhgian); color:var(--egg); border:1px solid rgba(212,175,99,.5)} .tag.son{background:var(--son)}
+.team .ini{background:var(--son); color:var(--egg); box-shadow:inset 0 0 0 1px rgba(212,175,99,.6)}
+.team .m.c .ini{background:var(--canhgian)} .team .m.h .ini{background:linear-gradient(135deg,#E2C27A,#A8822F); color:#1a120c}
+.team .m{border-left-color:var(--accent)} .team .m.c{border-left-color:var(--accent2)} .team .m.h{border-left-color:var(--hoe)}
+.row{border-top-color:var(--line)}
+.photo{background:var(--panel)}
+.photo.tall{outline:1px solid rgba(212,175,99,.6); outline-offset:10px}
+.photo figcaption,.cimg-cap{color:#EDE3CF}
+.tl{border-top-color:var(--gold)}
+.tl .i::before{background:var(--bg); border-color:var(--hoe)}
+.tl .y{color:var(--hoe)}
+.st .dot{background:var(--bg)}
+.gp-img::before{background:linear-gradient(180deg, rgba(10,7,5,.55), transparent 40%, transparent 60%, rgba(10,7,5,.9))}
+.gp2-grid .gp-img{outline:none}
+
+/* Ảnh lịch sử: in hai tông đen sơn – vàng ngà như bản in cũ */
+img.old{filter:url(#duo)!important}
+.bleed img.old{filter:url(#duo) brightness(.92)!important}
+/* Ảnh hiện đại: dịu màu cho cùng tông */
+.stage img:not(.old){filter:saturate(.72) sepia(.18) contrast(1.04)}
+
+/* Con dấu son trên nền tối */
+.stamp span{color:#E0503F; border-color:#E0503F}
+.stamp span::after{border-color:#E0503F}
+
+/* Gạch → mảnh sơn mài khảm: đỏ son, nâu cánh gián, vàng thếp; mảnh vỏ trứng rạn */
+.brick,.lay i,.endwall i,.common .bricks span{
+  background-color:var(--brick)!important;
+  background-image:
+    linear-gradient(160deg, rgba(255,220,170,.22), rgba(255,220,170,0) 40%, rgba(0,0,0,.35)),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='40'%3E%3Cpath d='M0 14 L22 9 L31 22 L52 16 L60 30 L90 24 M31 22 L28 40 M52 16 L56 0 M60 30 L74 40' stroke='rgba(0,0,0,.35)' stroke-width='.8' fill='none'/%3E%3C/svg%3E")!important;
+  box-shadow:inset 0 0 0 1px rgba(226,194,122,.45), 0 2px 6px rgba(0,0,0,.5)!important; border-radius:1px}
+.brick.c,.lay i.c,.endwall i.c{background-color:var(--brick2)!important}
+.brick.h,.lay i.h,.endwall i.h{background-color:var(--brick3)!important;
+  background-image:linear-gradient(135deg,#F0D58E,#B8913F 45%,#E2C27A 60%,#9C7A2F)!important}
+.endwall i.last{background-image:none!important; background-color:var(--egg)!important; box-shadow:0 0 28px rgba(233,222,198,.55), inset 0 0 0 1px #E2C27A!important}
+.common .bricks{background:var(--mortar); box-shadow:inset 0 0 0 1px rgba(212,175,99,.35)}
+.common .bricks span{color:var(--egg)}
+.common .bricks span:nth-child(2){background-color:var(--canhgian)!important}
+.common .bricks span:nth-child(3){background-color:#7A1E16!important}
+.common .bricks span:nth-child(4){background-color:#3E2418!important}
+.rail .b{outline-color:rgba(212,175,99,.22)}
+.rail .b.on{background-image:linear-gradient(180deg, rgba(255,220,170,.18), rgba(0,0,0,.3))!important; box-shadow:inset 0 0 0 1px rgba(226,194,122,.35)}
+.rail .b.on.mo{background-color:#B8913F!important} .rail .b.on.pt{background-color:#9E2A1F!important}
+.rail .b.on.gp{background-color:#6B2C19!important} .rail .b.on.kl{background-color:#E9DEC6!important}
+.rail .num{color:var(--muted)}
+
+/* Lưới, dòng chảy */
+.net line{stroke:var(--hoe); opacity:.7}
+.net circle{fill:var(--accent)}
+
+/* ===== Trống đồng ===== */
+.drum *{fill:none; stroke:#D4AF63; stroke-width:1.6; vector-effect:non-scaling-stroke}
+.drum .fill{fill:#D4AF63; stroke:none}
+.drum-cover{position:absolute; right:-230px; top:50%; width:900px; height:900px; margin-top:-450px; z-index:1; opacity:.0; pointer-events:none}
+.slide.active .drum-cover{animation:drumIn 2.4s ease-out .2s forwards}
+.drum-cover .spin{transform-origin:0 0; animation:spin 160s linear infinite}
+@keyframes drumIn{from{opacity:0; transform:scale(.92) rotate(-8deg)} to{opacity:.32; transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.cover .shade.l{background:linear-gradient(90deg, rgba(10,7,5,.95) 0%, rgba(10,7,5,.82) 45%, rgba(10,7,5,.55) 100%)}
+
+/* Trống đồng ở slide cuối: sáng dần từ ngôi sao ra vòng ngoài */
+.drum-end{position:absolute; right:70px; top:50%; width:640px; height:640px; margin-top:-360px; z-index:2; pointer-events:none}
+.drum-end .r{opacity:0; transform-origin:0 0}
+.slide.active .drum-end .r{animation:ringOn .9s cubic-bezier(.2,.8,.2,1) both}
+.slide.active .drum-end .r1{animation-delay:.5s} .slide.active .drum-end .r2{animation-delay:.85s}
+.slide.active .drum-end .r3{animation-delay:1.2s} .slide.active .drum-end .r4{animation-delay:1.55s}
+.slide.active .drum-end .r5{animation-delay:1.9s} .slide.active .drum-end .r6{animation-delay:2.25s}
+.slide.active .drum-end .r7{animation-delay:2.6s}
+@keyframes ringOn{from{opacity:0; transform:scale(.85)} to{opacity:1; transform:none}}
+.drum-end .r1{filter:drop-shadow(0 0 14px rgba(240,200,110,.7))}
+.slide.active .drum-end .r4{animation:ringOn .9s cubic-bezier(.2,.8,.2,1) 1.55s both, spin 90s linear 2.5s infinite}
+.drum-end .glow{position:absolute; inset:18%; border-radius:50%; background:radial-gradient(circle, rgba(212,175,99,.22), transparent 65%); opacity:0}
+.slide.active .drum-end .glow{animation:glow 3s ease-in-out 3.2s infinite alternate}
+@keyframes glow{from{opacity:.2} to{opacity:.9}}
+.endwall{display:none}
+
+/* Tường chuyển cảnh: tấm sơn mài khảm */
+
+
+/* Ẩn nút sáng/tối: bộ slide chỉ có một tông sơn mài */
+#theme{display:none}
+
+@media (prefers-reduced-motion: reduce){
+  .slide.active .drum-cover,.drum-cover .spin,.slide.active .drum-end .r,.slide.active .drum-end .glow{animation:none!important}
+  .drum-cover{opacity:.3} .drum-end .r{opacity:1}
+}
+
+.finale .bleed img{opacity:.3}
+.finale .hero-in{max-width:740px}
+.finale h1{font-size:76px}
+
+
+/* ================= v7: BỨC TƯỜNG – RÕ QUA GOOGLE MEET ================= */
+/* nền phẳng, không vân hạt */
+.stage{background:var(--bg)!important}
+.grain{display:none!important}
+
+/* cỡ chữ tối thiểu */
+.src{font-size:18px} .bcap{font-size:18px}
+.photo figcaption,.cimg-cap,.ocard .ov span{font-size:18px}
+.who{font-size:20px}
+.tl .t{font-size:20px} .tl.long .t{font-size:18px} .tl .y{font-size:28px}
+.map .g .l{font-size:18px} .map .g .t{font-size:24px}
+.tag{font-size:18px}
+.row .k{font-size:28px}
+h3{font-size:28px}
+.lead{font-size:30px}
+.take{font-size:30px}
+.credits{columns:3; column-gap:34px; font-size:18px; line-height:1.3}
+.credits li{margin-bottom:5px}
+.vs .who2,.rail .num{font-size:18px}
+.st .lbl{font-size:28px}
+.gp-num small{font-size:22px}
+.hero .meta{font-size:22px}
+
+/* ----- bấm từng bước ----- */
+.stp{opacity:0; transform:translateY(18px); transition:opacity .55s ease, transform .6s cubic-bezier(.2,.8,.2,1)}
+.stp.on{opacity:1; transform:none}
+svg .stp{transform:none; transition:opacity .5s ease}
+.team .m.stp{transform:translateY(-36px)}
+.team .m.stp.on{transform:none; transition:opacity .4s ease, transform .7s cubic-bezier(.3,1.4,.5,1)}
+
+/* chuyển phần: lướt mờ ngắn */
+.slide.active.secin{animation:secIn .6s ease both}
+@keyframes secIn{from{opacity:0; transform:scale(1.012)} to{opacity:1; transform:none}}
+
+/* ảnh nền "thở" ở bìa và slide mở phần */
+.slide.active .bleed img,.slide.active .bleed img.kb{animation:breathe 22s ease-in-out infinite alternate!important}
+@keyframes breathe{from{transform:scale(1)} to{transform:scale(1.06)}}
+
+/* ----- gạch (SVG) ----- */
+.bk{stroke:rgba(0,0,0,.4); stroke-width:1}
+.bk.t0{fill:#6A3E2D} .bk.t1{fill:#78472F} .bk.t2{fill:#855139}
+.sh{fill:rgba(255,222,184,.10)}
+.bl{fill:#F1E6CF; font-family:"Be Vietnam Pro",system-ui,sans-serif; font-weight:600; text-anchor:middle}
+.wcap{fill:#8A7E6A} .found{fill:#5B544A}
+.hole,.gap4{fill:#070504}
+.mortar{fill:none; stroke:#D8CCB0; stroke-width:12; stroke-linecap:round; stroke-dasharray:1400; stroke-dashoffset:1400; transition:stroke-dashoffset 1.3s ease}
+
+/* 1 · bìa: dải tường, tự xây khi chờ */
+.cover-wall-host{position:absolute; left:0; right:0; bottom:0; height:200px; z-index:1; opacity:.55; pointer-events:none}
+.cover-wall{width:100%; height:100%; display:block}
+.stage.attract .cw{animation:attract 18s linear infinite; animation-delay:var(--d)}
+@keyframes attract{0%{opacity:0; transform:translateY(-50px)} 3%{opacity:1; transform:none} 80%{opacity:1; transform:none} 88%,100%{opacity:0; transform:none}}
+.drum-cover{display:none!important}
+
+/* 2 · gạch cho từng thành viên */
+.team .ini.brickini{width:132px; height:62px; border-radius:2px; font-family:var(--serif); font-size:30px;
+  background:linear-gradient(180deg,rgba(255,222,184,.12),rgba(0,0,0,.25)),#78472F!important; color:#F1E6CF; box-shadow:inset 0 0 0 1px rgba(0,0,0,.4)}
+.team .m.h .ini.brickini{background:linear-gradient(180deg,rgba(255,222,184,.12),rgba(0,0,0,.25)),#855139!important}
+.team .m.c .ini.brickini{background:linear-gradient(180deg,rgba(255,222,184,.12),rgba(0,0,0,.25)),#6A3E2D!important}
+
+/* 3 · "Đánh!" to, tĩnh, thở sáng */
+.danh span{display:inline-block; font:700 72px/1 var(--serif); color:#E0503F}
+.slide.active .danh.on span.loop{animation:glowT 6s ease-in-out 1s infinite}
+@keyframes glowT{0%,100%{text-shadow:0 0 0 rgba(224,80,63,0)} 50%{text-shadow:0 0 26px rgba(224,80,63,.6)}}
+
+/* 5 · đống gạch chênh vênh */
+.pile-host{width:420px}
+.pile{width:420px; height:357px; display:block; overflow:visible}
+.wob{transform:rotate(var(--r))}
+.slide.active .pile-host.on .wob{animation:wob 3.6s ease-in-out infinite alternate; animation-delay:var(--wd)}
+@keyframes wob{from{transform:rotate(var(--r))} to{transform:rotate(calc(var(--r) + 3.5deg)) translateY(-3px)}}
+
+/* 7 */
+.steps-cap{font-size:22px; color:#E3DACA; letter-spacing:.1em; text-transform:uppercase; margin:0}
+
+/* 9 · hũ gạo · 11 · ba biểu tượng */
+.has-ic{position:relative} .has-ic h3{padding-right:86px}
+.ic-host{position:absolute; right:16px; top:12px; width:78px; height:86px}
+.ic-host svg{width:100%; height:100%}
+.jar{fill:none; stroke:#D4AF63; stroke-width:3} .lid{fill:#D4AF63} .rice{fill:#EDE3CF; opacity:.85} .rgr{fill:#EDE3CF; opacity:0}
+.slide.active .rgr.loop{animation:fall 3.2s ease-in infinite; animation-delay:var(--gd)}
+@keyframes fall{0%{opacity:0; transform:translateY(0)} 10%{opacity:1} 80%{opacity:1; transform:translateY(62px)} 100%{opacity:0; transform:translateY(64px)}}
+.ic *{fill:none; stroke:#D4AF63; stroke-width:3; stroke-linejoin:round; stroke-linecap:round}
+.ic{opacity:0} .ic1{opacity:1}
+.slide.active .ic.loop{animation:icCycle 12s ease-in-out infinite}
+.slide.active .ic2.loop{animation-delay:4s} .slide.active .ic3.loop{animation-delay:8s}
+@keyframes icCycle{0%{opacity:0} 6%{opacity:1} 30%{opacity:1} 36%{opacity:0} 100%{opacity:0}}
+
+/* 10 · giọt nước mòn đá */
+.drop-host{display:flex; align-items:center; gap:16px; margin-top:18px}
+.drop-host svg{width:120px; height:112px; flex:none}
+.drop-host .cap{fill:none; font-size:20px; color:var(--muted); font-style:italic; font-family:var(--serif)}
+.drip{fill:#9DB8AD; opacity:0; transform-box:fill-box; transform-origin:center}
+.ripple{fill:none; stroke:#9DB8AD; stroke-width:2; opacity:0; transform-box:fill-box; transform-origin:center}
+.stone{fill:#5B544A} .dent{fill:none; stroke:#2a2420; stroke-width:3}
+.slide.active .drip.loop{animation:drip 4s ease-in infinite}
+.slide.active .ripple.loop{animation:ripple 4s ease-out infinite}
+@keyframes drip{0%{opacity:0; transform:translateY(0)} 8%{opacity:1} 55%{opacity:1; transform:translateY(66px)} 58%,100%{opacity:0; transform:translateY(66px)}}
+@keyframes ripple{0%,54%{opacity:0; transform:scale(.3)} 58%{opacity:.9; transform:scale(1)} 100%{opacity:0; transform:scale(3)}}
+
+/* 12 · dải tường nền gốc */
+.strip-host{flex:none; margin-top:2px}
+.strip12{width:100%; height:auto; display:block}
+.strip12 .up .bk-g{opacity:.25; transition:opacity .6s}
+.slide.k1 .strip12 .up .bk-g{opacity:.95}
+.strip12 .base .bk{transition:fill .7s}
+.slide.k2 .strip12 .base .bk{fill:#B8913F}
+.slide.k2 .strip12 .base .bl{fill:#1a120c}
+
+/* 13 · chấm sáng · 16 · sợi chỉ vàng */
+.tl{position:relative}
+.tl-dot{position:absolute; top:-9px; left:0; width:14px; height:14px; border-radius:50%; background:#F3D88E; box-shadow:0 0 12px rgba(243,216,142,.8); z-index:2}
+.slide.active .tl-dot.loop{animation:tlRun 9s ease-in-out infinite alternate}
+@keyframes tlRun{from{left:0} to{left:calc(100% - 14px)}}
+.tl-thread{position:absolute; top:-3px; left:-140px; width:140px; height:3px; z-index:2; background:linear-gradient(90deg,transparent,#F3D88E,transparent)}
+.slide.active .tl-thread.loop{animation:thread 7s linear infinite}
+@keyframes thread{from{left:-140px} to{left:100%}}
+
+/* 14 · hai chiều: chấm to, chậm */
+.flow .ln{stroke-width:9; stroke-dasharray:1 20; stroke-linecap:round}
+.slide.active .flow .ln.r{animation:dashR 2.2s linear infinite}
+.slide.active .flow .ln.l{animation:dashL 2.2s linear infinite}
+@keyframes dashR{to{stroke-dashoffset:-42}} @keyframes dashL{to{stroke-dashoffset:42}}
+
+/* 15 · vữa trát vào giữa các hàng */
+.wall15-host{width:400px; margin-top:6px}
+.wall15{width:100%; height:auto; display:block}
+.slide.k1 .wall15 .mortar{stroke-dashoffset:0}
+.wall15 .mrun{fill:none; stroke:#FFF3D0; stroke-width:12; stroke-linecap:round; stroke-dasharray:50 1400; stroke-dashoffset:1450; opacity:0}
+.slide.active.k1 .wall15 .mrun.loop{opacity:.75; animation:mrun 6s linear 1.4s infinite}
+@keyframes mrun{from{stroke-dashoffset:1450} to{stroke-dashoffset:0}}
+
+/* 18 · lưới thở */
+.slide.active .net.loopnet g{animation:netB 5s ease-in-out 3.4s infinite alternate}
+@keyframes netB{from{transform:scale(1.06)} to{transform:scale(.94)}}
+.net line{stroke:#D4AF63; stroke-width:3} .net circle{fill:#E0503F}
+.netrow{grid-template-columns:170px 1fr} .net{width:170px; height:124px}
+
+/* 19 · sợi dây và ba nút */
+.rope-host{width:100%; max-width:520px}
+.rope19{width:100%; height:auto; display:block}
+.rope{fill:none; stroke:#C9A14A; stroke-width:5; stroke-linecap:round}
+.post{fill:#3A2A20; stroke:#C9A14A; stroke-width:2}
+.rl{fill:#B2A28A; font-size:22px; text-anchor:start; font-family:"Be Vietnam Pro",sans-serif}
+.knot circle{fill:#221913; stroke:#C9A14A; stroke-width:3; transition:fill .5s}
+.kl{fill:#C9A14A; font:700 18px "Be Vietnam Pro",sans-serif; text-anchor:middle}
+.slide.k2 .kn1 circle,.slide.k3 .kn2 circle,.slide.k4 .kn3 circle{fill:#D4AF63}
+.slide.k2 .kn1 .kl,.slide.k3 .kn2 .kl,.slide.k4 .kn3 .kl{fill:#1a120c}
+.slide.active .ropeg.loop{animation:ropeV 3.6s ease-in-out infinite alternate}
+@keyframes ropeV{from{transform:translateY(-2px)} to{transform:translateY(2px)}}
+.knum{position:absolute; top:10px; left:10px; z-index:3; width:36px; height:36px; border-radius:50%; background:#D4AF63; color:#1a120c; font:700 19px/36px "Be Vietnam Pro",sans-serif; text-align:center}
+
+/* 20 · tường dựng theo ba bước */
+.recap7 .r7-grid{display:grid; grid-template-columns:640px 1fr; gap:56px; align-items:center; min-height:0}
+.wall20{width:640px; height:auto; display:block; overflow:visible}
+.w20b{opacity:0; transform:translate(var(--jx),var(--jy)) rotate(var(--jr)); transform-box:fill-box; transform-origin:center;
+  transition:opacity .45s ease var(--dd), transform .9s cubic-bezier(.2,.8,.2,1) var(--dd)}
+.slide.k1 .w20b{opacity:1}
+.slide.k2 .w20b{transform:none}
+.rowlab{fill:#B2A28A; font:600 19px "Be Vietnam Pro",sans-serif; opacity:0; transition:opacity .6s .6s}
+.slide.k2 .rowlab{opacity:1}
+.m20{stroke-width:7}
+.slide.k3 .m20{stroke-dashoffset:0}
+.rim{fill:none; stroke:#D4AF63; stroke-width:3; opacity:0; transition:opacity .8s 1s}
+.slide.k3 .rim{opacity:1}
+.wall20 .sweep{display:none}
+.r7-rows{display:flex; flex-direction:column; gap:22px}
+.rr{display:grid; grid-template-columns:76px 1fr; gap:18px; padding:20px 0; border-top:1px solid var(--line)}
+.rr .rk{font:700 44px/1 var(--serif); color:var(--hoe)}
+.rr h3{font:700 32px var(--serif); margin:0 0 6px; color:var(--ink)}
+.rr .body{font-size:26px; color:var(--muted)}
+
+/* 21 · năm hư hại */
+.wall21-host{position:absolute; right:96px; top:64px; width:600px; z-index:2}
+.wall21{width:100%; height:auto; display:block}
+.dmg{opacity:0; transition:opacity .6s}
+.slide.k1 .d1,.slide.k2 .d2,.slide.k3 .d3,.slide.k4 .d4,.slide.k5 .d5{opacity:1}
+.wall21 .sink{transition:transform .8s ease}
+.slide.k3 .wall21 .sink{transform:translateY(8px)}
+.fadebk{fill:#855139} .faded{fill:#EFE3CF; opacity:.22; font:700 17px "Be Vietnam Pro",sans-serif; text-anchor:middle; letter-spacing:.08em}
+.sinkline{fill:none; stroke:#E0503F; stroke-width:3; stroke-dasharray:7 5}
+.crack{fill:none; stroke:#E0503F; stroke-width:4; stroke-linejoin:round}
+.chisel{fill:#B2A28A}
+.wall21 .gap4{fill:#E0503F; opacity:.85}
+.wall21 .hole{fill:#070504; stroke:#E0503F; stroke-width:2; stroke-dasharray:6 4}
+.badge circle{fill:#A3241B; stroke:#F3EDE0; stroke-width:2}
+.badge text{fill:#fff; font:700 19px "Be Vietnam Pro",sans-serif; text-anchor:middle}
+.badge{transform-box:fill-box; transform-origin:center}
+.slide.active .badge.loop{animation:bpulse 2.6s ease-in-out infinite; animation-delay:var(--bd)}
+@keyframes bpulse{0%,100%{opacity:1; transform:scale(1)} 50%{opacity:.6; transform:scale(.9)}}
+
+/* 22–26 · một hư hại, một cách sửa */
+.gpfix-host{position:absolute; right:104px; top:78px; width:230px; z-index:3; text-align:center}
+.gpfix{width:230px; height:auto; display:block}
+.fixcap{display:block; font-size:18px; color:var(--muted); margin-top:6px}
+.gp2 .gp-right h2,.gp2 .gp-right .sec{padding-right:250px}
+.fx-new{opacity:0; transition:opacity .9s ease .2s}
+.fx-old{transition:opacity .6s ease}
+.slide.k2 .fx-new{opacity:1} .slide.k2 .fx-old{opacity:0}
+.gpfix .ink{font:700 18px "Be Vietnam Pro",sans-serif; text-anchor:middle; letter-spacing:.08em}
+.gpfix .ink.fx-old{fill:#EFE3CF; opacity:.2}
+.slide.k2 .gpfix .ink.fx-old{opacity:0}
+.gpfix .ink.fx-new{fill:#F3D88E}
+.gpfix .tie{fill:#B2A28A} .gpfix .plate{fill:#B2A28A}
+.gpfix .shim{fill:#B2A28A}
+.gpfix .tilt{transform:rotate(-3.5deg); transform-origin:20px 150px; transition:transform 1.2s cubic-bezier(.3,1.3,.5,1)}
+.slide.k2 .gpfix .tilt{transform:none}
+.gpfix .capg{transform:translateY(-9px); transition:transform 1s cubic-bezier(.3,1.3,.5,1)}
+.slide.k2 .gpfix .capg{transform:none}
+.gpfix .seal{fill:#D8CCB0}
+.gpfix .gap4{fill:#E0503F}
+.gpfix .fill5{fill:none; stroke:#D8CCB0; stroke-width:6; stroke-linejoin:round; stroke-dasharray:300; stroke-dashoffset:300; opacity:1; transition:stroke-dashoffset 1.2s ease .2s}
+.slide.k2 .gpfix .fill5{stroke-dashoffset:0}
+.gp-drum{display:none!important}
+
+/* 27 · chỉ còn câu hỏi */
+.open27{justify-content:center; gap:40px}
+.q27{font-size:60px; max-width:1300px}
+.chips27{display:grid; grid-template-columns:repeat(5,1fr); gap:18px}
+.c27{background:var(--panel); box-shadow:inset 0 0 0 1px rgba(212,175,99,.25); padding:22px 22px 24px; display:flex; flex-direction:column; gap:10px; min-height:150px}
+.c27 b{font:700 44px/1 var(--serif); color:var(--hoe)}
+.c27 span{font-size:24px; line-height:1.35}
+
+/* 29 · viên gạch cuối */
+.last-host{margin-top:20px; width:300px}
+.last29{width:300px; height:auto; display:block; overflow:visible}
+.lastb{opacity:0; transform:translateY(-70px); transition:opacity .35s, transform .9s cubic-bezier(.3,1.4,.5,1)}
+.slide.k3 .lastb{opacity:1; transform:none}
+.lastbk{fill:#B8913F!important}
+.slide.active.k3 .lastb.loop .bk{animation:lastGlow 3.2s ease-in-out 1.2s infinite alternate}
+@keyframes lastGlow{from{fill:#B8913F} to{fill:#E2C27A}}
+
+/* 32 · tường hoàn chỉnh dưới nắng */
+.wall32-host{position:absolute; right:104px; top:50%; transform:translateY(-56%); width:540px; z-index:2}
+.wall32{width:100%; height:auto; display:block}
+.wall32 .sweep{fill:url(#gsw2)}
+.slide.active .wall32 .sweep.loop{animation:sweep 12s ease-in-out 1s infinite}
+@keyframes sweep{0%{transform:translateX(0)} 45%{transform:translateX(820px)} 100%{transform:translateX(820px)}}
+.drum-end{display:none!important}
+
+/* ----- tường nhỏ ở góc (thay thanh tiến độ) ----- */
+.rail{left:auto!important; right:104px; bottom:22px; gap:14px}
+.rail .row,.rail .pline{display:none}
+.mini-host{width:120px; height:58px; flex:none}
+.mini{width:120px; height:58px; display:block; overflow:visible}
+.mb{fill:#2c221b; stroke:rgba(212,175,99,.28); stroke-width:.7; transition:fill .5s, transform .6s; transform-box:fill-box; transform-origin:center}
+.mb.on{fill:#87553F; stroke:rgba(0,0,0,.4)}
+.mm{fill:none; stroke:#D8CCB0; stroke-width:1.8; opacity:0; transition:opacity .6s}
+.mini.mt .mm{opacity:.9}
+.md{fill:#E0503F; opacity:0; transition:opacity .4s, fill .6s}
+.md.show{opacity:1} .md.fixed{fill:#D8CCB0}
+.mini.done .mb.cur{fill:#B8913F}
+.mb.cur{animation:curP 4s ease-in-out infinite}
+@keyframes curP{0%,100%{fill:#87553F} 50%{fill:#E2C27A}}
+.mini.done .mb.cur{animation:curD 4s ease-in-out infinite}
+@keyframes curD{0%,100%{fill:#B8913F} 50%{fill:#F0D58E}}
+
+/* ----- dừng chuyển động: phím L, hoặc slide có tranh luận ở bước cuối ----- */
+.stage.noloop .loop,.stage.noloop .loop *,.slide.still .loop,.slide.still .loop *,
+.stage.noloop .slide.active .bleed img,.slide.still .bleed img,
+.stage.noloop .flow .ln,.slide.still .flow .ln,
+.stage.noloop .net.loopnet g,.slide.still .net.loopnet g,
+.stage.noloop .mb.cur,.stage.hush .mb.cur,
+.stage.noloop .wob,.slide.still .wob{animation:none!important}
+.stage.noloop .ic,.slide.still .ic{opacity:0} .stage.noloop .ic1,.slide.still .ic1{opacity:1}
+.stage.noloop .wall15 .mrun,.slide.still .wall15 .mrun{opacity:0}
+
+@media (prefers-reduced-motion: reduce){
+  .stp{transition:none} .slide.active.secin{animation:none}
+  .stage.attract .cw{animation:none}
+}
+
+.rl.rle{text-anchor:end}
+/* chỉnh sau kiểm tra 1 */
+.cover .bcap{bottom:214px}
+.finale .bcap{bottom:86px}
+section.slide:nth-of-type(28) .bcap{top:74px; bottom:auto}
+.credits{line-height:1.22} .credits li{margin-bottom:3px}
+.loopnote{display:flex; align-items:center; gap:16px; margin-top:6px}
+.loopnote svg{width:84px; height:84px; flex:none}
+.loopnote span{font:italic 22px var(--serif); color:var(--muted)}
+.gpfix-host{left:40px; right:auto; top:300px; width:300px; padding:14px 14px 10px; background:rgba(10,7,5,.72); box-shadow:inset 0 0 0 1px rgba(212,175,99,.3); border-radius:3px}
+.gpfix{width:272px}
+.fixcap{font-size:19px; color:#E3DACA}
+.gp2 .gp-right h2,.gp2 .gp-right .sec{padding-right:0}
+.wall21-host{top:92px; right:120px; width:560px}
+.toast7{position:fixed; left:50%; bottom:24px; transform:translateX(-50%); background:#221913; color:#EDE3CF; border:1px solid #6b5636; padding:10px 18px; font:500 15px "Be Vietnam Pro",sans-serif; border-radius:4px; opacity:0; transition:opacity .3s; z-index:10; pointer-events:none}
+.toast7.show{opacity:1}
+/* In ra PDF: mỗi slide một trang, hiện đủ mọi bước, không chuyển động */
+@media print{
+  @page{size:1600px 900px; margin:0}
+  html,body{height:auto; overflow:visible; background:#130E0B}
+  .viewport{position:static; display:block}
+  .stage{transform:none!important; width:1600px; height:auto; overflow:visible}
+  .slide{display:flex!important; position:relative; width:1600px; height:900px; break-after:page; page-break-after:always; animation:none!important}
+  .slide *{animation:none!important; transition:none!important}
+  .stp{opacity:1!important; transform:none!important}
+  .w20b{opacity:1!important; transform:none!important} .rowlab,.rim,.dmg,.fx-new,.lastb{opacity:1!important; transform:none!important}
+  .fx-old{opacity:0!important} .mortar,.fill5{stroke-dashoffset:0!important}
+  .ctrl,.rail,.toast7,.cover-wall-host{display:none!important}
+}
+
+/* 13, 16: cả dòng thời gian hiện trong một lần bấm, từng mốc nối nhau */
+.tl .i.stp{transition-delay:calc(var(--j,0) * .14s)}
+.tl .i.stp:not(.on){transition-delay:0s}
+
+/* ----- căn hàng các ô đứng cạnh nhau (subgrid) ----- */
+.al-grid{display:grid!important; row-gap:0!important; align-items:stretch}
+.al-item{display:grid!important; grid-row:1 / span 6; grid-template-rows:subgrid; row-gap:0; min-height:0}
+.al-item .al-flat{display:contents}
+.card.al-item{padding:0}
+.card.al-item > .al-media{flex:none; min-height:0; position:relative; overflow:hidden}
+.al-grid.grow > .card.al-item > .al-media{height:auto!important; min-height:0}
+.card.al-item > .al-media img{position:absolute; inset:0; width:100%; height:100%}
+.card.al-item .al-tag,.card.al-item .al-h,.card.al-item .al-b,.card.al-item .al-q,.card.al-item .al-s{margin-left:24px!important; margin-right:24px!important}
+.card.al-item .al-h,.card.al-item .al-tag{margin-top:18px!important}
+.card.al-item .al-media + *,.card.al-item .al-tag{margin-top:20px}
+.card.al-item > :last-child,.card.al-item .al-flat > :last-child{margin-bottom:22px}
+.al-h{margin:0 0 10px!important; align-self:start}
+.al-tag{justify-self:start; align-self:start}
+.al-b{align-self:start}
+/* trích dẫn / câu chốt trong ô: cùng kiểu chữ, cùng chiều cao hàng */
+.al-q{margin:16px 0 0!important; align-self:stretch}
+.al-item blockquote.al-q,.al-item .take.al-q{font:italic 500 25px/1.42 var(--serif)!important; color:var(--ink)!important; border-left:3px solid var(--gold); padding:2px 0 2px 18px; max-width:none}
+.al-item .take.al-q{color:#B8CBD3!important}
+.al-item .last-host.al-q,.al-item .drop-host.al-q{border:none; padding:0; font:inherit!important}
+.al-s{margin:10px 0 0!important; align-self:start}
+.card.al-item .al-s{margin-bottom:22px!important}
+
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="duo" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .55 .15 0 0 .3 .55 .15 0 0 .3 .55 .15 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues=".06 .42 .80 .95"/><feFuncG type="table" tableValues=".04 .30 .68 .89"/><feFuncB type="table" tableValues=".03 .17 .42 .74"/></feComponentTransfer></filter></svg>
 <div class="viewport"><div class="stage" id="stage">
 
 <!-- 1 -->
-<section class="slide hero cover" data-sec="mo" data-who="Diệu Anh"><div class="bleed"><img src="https://upload.wikimedia.org/wikipedia/commons/c/cd/M%C3%ADt_tinh_ch%C3%A0o_m%E1%BB%ABng_C%C3%A1ch_m%E1%BA%A1ng_Th%C3%A1ng_T%C3%A1m_n%C4%83m_1945_th%C3%A0nh_c%C3%B4ng_t%E1%BA%A1i_Nh%C3%A0_h%C3%A1t_L%E1%BB%9Bn_H%C3%A0_N%E1%BB%99i.jpg" alt="Mít tinh mừng Cách mạng Tháng Tám thành công, Nhà hát Lớn Hà Nội, 1945" style="object-position:center 40%" class="kb" decoding="async" referrerpolicy="no-referrer"></div><div class="shade l"></div><p class="bcap">Ảnh: Mít tinh mừng Cách mạng Tháng Tám thành công, Nhà hát Lớn Hà Nội, 1945</p>
+<section class="slide hero cover" data-sec="mo" data-who="Diệu Anh"><div class="bleed"><img src="https://upload.wikimedia.org/wikipedia/commons/c/cd/M%C3%ADt_tinh_ch%C3%A0o_m%E1%BB%ABng_C%C3%A1ch_m%E1%BA%A1ng_Th%C3%A1ng_T%C3%A1m_n%C4%83m_1945_th%C3%A0nh_c%C3%B4ng_t%E1%BA%A1i_Nh%C3%A0_h%C3%A1t_L%E1%BB%9Bn_H%C3%A0_N%E1%BB%99i.jpg" alt="Mít tinh mừng Cách mạng Tháng Tám thành công, Nhà hát Lớn Hà Nội, 1945" style="object-position:center 40%" class="kb old" decoding="async" referrerpolicy="no-referrer"></div><div class="shade l"></div><p class="bcap">Ảnh: Mít tinh mừng Cách mạng Tháng Tám thành công, Nhà hát Lớn Hà Nội, 1945</p>
+<div class="cover-wall-host" aria-hidden="true"><svg class="cover-wall" viewBox="0 0 1600 200" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><g class="bk-g cw" style="--d:0.00s"><rect class="bk t2" x="0" y="154" width="118" height="40" rx="2"/><rect class="sh" x="2" y="156" width="114" height="3"/></g><g class="bk-g cw" style="--d:0.11s"><rect class="bk t1" x="124" y="154" width="118" height="40" rx="2"/><rect class="sh" x="126" y="156" width="114" height="3"/></g><g class="bk-g cw" style="--d:0.22s"><rect class="bk t2" x="248" y="154" width="118" height="40" rx="2"/><rect class="sh" x="250" y="156" width="114" height="3"/></g><g class="bk-g cw" style="--d:0.33s"><rect class="bk t1" x="372" y="154" width="118" height="40" rx="2"/><rect class="sh" x="374" y="156" width="114" height="3"/></g><g class="bk-g cw" style="--d:0.44s"><rect class="bk t2" x="496" y="154" width="118" height="40" rx="2"/><rect class="sh" x="498" y="156" width="114" height="3"/></g><g class="bk-g cw" style="--d:0.55s"><rect class="bk t2" x="620" y="154" width="118" height="40" rx="2"/><rect class="sh" x="622" y="156" width="114" height="3"/></g><g class="bk-g cw" style="--d:0.66s"><rect class="bk t2" x="744" y="154" width="118" height="40" rx="2"/><rect class="sh" x="746" y="156" width="114" height="3"/></g><g class="bk-g cw" style="--d:0.77s"><rect class="bk t2" x="868" y="154" width="118" height="40" rx="2"/><rect class="sh" x="870" y="156" width="114" height="3"/></g><g class="bk-g cw" style="--d:0.88s"><rect class="bk t0" x="992" y="154" width="118" height="40" rx="2"/><rect class="sh" x="994" y="156" width="114" height="3"/></g><g class="bk-g cw" style="--d:0.99s"><rect class="bk t1" x="1116" y="154" width="118" height="40" rx="2"/><rect class="sh" x="1118" y="156" width="114" height="3"/></g><g class="bk-g cw" style="--d:1.10s"><rect class="bk t0" x="1240" y="154" width="118" height="40" rx="2"/><rect class="sh" x="1242" y="156" width="114" height="3"/></g><g class="bk-g cw" style="--d:1.21s"><rect class="bk t2" x="1364" y="154" width="118" height="40" rx="2"/><rect class="sh" x="1366" y="156" width="114" height="3"/></g><g class="bk-g cw" style="--d:1.32s"><rect class="bk t0" x="1488" y="154" width="112" height="40" rx="2"/><rect class="sh" x="1490" y="156" width="108" height="3"/></g><g class="bk-g cw" style="--d:1.43s"><rect class="bk t0" x="0" y="108" width="59" height="40" rx="2"/><rect class="sh" x="2" y="110" width="55" height="3"/></g><g class="bk-g cw" style="--d:1.54s"><rect class="bk t0" x="65" y="108" width="118" height="40" rx="2"/><rect class="sh" x="67" y="110" width="114" height="3"/></g><g class="bk-g cw" style="--d:1.65s"><rect class="bk t1" x="189" y="108" width="118" height="40" rx="2"/><rect class="sh" x="191" y="110" width="114" height="3"/></g><g class="bk-g cw" style="--d:1.76s"><rect class="bk t1" x="313" y="108" width="118" height="40" rx="2"/><rect class="sh" x="315" y="110" width="114" height="3"/></g><g class="bk-g cw" style="--d:1.87s"><rect class="bk t0" x="437" y="108" width="118" height="40" rx="2"/><rect class="sh" x="439" y="110" width="114" height="3"/></g><g class="bk-g cw" style="--d:1.98s"><rect class="bk t1" x="561" y="108" width="118" height="40" rx="2"/><rect class="sh" x="563" y="110" width="114" height="3"/></g><g class="bk-g cw" style="--d:2.09s"><rect class="bk t2" x="685" y="108" width="118" height="40" rx="2"/><rect class="sh" x="687" y="110" width="114" height="3"/></g><g class="bk-g cw" style="--d:2.20s"><rect class="bk t0" x="809" y="108" width="118" height="40" rx="2"/><rect class="sh" x="811" y="110" width="114" height="3"/></g><g class="bk-g cw" style="--d:2.31s"><rect class="bk t2" x="933" y="108" width="118" height="40" rx="2"/><rect class="sh" x="935" y="110" width="114" height="3"/></g><g class="bk-g cw" style="--d:2.42s"><rect class="bk t0" x="1057" y="108" width="118" height="40" rx="2"/><rect class="sh" x="1059" y="110" width="114" height="3"/></g><g class="bk-g cw" style="--d:2.53s"><rect class="bk t0" x="1181" y="108" width="118" height="40" rx="2"/><rect class="sh" x="1183" y="110" width="114" height="3"/></g><g class="bk-g cw" style="--d:2.64s"><rect class="bk t2" x="1305" y="108" width="118" height="40" rx="2"/><rect class="sh" x="1307" y="110" width="114" height="3"/></g><g class="bk-g cw" style="--d:2.75s"><rect class="bk t0" x="1429" y="108" width="118" height="40" rx="2"/><rect class="sh" x="1431" y="110" width="114" height="3"/></g><g class="bk-g cw" style="--d:2.86s"><rect class="bk t1" x="1553" y="108" width="47" height="40" rx="2"/><rect class="sh" x="1555" y="110" width="43" height="3"/></g><g class="bk-g cw" style="--d:2.97s"><rect class="bk t1" x="0" y="62" width="118" height="40" rx="2"/><rect class="sh" x="2" y="64" width="114" height="3"/></g><g class="bk-g cw" style="--d:3.08s"><rect class="bk t0" x="124" y="62" width="118" height="40" rx="2"/><rect class="sh" x="126" y="64" width="114" height="3"/></g><g class="bk-g cw" style="--d:3.19s"><rect class="bk t1" x="248" y="62" width="118" height="40" rx="2"/><rect class="sh" x="250" y="64" width="114" height="3"/></g><g class="bk-g cw" style="--d:3.30s"><rect class="bk t0" x="372" y="62" width="118" height="40" rx="2"/><rect class="sh" x="374" y="64" width="114" height="3"/></g><g class="bk-g cw" style="--d:3.41s"><rect class="bk t0" x="496" y="62" width="118" height="40" rx="2"/><rect class="sh" x="498" y="64" width="114" height="3"/></g><g class="bk-g cw" style="--d:3.52s"><rect class="bk t0" x="620" y="62" width="118" height="40" rx="2"/><rect class="sh" x="622" y="64" width="114" height="3"/></g><g class="bk-g cw" style="--d:3.63s"><rect class="bk t2" x="744" y="62" width="118" height="40" rx="2"/><rect class="sh" x="746" y="64" width="114" height="3"/></g><g class="bk-g cw" style="--d:3.74s"><rect class="bk t2" x="868" y="62" width="118" height="40" rx="2"/><rect class="sh" x="870" y="64" width="114" height="3"/></g><g class="bk-g cw" style="--d:3.85s"><rect class="bk t1" x="992" y="62" width="118" height="40" rx="2"/><rect class="sh" x="994" y="64" width="114" height="3"/></g><g class="bk-g cw" style="--d:3.96s"><rect class="bk t0" x="1116" y="62" width="118" height="40" rx="2"/><rect class="sh" x="1118" y="64" width="114" height="3"/></g><g class="bk-g cw" style="--d:4.07s"><rect class="bk t0" x="1240" y="62" width="118" height="40" rx="2"/><rect class="sh" x="1242" y="64" width="114" height="3"/></g><g class="bk-g cw" style="--d:4.18s"><rect class="bk t0" x="1364" y="62" width="118" height="40" rx="2"/><rect class="sh" x="1366" y="64" width="114" height="3"/></g><g class="bk-g cw" style="--d:4.29s"><rect class="bk t0" x="1488" y="62" width="112" height="40" rx="2"/><rect class="sh" x="1490" y="64" width="108" height="3"/></g></svg></div>
 <div class="hero-in">
   <p class="sec a">Tư tưởng Hồ Chí Minh · Đề tài 8 · Nhóm SS003</p>
   <h1 class="a">Phương thức xây dựng khối đại đoàn kết dân tộc</h1>
@@ -270,10 +1015,10 @@ img{display:block}
 <p class="sec a">Nhóm thực hiện</p>
 <h2 class="a">Bốn người, bốn phần của một bức tường</h2>
 <div class="team grow">
-  <div class="m a"><span class="ini">DA</span><div><div class="n">Nguyễn Lý Diệu Anh</div><div class="id">24520106</div><div class="r">Mở đầu, giải pháp 1 và 2, kết luận, dẫn chương trình</div></div></div>
-  <div class="m a c"><span class="ini">N</span><div><div class="n">Trần Hoàng Khánh Ngọc</div><div class="id">24521164</div><div class="r">Phương thức dân vận, giải pháp 3</div></div></div>
-  <div class="m a h"><span class="ini">G</span><div><div class="n">Phan Mai Trà Giang</div><div class="id">24520423</div><div class="r">Phương thức đoàn thể, giải pháp 4</div></div></div>
-  <div class="m a"><span class="ini">H</span><div><div class="n">Huỳnh Hồng Hân</div><div class="id">24520447</div><div class="r">Phương thức Mặt trận, giải pháp 5</div></div></div>
+  <div class="m a"><span class="ini brickini">DA</span><div><div class="n">Nguyễn Lý Diệu Anh</div><div class="id">24520106</div><div class="r">Mở đầu, giải pháp 1 và 2, kết luận, dẫn chương trình</div></div></div>
+  <div class="m a c"><span class="ini brickini">N</span><div><div class="n">Trần Hoàng Khánh Ngọc</div><div class="id">24521164</div><div class="r">Phương thức dân vận, giải pháp 3</div></div></div>
+  <div class="m a h"><span class="ini brickini">G</span><div><div class="n">Phan Mai Trà Giang</div><div class="id">24520423</div><div class="r">Phương thức đoàn thể, giải pháp 4</div></div></div>
+  <div class="m a"><span class="ini brickini">H</span><div><div class="n">Huỳnh Hồng Hân</div><div class="id">24520447</div><div class="r">Phương thức Mặt trận, giải pháp 5</div></div></div>
 </div></section>
 
 <!-- 3 -->
@@ -281,18 +1026,18 @@ img{display:block}
 <div class="split r">
   <div class="txt">
     <p class="sec a">Mở đầu</p>
-    <div class="big a">1284</div>
+    <div class="big a" data-count="1284">1284</div>
     <p class="lead a">Hội nghị Diên Hồng. Nhà Trần hỏi các bô lão khắp nơi: nên hòa hay nên đánh?</p>
-    <p class="take accent a" style="font-size:52px">"Đánh!"</p>
+    <div class="danh"><span class="loop">"Đánh!"</span></div>
     <blockquote class="sm a">Sử dạy cho ta bài học này: Lúc nào dân ta đoàn kết muôn người như một thì nước ta độc lập, tự do. Trái lại lúc nào dân ta không đoàn kết thì bị nước ngoài xâm lấn.<span class="src">Hồ Chí Minh, Toàn tập, t.3, tr.256</span></blockquote>
   </div>
-  <figure class="photo tall a" style=""><img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Painting_of_Tr%E1%BA%A7n_H%C6%B0ng_%C4%90%E1%BA%A1o_%281228_-_1300%29%2C_Nguy%E1%BB%85n_dynasty%2C_Vietnam.jpg" alt="Tranh thờ Hưng Đạo Đại vương Trần Quốc Tuấn (vẽ thời Nguyễn)" style="object-position:center 25%" class="" decoding="async" referrerpolicy="no-referrer"><figcaption>Tranh thờ Hưng Đạo Đại vương Trần Quốc Tuấn (vẽ thời Nguyễn)</figcaption></figure>
+  <figure class="photo tall a" style=""><img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Painting_of_Tr%E1%BA%A7n_H%C6%B0ng_%C4%90%E1%BA%A1o_%281228_-_1300%29%2C_Nguy%E1%BB%85n_dynasty%2C_Vietnam.jpg" alt="Tranh thờ Hưng Đạo Đại vương Trần Quốc Tuấn (vẽ thời Nguyễn)" style="object-position:center 25%" class="old" decoding="async" referrerpolicy="no-referrer"><figcaption>Tranh thờ Hưng Đạo Đại vương Trần Quốc Tuấn (vẽ thời Nguyễn)</figcaption></figure>
 </div></section>
 
 <!-- 4 -->
 <section class="slide " data-sec="mo" data-who="Diệu Anh">
 <div class="split l">
-  <figure class="photo tall a" style=""><img src="https://upload.wikimedia.org/wikipedia/commons/1/1c/Ho_Chi_Minh_1946.jpg" alt="Chủ tịch Hồ Chí Minh, 1946" style="object-position:center 30%" class="" decoding="async" referrerpolicy="no-referrer"><figcaption>Chủ tịch Hồ Chí Minh, 1946</figcaption></figure>
+  <figure class="photo tall a" style=""><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Ho_Chi_Minh_-_1946_Portrait.jpg/1280px-Ho_Chi_Minh_-_1946_Portrait.jpg" data-fb="https://upload.wikimedia.org/wikipedia/commons/1/1c/Ho_Chi_Minh_1946.jpg" alt="Chủ tịch Hồ Chí Minh, 1946" style="object-position:center 22%" class="old" decoding="async" referrerpolicy="no-referrer"><figcaption>Chủ tịch Hồ Chí Minh, 1946</figcaption></figure>
   <div class="txt">
     <p class="sec a">Mở đầu</p>
     <h2 class="a">Đại đoàn kết giữ hai vai trò</h2>
@@ -310,14 +1055,12 @@ img{display:block}
 <p class="sec a">Mở đầu</p>
 <h2 class="a">Một đống gạch chưa phải là bức tường</h2>
 <div class="cols grow" style="grid-template-columns:420px 1fr; align-items:center; gap:56px">
-  <div class="pile a" aria-hidden="true">
-    <span class="brick p1"></span><span class="brick c p2"></span><span class="brick h p3"></span><span class="brick p4"></span><span class="brick c p5"></span><span class="brick p6"></span>
-  </div>
+  <div class="pile-host" aria-hidden="true"><svg class="pile" viewBox="0 0 470 400" aria-hidden="true"><g class="wob loop" style="--r:-6deg;--wd:0.00s;transform-origin:110px 323px"><g class="bk-g "><rect class="bk t0" x="40" y="300" width="140" height="46" rx="2"/><rect class="sh" x="42" y="302" width="136" height="3"/><text x="110" y="329.5" class="bl" font-size="18">Công nhân</text></g></g><g class="wob loop" style="--r:4deg;--wd:0.37s;transform-origin:260px 335px"><g class="bk-g "><rect class="bk t1" x="190" y="312" width="140" height="46" rx="2"/><rect class="sh" x="192" y="314" width="136" height="3"/><text x="260" y="341.5" class="bl" font-size="18">Nông dân</text></g></g><g class="wob loop" style="--r:-10deg;--wd:0.74s;transform-origin:370px 291px"><g class="bk-g "><rect class="bk t2" x="300" y="268" width="140" height="46" rx="2"/><rect class="sh" x="302" y="270" width="136" height="3"/><text x="370" y="297.5" class="bl" font-size="18">Trí thức</text></g></g><g class="wob loop" style="--r:8deg;--wd:1.11s;transform-origin:90px 243px"><g class="bk-g "><rect class="bk t0" x="20" y="220" width="140" height="46" rx="2"/><rect class="sh" x="22" y="222" width="136" height="3"/><text x="90" y="249.5" class="bl" font-size="18">Dân tộc Kinh</text></g></g><g class="wob loop" style="--r:-3deg;--wd:1.48s;transform-origin:240px 259px"><g class="bk-g "><rect class="bk t1" x="170" y="236" width="140" height="46" rx="2"/><rect class="sh" x="172" y="238" width="136" height="3"/><text x="240" y="265.5" class="bl" font-size="18">Đồng bào Khmer</text></g></g><g class="wob loop" style="--r:14deg;--wd:1.85s;transform-origin:380px 209px"><g class="bk-g "><rect class="bk t2" x="310" y="186" width="140" height="46" rx="2"/><rect class="sh" x="312" y="188" width="136" height="3"/><text x="380" y="215.5" class="bl" font-size="18">Phật giáo</text></g></g><g class="wob loop" style="--r:-14deg;--wd:0.02s;transform-origin:130px 163px"><g class="bk-g "><rect class="bk t0" x="60" y="140" width="140" height="46" rx="2"/><rect class="sh" x="62" y="142" width="136" height="3"/><text x="130" y="169.5" class="bl" font-size="18">Công giáo</text></g></g><g class="wob loop" style="--r:6deg;--wd:0.39s;transform-origin:270px 179px"><g class="bk-g "><rect class="bk t1" x="200" y="156" width="140" height="46" rx="2"/><rect class="sh" x="202" y="158" width="136" height="3"/><text x="270" y="185.5" class="bl" font-size="18">Thanh niên</text></g></g><g class="wob loop" style="--r:-4deg;--wd:0.76s;transform-origin:190px 95px"><g class="bk-g "><rect class="bk t2" x="120" y="72" width="140" height="46" rx="2"/><rect class="sh" x="122" y="74" width="136" height="3"/><text x="190" y="101.5" class="bl" font-size="18">Phụ nữ</text></g></g><g class="wob loop" style="--r:11deg;--wd:1.13s;transform-origin:350px 119px"><g class="bk-g "><rect class="bk t0" x="280" y="96" width="140" height="46" rx="2"/><rect class="sh" x="282" y="98" width="136" height="3"/><text x="350" y="125.5" class="bl" font-size="18">Kiều bào</text></g></g></svg></div>
   <div style="display:flex; flex-direction:column; gap:24px">
     <p class="lead a">Muốn thành tường phải có vữa và có người biết cách xây. Hồ Chí Minh chỉ ra cách xây ấy: <b>phương thức</b> xây dựng khối đại đoàn kết.</p>
     <div class="cols" style="grid-template-columns:1fr 1fr; gap:24px">
-      <div class="card a sm"><div class="cimg"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/6/62/Typhoon_Yagi_damage_in_Hanoi.jpg/1920px-Typhoon_Yagi_damage_in_Hanoi.jpg" alt="Hà Nội sau bão Yagi, 9/2024" style="object-position:center" class="" decoding="async" referrerpolicy="no-referrer"><span class="cimg-cap">Hà Nội sau bão Yagi, 9/2024</span></div><div class="cbody"><span class="tag">Hôm nay vẫn thấy</span><p class="body">2021 cả nước chi viện TP.HCM chống dịch; 9/2024 xe cứu trợ nối nhau lên miền Bắc sau bão Yagi.</p></div></div>
-      <div class="card a sm"><div class="cimg"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/1/11/Newone_-_people_relax_with_smartphone_at_cafe_in_Hanoi.jpg/1920px-Newone_-_people_relax_with_smartphone_at_cafe_in_Hanoi.jpg" alt="Người trẻ với điện thoại ở một quán cà phê Hà Nội" style="object-position:center 45%" class="" decoding="async" referrerpolicy="no-referrer"><span class="cimg-cap">Người trẻ với điện thoại ở một quán cà phê Hà Nội</span></div><div class="cbody"><span class="tag son">Thử thách mới</span><p class="body">Lợi ích đa dạng, khoảng cách giàu nghèo, một tin sai gây chia rẽ trong vài giờ.</p></div></div>
+      <div class="card a sm"><div class="cimg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Typhoon_Yagi_damage_in_Hanoi.jpg/1920px-Typhoon_Yagi_damage_in_Hanoi.jpg" alt="Hà Nội sau bão Yagi, 9/2024" style="object-position:center" class="" decoding="async" referrerpolicy="no-referrer"><span class="cimg-cap">Hà Nội sau bão Yagi, 9/2024</span></div><div class="cbody"><span class="tag">Hôm nay vẫn thấy</span><p class="body">2021 cả nước chi viện TP.HCM chống dịch; 9/2024 xe cứu trợ nối nhau lên miền Bắc sau bão Yagi.</p></div></div>
+      <div class="card a sm"><div class="cimg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Newone_-_people_relax_with_smartphone_at_cafe_in_Hanoi.jpg/1920px-Newone_-_people_relax_with_smartphone_at_cafe_in_Hanoi.jpg" alt="Người trẻ với điện thoại ở một quán cà phê Hà Nội" style="object-position:center 45%" class="" decoding="async" referrerpolicy="no-referrer"><span class="cimg-cap">Người trẻ với điện thoại ở một quán cà phê Hà Nội</span></div><div class="cbody"><span class="tag son">Thử thách mới</span><p class="body">Lợi ích đa dạng, khoảng cách giàu nghèo, một tin sai gây chia rẽ trong vài giờ.</p></div></div>
     </div>
   </div>
 </div>
@@ -328,22 +1071,22 @@ img{display:block}
 <p class="sec a">Bố cục</p>
 <h2 class="a">Hai phần của bài trình bày</h2>
 <div class="cols grow" style="grid-template-columns:1fr 1fr; gap:40px">
-  <div class="card a"><div class="cimg"><img src="https://upload.wikimedia.org/wikipedia/commons/4/45/Dan_cong_tho_luong_thuc.jpg" alt="Dân công thồ lương thực ra mặt trận" style="object-position:center 60%" class="" decoding="async" referrerpolicy="no-referrer"><span class="cimg-cap">Dân công thồ lương thực ra mặt trận</span></div><div class="cbody"><h3>Phần 1. Ba phương thức</h3><ul><li>1.1 Làm tốt công tác dân vận (Ngọc)</li><li>1.2 Thành lập đoàn thể theo từng đối tượng (Giang)</li><li>1.3 Tập hợp đoàn thể trong Mặt trận (Hân)</li></ul></div></div>
-  <div class="card a cham"><div class="cimg"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f6/Ho_Chi_Minh_City_Skyline_%28night%29.jpg/1920px-Ho_Chi_Minh_City_Skyline_%28night%29.jpg" alt="TP. Hồ Chí Minh về đêm" style="object-position:center" class="" decoding="async" referrerpolicy="no-referrer"><span class="cimg-cap">TP. Hồ Chí Minh về đêm</span></div><div class="cbody"><h3 style="color:var(--accent2)">Phần 2. Năm giải pháp</h3><p class="body">Thảo luận cả nhóm: mỗi giải pháp có phần trình bày và một lượt tranh luận phản biện.</p></div></div>
+  <div class="card a"><div class="cimg"><img src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Ho-chi-Minh_with_children_%286%29.jpg" data-fb="https://upload.wikimedia.org/wikipedia/commons/4/45/Dan_cong_tho_luong_thuc.jpg" alt="Chủ tịch Hồ Chí Minh với thiếu nhi" style="object-position:center 40%" class="old" decoding="async" referrerpolicy="no-referrer"><span class="cimg-cap">Chủ tịch Hồ Chí Minh với thiếu nhi</span></div><div class="cbody"><h3>Phần 1. Ba phương thức</h3><ul><li>1.1 Làm tốt công tác dân vận (Ngọc)</li><li>1.2 Thành lập đoàn thể theo từng đối tượng (Giang)</li><li>1.3 Tập hợp đoàn thể trong Mặt trận (Hân)</li></ul></div></div>
+  <div class="card a cham"><div class="cimg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Hanoi_Traffic_%28174818911%29.jpeg/1280px-Hanoi_Traffic_%28174818911%29.jpeg" data-fb="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Ho_Chi_Minh_City_Skyline_%28night%29.jpg/1920px-Ho_Chi_Minh_City_Skyline_%28night%29.jpg" alt="Giờ tan tầm trên phố Hà Nội" style="object-position:center 55%" class="" decoding="async" referrerpolicy="no-referrer"><span class="cimg-cap">Giờ tan tầm trên phố Hà Nội</span></div><div class="cbody"><h3 style="color:var(--accent2)">Phần 2. Năm giải pháp</h3><p class="body">Năm giải pháp tăng cường khối đại đoàn kết hôm nay.</p></div></div>
 </div></section>
 
 <!-- 7 -->
-<section class="slide hero" data-sec="pt" data-who="Ngọc · Giang · Hân"><div class="bleed"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3b/%C4%90%C3%ACnh_T%C3%A2n_Tr%C3%A0o.jpg/1920px-%C4%90%C3%ACnh_T%C3%A2n_Tr%C3%A0o.jpg" alt="Đình Tân Trào, Tuyên Quang" style="object-position:center 60%" class="kb" decoding="async" referrerpolicy="no-referrer"></div><div class="shade b"></div><p class="bcap">Ảnh: Đình Tân Trào, Tuyên Quang</p>
+<section class="slide hero" data-sec="pt" data-who="Ngọc · Giang · Hân"><div class="bleed"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Victory_in_Battle_of_Dien_Bien_Phu.jpg/1280px-Victory_in_Battle_of_Dien_Bien_Phu.jpg" data-fb="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/%C4%90%C3%ACnh_T%C3%A2n_Tr%C3%A0o.jpg/1920px-%C4%90%C3%ACnh_T%C3%A2n_Tr%C3%A0o.jpg" alt="Chiến thắng Điện Biên Phủ, 1954" style="object-position:center 35%" class="kb old" decoding="async" referrerpolicy="no-referrer"></div><div class="shade b"></div><p class="bcap">Ảnh: Chiến thắng Điện Biên Phủ, 1954</p>
 <div class="hero-in bottom">
   <p class="sec a">Phần 1</p>
   <h1 class="a">Ba phương thức xây dựng khối đại đoàn kết</h1>
-  <div class="steps a"><span>Dân vận</span><span>Đoàn thể</span><span>Mặt trận</span></div>
+  <p class="steps-cap">Ba bước xây một bức tường</p><div class="steps a"><span>Dân vận</span><span>Đoàn thể</span><span>Mặt trận</span></div>
 </div></section>
 
 <!-- 8 -->
 <section class="slide " data-sec="pt" data-who="Ngọc">
 <div class="split l">
-  <figure class="photo tall a" style=""><img src="https://upload.wikimedia.org/wikipedia/commons/4/43/Ch%E1%BB%A7_t%E1%BB%8Bch_H%E1%BB%93_Ch%C3%AD_Minh_v%C3%A0_c%E1%BB%A5_Nguy%E1%BB%85n_V%C4%83n_T%E1%BB%91.jpg" alt="Chủ tịch Hồ Chí Minh và cụ Nguyễn Văn Tố, nhân sĩ ngoài Đảng" style="object-position:center 30%" class="" decoding="async" referrerpolicy="no-referrer"><figcaption>Chủ tịch Hồ Chí Minh và cụ Nguyễn Văn Tố, nhân sĩ ngoài Đảng</figcaption></figure>
+  <figure class="photo tall a" style=""><img src="https://upload.wikimedia.org/wikipedia/commons/4/43/Ch%E1%BB%A7_t%E1%BB%8Bch_H%E1%BB%93_Ch%C3%AD_Minh_v%C3%A0_c%E1%BB%A5_Nguy%E1%BB%85n_V%C4%83n_T%E1%BB%91.jpg" alt="Chủ tịch Hồ Chí Minh và cụ Nguyễn Văn Tố, nhân sĩ ngoài Đảng" style="object-position:center 30%" class="old" decoding="async" referrerpolicy="no-referrer"><figcaption>Chủ tịch Hồ Chí Minh và cụ Nguyễn Văn Tố, nhân sĩ ngoài Đảng</figcaption></figure>
   <div class="txt">
     <p class="sec a">1.1 Phương thức dân vận</p>
     <h2 class="a">Điều gì khiến một người muốn đứng chung với người khác?</h2>
@@ -367,8 +1110,9 @@ img{display:block}
       <div class="panel cham a"><h3>Nay: thành luật</h3><ul><li>Luật Thực hiện dân chủ ở cơ sở 2022</li><li>Đại hội XIII: phát huy quyền làm chủ</li></ul></div>
     </div>
     <p class="take accent a">Dân có hiểu thì dân mới làm.</p>
+    <div class="loopnote"><svg class="jar9" viewBox="0 0 100 110" aria-hidden="true"><circle class="rgr loop" cx="44" cy="6" r="3" style="--gd:0s"/><circle class="rgr loop" cx="52" cy="6" r="3" style="--gd:0.8s"/><circle class="rgr loop" cx="48" cy="6" r="3" style="--gd:1.6s"/><circle class="rgr loop" cx="56" cy="6" r="3" style="--gd:2.3s"/><path class="jar" d="M28 40 Q22 40 22 50 L26 96 Q28 104 40 104 L60 104 Q72 104 74 96 L78 50 Q78 40 72 40 Z"/><rect class="lid" x="30" y="32" width="40" height="9" rx="3"/><path class="rice" d="M27 72 L73 72 L71 96 Q69 101 60 101 L40 101 Q31 101 29 96 Z"/></svg><span>Hũ gạo cứu đói: mỗi nhà góp một nắm</span></div>
   </div>
-  <figure class="photo tall a" style=""><img src="https://upload.wikimedia.org/wikipedia/commons/2/20/1945_Vietnam_Independence_or_Death.png" alt="Biểu ngữ &quot;Độc lập hay là chết&quot;, 1945" style="object-position:center 35%" class="" decoding="async" referrerpolicy="no-referrer"><figcaption>Biểu ngữ &quot;Độc lập hay là chết&quot;, 1945</figcaption></figure>
+  <figure class="photo tall a" style=""><img src="https://upload.wikimedia.org/wikipedia/commons/2/20/1945_Vietnam_Independence_or_Death.png" alt="Biểu ngữ &quot;Độc lập hay là chết&quot;, 1945" style="object-position:center 35%" class="old" decoding="async" referrerpolicy="no-referrer"><figcaption>Biểu ngữ &quot;Độc lập hay là chết&quot;, 1945</figcaption></figure>
 </div></section>
 
 <!-- 10 -->
@@ -377,7 +1121,7 @@ img{display:block}
 <h2 class="a">Dân vận phải kiên nhẫn</h2>
 <blockquote class="a">cần phải chịu khó tìm đủ cách giải thích cho họ hiểu rằng: những việc đó là vì ích lợi của họ mà phải làm<span class="src">Toàn tập, t.5, tr.286</span></blockquote>
 <div class="cols c3 grow">
-  <div class="panel a"><h3>"Chịu khó", "đủ cách"</h3><p class="body">Không nản khi dân chưa đồng tình ngay; cách này chưa được thì tìm cách khác.</p></div>
+  <div class="panel a"><h3>"Chịu khó", "đủ cách"</h3><p class="body">Không nản khi dân chưa đồng tình ngay; cách này chưa được thì tìm cách khác.</p><div class="drop-host"><svg class="drop10" viewBox="0 0 140 130" aria-hidden="true"><path class="drip loop" d="M70 8 C66 16 63 20 63 24 a7 7 0 0 0 14 0 C77 20 74 16 70 8Z"/><ellipse class="ripple loop" cx="70" cy="86" rx="10" ry="3"/><path class="stone" d="M14 120 Q20 88 52 84 Q70 90 88 84 Q122 88 128 120 Z"/><path class="dent" d="M58 87 Q70 95 82 87"/></svg><span class="cap">Nước chảy đá mòn</span></div></div>
   <div class="panel hoe a"><h3>Bài báo "Dân vận", 15/10/1949</h3><p class="body">"Dân vận kém thì việc gì cũng kém. Dân vận khéo thì việc gì cũng thành công."</p></div>
   <div class="ocard a"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Cao_toc_Cau_Gie_Ninh_Binh.JPG" alt="Cao tốc Cầu Giẽ – Ninh Bình" style="object-position:center 60%" class="" decoding="async" referrerpolicy="no-referrer"><div class="ov"><h3>Nay: giải phóng mặt bằng</h3><p>Đối thoại, công khai bồi thường thì dân tự nguyện bàn giao sớm.</p><span>Cao tốc Cầu Giẽ – Ninh Bình</span></div></div>
 </div></section>
@@ -394,6 +1138,7 @@ img{display:block}
       <div class="panel cham a"><h3>Nay</h3><ul><li>Tuyên truyền bằng tiếng dân tộc ở vùng cao</li><li>Mở kênh mạng xã hội để gặp người trẻ</li></ul></div>
     </div>
     <p class="take accent a">Nội dung giữ nguyên, cách nói đổi theo người nghe.</p>
+    <div class="loopnote"><svg class="icons11" viewBox="0 0 80 80" aria-hidden="true"><g class="ic ic1 loop"><path d="M14 44 L40 22 L66 44 Z"/><rect x="22" y="44" width="36" height="16"/><path d="M24 60 V74 M56 60 V74 M40 60 V74"/></g><g class="ic ic2 loop"><rect x="12" y="34" width="16" height="40"/><rect x="32" y="18" width="18" height="56"/><rect x="54" y="40" width="14" height="34"/><path d="M36 26 h10 M36 36 h10 M36 46 h10 M36 56 h10"/></g><g class="ic ic3 loop"><rect x="26" y="12" width="28" height="56" rx="5"/><path d="M36 60 h8"/><path d="M32 24 h16 M32 32 h16 M32 40 h10"/></g></svg><span>Vùng cao · Phố thị · Mạng xã hội</span></div>
   </div>
   <figure class="photo tall a" style=""><img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Hmong_women_at_Coc_Ly_market%2C_Sapa%2C_Vietnam.jpg" alt="Phụ nữ H&#x27;Mông ở chợ Cốc Ly, Lào Cai" style="object-position:center 30%" class="" decoding="async" referrerpolicy="no-referrer"><figcaption>Phụ nữ H&#x27;Mông ở chợ Cốc Ly, Lào Cai</figcaption></figure>
 </div></section>
@@ -404,16 +1149,17 @@ img{display:block}
 <h2 class="a">Khối đại đoàn kết gồm những ai?</h2>
 <div class="cols c3 grow">
   <div class="card a"><div class="cimg"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e2/Vietnamese_people_celebrate_when_Vietnam_won_the_2018_aff_cup_03.jpg" alt="Người dân xuống đường mừng chiến thắng AFF Cup, 12/2018" style="object-position:center" class="" decoding="async" referrerpolicy="no-referrer"><span class="cimg-cap">Người dân xuống đường mừng chiến thắng AFF Cup, 12/2018</span></div><div class="cbody"><h3>Chủ thể: toàn dân</h3><blockquote class="sm">ai có tài, có đức, có sức, có lòng phụng sự Tổ quốc và phục vụ nhân dân thì ta đoàn kết với họ<span class="src">Toàn tập, t.9, tr.244</span></blockquote></div></div>
-  <div class="card a hoe"><div class="cimg"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d6/Rice_harvesting_in_Can_Tho.JPG/1920px-Rice_harvesting_in_Can_Tho.JPG" alt="Mùa gặt ở Cần Thơ" style="object-position:center" class="" decoding="async" referrerpolicy="no-referrer"><span class="cimg-cap">Mùa gặt ở Cần Thơ</span></div><div class="cbody"><h3 style="color:var(--hoe)">Nền gốc: công, nông, trí</h3><p class="body">"Nó cũng như cái nền của nhà, gốc của cây." Đại hội XII vẫn giữ nền tảng này.</p></div></div>
-  <div class="card a cham"><div class="cimg"><img src="https://upload.wikimedia.org/wikipedia/commons/1/15/Ho_Chi_Minh_and_Vo_Nguyen_Giap_%281945%29.jpg" alt="Hồ Chí Minh và Võ Nguyên Giáp, 1945" style="object-position:center 30%" class="" decoding="async" referrerpolicy="no-referrer"><span class="cimg-cap">Hồ Chí Minh và Võ Nguyên Giáp, 1945</span></div><div class="cbody"><h3 style="color:var(--accent2)">Hạt nhân: đoàn kết trong Đảng</h3><p class="body">Đảng đoàn kết thì xã hội mới đoàn kết.</p></div></div>
-</div></section>
+  <div class="card a hoe"><div class="cimg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Rice_harvesting_in_Can_Tho.JPG/1920px-Rice_harvesting_in_Can_Tho.JPG" alt="Mùa gặt ở Cần Thơ" style="object-position:center" class="" decoding="async" referrerpolicy="no-referrer"><span class="cimg-cap">Mùa gặt ở Cần Thơ</span></div><div class="cbody"><h3 style="color:var(--hoe)">Nền gốc: công, nông, trí</h3><p class="body">"Nó cũng như cái nền của nhà, gốc của cây." Đại hội XII vẫn giữ nền tảng này.</p></div></div>
+  <div class="card a cham"><div class="cimg"><img src="https://upload.wikimedia.org/wikipedia/commons/1/15/Ho_Chi_Minh_and_Vo_Nguyen_Giap_%281945%29.jpg" alt="Hồ Chí Minh và Võ Nguyên Giáp, 1945" style="object-position:center 30%" class="old" decoding="async" referrerpolicy="no-referrer"><span class="cimg-cap">Hồ Chí Minh và Võ Nguyên Giáp, 1945</span></div><div class="cbody"><h3 style="color:var(--accent2)">Hạt nhân: đoàn kết trong Đảng</h3><p class="body">Đảng đoàn kết thì xã hội mới đoàn kết.</p></div></div>
+</div>
+<div class="strip-host"><svg class="strip12" viewBox="0 0 1392 86" aria-hidden="true"><g class="up"><g class="bk-g "><rect class="bk t0" x="0" y="0" width="132" height="40" rx="2"/><rect class="sh" x="2" y="2" width="128" height="3"/></g><g class="bk-g "><rect class="bk t2" x="138" y="0" width="132" height="40" rx="2"/><rect class="sh" x="140" y="2" width="128" height="3"/></g><g class="bk-g "><rect class="bk t2" x="276" y="0" width="132" height="40" rx="2"/><rect class="sh" x="278" y="2" width="128" height="3"/></g><g class="bk-g "><rect class="bk t0" x="414" y="0" width="132" height="40" rx="2"/><rect class="sh" x="416" y="2" width="128" height="3"/></g><g class="bk-g "><rect class="bk t1" x="552" y="0" width="132" height="40" rx="2"/><rect class="sh" x="554" y="2" width="128" height="3"/></g><g class="bk-g "><rect class="bk t2" x="690" y="0" width="132" height="40" rx="2"/><rect class="sh" x="692" y="2" width="128" height="3"/></g><g class="bk-g "><rect class="bk t1" x="828" y="0" width="132" height="40" rx="2"/><rect class="sh" x="830" y="2" width="128" height="3"/></g><g class="bk-g "><rect class="bk t2" x="966" y="0" width="132" height="40" rx="2"/><rect class="sh" x="968" y="2" width="128" height="3"/></g><g class="bk-g "><rect class="bk t2" x="1104" y="0" width="132" height="40" rx="2"/><rect class="sh" x="1106" y="2" width="128" height="3"/></g><g class="bk-g "><rect class="bk t0" x="1242" y="0" width="132" height="40" rx="2"/><rect class="sh" x="1244" y="2" width="128" height="3"/></g></g><g class="basegrp"><g class="bk-g base"><rect class="bk t1" x="0" y="46" width="458" height="40" rx="2"/><rect class="sh" x="2" y="48" width="454" height="3"/><text x="229" y="72.8" class="bl" font-size="19">Công nhân</text></g><g class="bk-g base"><rect class="bk t1" x="464" y="46" width="458" height="40" rx="2"/><rect class="sh" x="466" y="48" width="454" height="3"/><text x="693" y="72.8" class="bl" font-size="19">Nông dân</text></g><g class="bk-g base"><rect class="bk t1" x="928" y="46" width="458" height="40" rx="2"/><rect class="sh" x="930" y="48" width="454" height="3"/><text x="1157" y="72.8" class="bl" font-size="19">Trí thức</text></g></g></svg></div></section>
 
 <!-- 13 -->
 <section class="slide " data-sec="pt" data-who="Giang">
 <p class="sec a">1.2 Phương thức đoàn thể</p>
 <h2 class="a">Mỗi giới một "ngôi nhà" riêng</h2>
 <p class="lead a" style="font-size:28px">Người cùng hoàn cảnh thì hiểu nhau: công nhân lo tiền lương, nông dân lo mùa màng, sinh viên lo chuyện học và việc làm.</p>
-<div class="tl a">
+<div class="tl a"><span class="tl-dot loop"></span>
   <div class="i"><div class="y">1925</div><div class="t">Hội Việt Nam Cách mạng Thanh niên</div></div>
   <div class="i"><div class="y">1929</div><div class="t">Công hội đỏ</div></div>
   <div class="i"><div class="y">1930</div><div class="t">Hội Nông dân, Hội Phụ nữ</div></div>
@@ -421,7 +1167,7 @@ img{display:block}
   <div class="i"><div class="y">1941–1945</div><div class="t">Hội cứu quốc cho từng giới</div></div>
 </div>
 <div class="cols" style="grid-template-columns:520px 1fr; margin-top:auto; align-items:stretch">
-  <div class="ocard a" style="height:230px"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Ho-chi-Minh_and_Vietnam_Women_Union%27s_cadres_at_Vietbac_in_Feb_1949.jpg" alt="Hồ Chí Minh với cán bộ Hội Phụ nữ, Việt Bắc, 2/1949" style="object-position:center 35%" class="" decoding="async" referrerpolicy="no-referrer"><div class="ov"><span>Hồ Chí Minh với cán bộ Hội Phụ nữ, Việt Bắc, 2/1949</span></div></div>
+  <div class="ocard a" style="height:230px"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Ho-chi-Minh_and_Vietnam_Women_Union%27s_cadres_at_Vietbac_in_Feb_1949.jpg" alt="Hồ Chí Minh với cán bộ Hội Phụ nữ, Việt Bắc, 2/1949" style="object-position:center 35%" class="old" decoding="async" referrerpolicy="no-referrer"><div class="ov"><span>Hồ Chí Minh với cán bộ Hội Phụ nữ, Việt Bắc, 2/1949</span></div></div>
   <div class="panel cham a"><h3>Hôm nay</h3><p class="body">Công đoàn thương lượng với doanh nghiệp, Hội Nông dân hỗ trợ vốn và kỹ thuật, Đoàn trường và Hội Sinh viên ở UIT.</p></div>
 </div></section>
 
@@ -431,13 +1177,13 @@ img{display:block}
 <h2 class="a">Đoàn thể làm việc hai chiều</h2>
 <div class="flow a">
   <div class="box">Đảng, Nhà nước: chủ trương, chính sách</div>
-  <div class="arrows"><span class="arr"></span><span class="arr back"></span></div>
+  <svg viewBox="0 0 220 90" aria-hidden="true"><line class="ln r" x1="12" y1="28" x2="196" y2="28" stroke="var(--son)"/><polygon points="196,16 216,28 196,40" fill="var(--son)"/><line class="ln l" x1="24" y1="64" x2="208" y2="64" stroke="var(--accent2)"/><polygon points="24,52 4,64 24,76" fill="var(--accent2)"/></svg>
   <div class="box">Hội viên: tiếng nói, quyền lợi</div>
 </div>
 <p class="lead a" style="font-size:28px">Chỉ làm một chiều thì đoàn thể giống chiếc loa phát thanh: nói được mà không nghe được.</p>
 <div class="cols grow" style="grid-template-columns:1fr 1fr">
-  <div class="card a hoe row-card"><div class="cimg"><img src="https://upload.wikimedia.org/wikipedia/commons/4/45/Dan_cong_tho_luong_thuc.jpg" alt="Dân công thồ lương thực ra mặt trận" style="object-position:center 60%" class="" decoding="async" referrerpolicy="no-referrer"><span class="cimg-cap">Dân công thồ lương thực ra mặt trận</span></div><div class="cbody"><h3 style="color:var(--hoe)">Xưa: "Ba đảm đang"</h3><p class="body">Phụ nữ vừa sản xuất, vừa lo gia đình, vừa phục vụ chiến đấu.</p></div></div>
-  <div class="card a cham row-card"><div class="cimg"><img src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Ho-chi-Minh_with_children_%286%29.jpg" alt="Chủ tịch Hồ Chí Minh giữa thiếu nhi" style="object-position:center 35%" class="" decoding="async" referrerpolicy="no-referrer"><span class="cimg-cap">Chủ tịch Hồ Chí Minh giữa thiếu nhi</span></div><div class="cbody"><h3 style="color:var(--accent2)">Nay</h3><p class="body">Mùa hè xanh, Tiếp sức mùa thi: người trẻ tìm thấy chỗ của mình trong Đoàn.</p></div></div>
+  <div class="card a hoe row-card"><div class="cimg"><img src="https://upload.wikimedia.org/wikipedia/commons/4/45/Dan_cong_tho_luong_thuc.jpg" alt="Dân công thồ lương thực ra mặt trận" style="object-position:center 60%" class="old" decoding="async" referrerpolicy="no-referrer"><span class="cimg-cap">Dân công thồ lương thực ra mặt trận</span></div><div class="cbody"><h3 style="color:var(--hoe)">Xưa: "Ba đảm đang"</h3><p class="body">Phụ nữ vừa sản xuất, vừa lo gia đình, vừa phục vụ chiến đấu.</p></div></div>
+  <div class="card a cham row-card"><div class="cimg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Youth_Union_Members_at_the_World_TB_Day_Event_in_Hanoi_%288581055659%29.jpg/1280px-Youth_Union_Members_at_the_World_TB_Day_Event_in_Hanoi_%288581055659%29.jpg" data-fb="https://upload.wikimedia.org/wikipedia/commons/2/2e/Ho-chi-Minh_with_children_%286%29.jpg" alt="Đoàn viên thanh niên tại một sự kiện cộng đồng ở Hà Nội" style="object-position:center 40%" class="" decoding="async" referrerpolicy="no-referrer"><span class="cimg-cap">Đoàn viên thanh niên tại một sự kiện cộng đồng ở Hà Nội</span></div><div class="cbody"><h3 style="color:var(--accent2)">Nay</h3><p class="body">Mùa hè xanh, Tiếp sức mùa thi: người trẻ tìm thấy chỗ của mình trong Đoàn.</p></div></div>
 </div></section>
 
 <!-- 15 -->
@@ -447,16 +1193,16 @@ img{display:block}
     <p class="sec a">1.3 Phương thức Mặt trận</p>
     <h2 class="a">Mặt trận là lớp vữa gắn các hàng gạch lại với nhau</h2>
     <p class="lead a">Khối đại đoàn kết chỉ thành lực lượng to lớn khi được tổ chức thành một khối vững chắc. Mặt trận quy tụ công hội, nông hội, đoàn thanh niên, hội phụ nữ, các tổ chức tôn giáo, kể cả kiều bào.</p>
-    <div class="wall build" aria-hidden="true"><div class="course"><span class="brick "></span><span class="brick "></span><span class="brick "></span></div><div class="course off"><span class="brick c"></span><span class="brick c"></span><span class="brick c"></span></div><div class="course"><span class="brick h"></span><span class="brick h"></span><span class="brick h"></span></div></div>
+    <div class="wall15-host" aria-hidden="true"><svg class="wall15" viewBox="0 0 400 174" aria-hidden="true"><g class="row15" transform="translate(0 0)"><g class="bk-g "><rect class="bk t1" x="0" y="0" width="96" height="40" rx="2"/><rect class="sh" x="2" y="2" width="92" height="3"/></g><g class="bk-g "><rect class="bk t2" x="102" y="0" width="96" height="40" rx="2"/><rect class="sh" x="104" y="2" width="92" height="3"/></g><g class="bk-g "><rect class="bk t1" x="204" y="0" width="96" height="40" rx="2"/><rect class="sh" x="206" y="2" width="92" height="3"/></g><g class="bk-g "><rect class="bk t1" x="306" y="0" width="94" height="40" rx="2"/><rect class="sh" x="308" y="2" width="90" height="3"/></g></g><g class="row15" transform="translate(0 16)"><g class="bk-g "><rect class="bk t0" x="0" y="46" width="48" height="40" rx="2"/><rect class="sh" x="2" y="48" width="44" height="3"/></g><g class="bk-g "><rect class="bk t0" x="54" y="46" width="96" height="40" rx="2"/><rect class="sh" x="56" y="48" width="92" height="3"/></g><g class="bk-g "><rect class="bk t2" x="156" y="46" width="96" height="40" rx="2"/><rect class="sh" x="158" y="48" width="92" height="3"/></g><g class="bk-g "><rect class="bk t0" x="258" y="46" width="96" height="40" rx="2"/><rect class="sh" x="260" y="48" width="92" height="3"/></g><g class="bk-g "><rect class="bk t1" x="360" y="46" width="40" height="40" rx="2"/><rect class="sh" x="362" y="48" width="36" height="3"/></g></g><g class="row15" transform="translate(0 32)"><g class="bk-g "><rect class="bk t2" x="0" y="92" width="96" height="40" rx="2"/><rect class="sh" x="2" y="94" width="92" height="3"/></g><g class="bk-g "><rect class="bk t1" x="102" y="92" width="96" height="40" rx="2"/><rect class="sh" x="104" y="94" width="92" height="3"/></g><g class="bk-g "><rect class="bk t2" x="204" y="92" width="96" height="40" rx="2"/><rect class="sh" x="206" y="94" width="92" height="3"/></g><g class="bk-g "><rect class="bk t0" x="306" y="92" width="94" height="40" rx="2"/><rect class="sh" x="308" y="94" width="90" height="3"/></g></g><path class="mortar" d="M0 51 H400"/><path class="mrun loop" d="M0 51 H400"/><path class="mortar" d="M0 113 H400"/><path class="mrun loop" d="M0 113 H400"/></svg></div>
   </div>
-  <figure class="photo tall a" style=""><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3e/Central_Committee_of_Vietnam_Fatherland_Front.jpg/1920px-Central_Committee_of_Vietnam_Fatherland_Front.jpg" alt="Trụ sở Ủy ban Trung ương MTTQ Việt Nam, Hà Nội" style="object-position:center" class="" decoding="async" referrerpolicy="no-referrer"><figcaption>Trụ sở Ủy ban Trung ương MTTQ Việt Nam, Hà Nội</figcaption></figure>
+  <figure class="photo tall a" style=""><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Central_Committee_of_Vietnam_Fatherland_Front.jpg/1920px-Central_Committee_of_Vietnam_Fatherland_Front.jpg" alt="Trụ sở Ủy ban Trung ương MTTQ Việt Nam, Hà Nội" style="object-position:center" class="" decoding="async" referrerpolicy="no-referrer"><figcaption>Trụ sở Ủy ban Trung ương MTTQ Việt Nam, Hà Nội</figcaption></figure>
 </div></section>
 
 <!-- 16 -->
 <section class="slide " data-sec="pt" data-who="Hân">
 <p class="sec a">1.3 Phương thức Mặt trận</p>
 <h2 class="a">Tên gọi đổi theo nhiệm vụ, bản chất vẫn là một</h2>
-<div class="tl long a">
+<div class="tl long a"><span class="tl-thread loop"></span>
   <div class="i"><div class="y">1930</div><div class="t">Hội Phản đế đồng minh</div></div>
   <div class="i"><div class="y">1936</div><div class="t">Mặt trận Dân chủ Đông Dương</div></div>
   <div class="i"><div class="y">1939</div><div class="t">Mặt trận Nhân dân phản đế Đông Dương</div></div>
@@ -468,9 +1214,9 @@ img{display:block}
   <div class="i"><div class="y">1976</div><div class="t">Mặt trận Tổ quốc Việt Nam</div></div>
 </div>
 <div class="strip grow">
-  <div class="ocard a"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3b/%C4%90%C3%ACnh_T%C3%A2n_Tr%C3%A0o.jpg/1920px-%C4%90%C3%ACnh_T%C3%A2n_Tr%C3%A0o.jpg" alt="Đình Tân Trào, Tuyên Quang" style="object-position:center 60%" class="" decoding="async" referrerpolicy="no-referrer"><div class="ov"><b>1945</b><span>Đình Tân Trào, Tuyên Quang: nơi Việt Minh họp Quốc dân Đại hội</span></div></div>
-  <div class="ocard a"><img src="https://upload.wikimedia.org/wikipedia/commons/c/cd/M%C3%ADt_tinh_ch%C3%A0o_m%E1%BB%ABng_C%C3%A1ch_m%E1%BA%A1ng_Th%C3%A1ng_T%C3%A1m_n%C4%83m_1945_th%C3%A0nh_c%C3%B4ng_t%E1%BA%A1i_Nh%C3%A0_h%C3%A1t_L%E1%BB%9Bn_H%C3%A0_N%E1%BB%99i.jpg" alt="Mít tinh mừng Cách mạng Tháng Tám thành công, Nhà hát Lớn Hà Nội, 1945" style="object-position:center 40%" class="" decoding="async" referrerpolicy="no-referrer"><div class="ov"><b>8/1945</b><span>Việt Minh lãnh đạo Tổng khởi nghĩa</span></div></div>
-  <div class="ocard a"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3e/Central_Committee_of_Vietnam_Fatherland_Front.jpg/1920px-Central_Committee_of_Vietnam_Fatherland_Front.jpg" alt="Trụ sở Ủy ban Trung ương MTTQ Việt Nam, Hà Nội" style="object-position:center" class="" decoding="async" referrerpolicy="no-referrer"><div class="ov"><b>Hôm nay</b><span>Trụ sở Ủy ban Trung ương MTTQ Việt Nam, Hà Nội</span></div></div>
+  <div class="ocard a"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/%C4%90%C3%ACnh_T%C3%A2n_Tr%C3%A0o.jpg/1920px-%C4%90%C3%ACnh_T%C3%A2n_Tr%C3%A0o.jpg" alt="Đình Tân Trào, Tuyên Quang" style="object-position:center 60%" class="" decoding="async" referrerpolicy="no-referrer"><div class="ov"><b>1945</b><span>Đình Tân Trào, Tuyên Quang: nơi Việt Minh họp Quốc dân Đại hội</span></div></div>
+  <div class="ocard a"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Ba_Dinh_Square_September_2nd%2C_1945.jpg/1280px-Ba_Dinh_Square_September_2nd%2C_1945.jpg" data-fb="https://upload.wikimedia.org/wikipedia/commons/c/cd/M%C3%ADt_tinh_ch%C3%A0o_m%E1%BB%ABng_C%C3%A1ch_m%E1%BA%A1ng_Th%C3%A1ng_T%C3%A1m_n%C4%83m_1945_th%C3%A0nh_c%C3%B4ng_t%E1%BA%A1i_Nh%C3%A0_h%C3%A1t_L%E1%BB%9Bn_H%C3%A0_N%E1%BB%99i.jpg" alt="Quảng trường Ba Đình, 2/9/1945" style="object-position:center 35%" class="old" decoding="async" referrerpolicy="no-referrer"><div class="ov"><b>2/9/1945</b><span>Quảng trường Ba Đình: thành quả Tổng khởi nghĩa do Việt Minh lãnh đạo</span></div></div>
+  <div class="ocard a"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Central_Committee_of_Vietnam_Fatherland_Front.jpg/1920px-Central_Committee_of_Vietnam_Fatherland_Front.jpg" alt="Trụ sở Ủy ban Trung ương MTTQ Việt Nam, Hà Nội" style="object-position:center" class="" decoding="async" referrerpolicy="no-referrer"><div class="ov"><b>Hôm nay</b><span>Trụ sở Ủy ban Trung ương MTTQ Việt Nam, Hà Nội</span></div></div>
 </div>
 <p class="src a">Giáo trình Tư tưởng Hồ Chí Minh, tr.177–178</p></section>
 
@@ -479,20 +1225,20 @@ img{display:block}
 <p class="sec a">1.3 Phương thức Mặt trận</p>
 <h2 class="a">Ba nguyên tắc để khối rộng mà không lỏng</h2>
 <div class="cols c3 grow">
-  <div class="card a"><div class="cimg"><img src="https://upload.wikimedia.org/wikipedia/commons/f/f6/D%C3%A2n_c%C3%B4ng_d%C3%A2n_t%E1%BB%99c_v%E1%BA%ADn_chuy%E1%BB%83n_h%C3%A0ng_ra_m%E1%BA%B7t_tr%E1%BA%ADn.jpg" alt="Dân công các dân tộc vận chuyển hàng ra mặt trận" style="object-position:center" class="" decoding="async" referrerpolicy="no-referrer"><span class="cimg-cap">Dân công các dân tộc vận chuyển hàng ra mặt trận</span></div><div class="cbody"><h3>Nền tảng và sự lãnh đạo</h3><p class="body">Liên minh công, nông, trí; dưới sự lãnh đạo của Đảng, không có lợi ích riêng ngoài lợi ích dân tộc.</p></div></div>
-  <div class="card a hoe"><div class="cimg"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/a/af/H%E1%BB%99i_tr%C6%B0%E1%BB%9Dng_Di%C3%AAn_H%E1%BB%93ng%2C_Qu%E1%BB%91c_h%E1%BB%99i_Vi%E1%BB%87t_Nam.jpg/1920px-H%E1%BB%99i_tr%C6%B0%E1%BB%9Dng_Di%C3%AAn_H%E1%BB%93ng%2C_Qu%E1%BB%91c_h%E1%BB%99i_Vi%E1%BB%87t_Nam.jpg" alt="Hội trường Diên Hồng, Nhà Quốc hội" style="object-position:center 55%" class="" decoding="async" referrerpolicy="no-referrer"><span class="cimg-cap">Hội trường Diên Hồng, Nhà Quốc hội</span></div><div class="cbody"><h3 style="color:var(--hoe)">Hiệp thương dân chủ</h3><p class="body">Một chiếc bàn tròn, không ghế nào cao hơn ghế nào. Nay: hội nghị hiệp thương giới thiệu người ứng cử.</p></div></div>
-  <div class="card a cham"><div class="cimg"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b6/Ho_Chi_Minh%2C_Bao_Dai%2C_Siphanouvong_1945.png" alt="Hồ Chí Minh, cố vấn Vĩnh Thụy (Bảo Đại) và Souphanouvong, 1945" style="object-position:center 40%" class="" decoding="async" referrerpolicy="no-referrer"><span class="cimg-cap">Hồ Chí Minh, cố vấn Vĩnh Thụy (Bảo Đại) và Souphanouvong, 1945</span></div><div class="cbody"><h3 style="color:var(--accent2)">Đoàn kết thật sự</h3><p class="body">"Cầu đồng tồn dị": vừa đoàn kết, vừa đấu tranh, phê bình trên lập trường thân ái.</p><p class="src">Toàn tập, t.11, tr.362</p></div></div>
+  <div class="card a"><div class="cimg"><img src="https://upload.wikimedia.org/wikipedia/commons/f/f6/D%C3%A2n_c%C3%B4ng_d%C3%A2n_t%E1%BB%99c_v%E1%BA%ADn_chuy%E1%BB%83n_h%C3%A0ng_ra_m%E1%BA%B7t_tr%E1%BA%ADn.jpg" alt="Dân công các dân tộc vận chuyển hàng ra mặt trận" style="object-position:center" class="old" decoding="async" referrerpolicy="no-referrer"><span class="cimg-cap">Dân công các dân tộc vận chuyển hàng ra mặt trận</span></div><div class="cbody"><h3>Nền tảng và sự lãnh đạo</h3><p class="body">Liên minh công, nông, trí; dưới sự lãnh đạo của Đảng, không có lợi ích riêng ngoài lợi ích dân tộc.</p></div></div>
+  <div class="card a hoe"><div class="cimg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/H%E1%BB%99i_tr%C6%B0%E1%BB%9Dng_Di%C3%AAn_H%E1%BB%93ng%2C_Qu%E1%BB%91c_h%E1%BB%99i_Vi%E1%BB%87t_Nam.jpg/1920px-H%E1%BB%99i_tr%C6%B0%E1%BB%9Dng_Di%C3%AAn_H%E1%BB%93ng%2C_Qu%E1%BB%91c_h%E1%BB%99i_Vi%E1%BB%87t_Nam.jpg" alt="Hội trường Diên Hồng, Nhà Quốc hội" style="object-position:center 55%" class="" decoding="async" referrerpolicy="no-referrer"><span class="cimg-cap">Hội trường Diên Hồng, Nhà Quốc hội</span></div><div class="cbody"><h3 style="color:var(--hoe)">Hiệp thương dân chủ</h3><p class="body">Một chiếc bàn tròn, không ghế nào cao hơn ghế nào. Nay: hội nghị hiệp thương giới thiệu người ứng cử.</p></div></div>
+  <div class="card a cham"><div class="cimg"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b6/Ho_Chi_Minh%2C_Bao_Dai%2C_Siphanouvong_1945.png" alt="Hồ Chí Minh, cố vấn Vĩnh Thụy (Bảo Đại) và Souphanouvong, 1945" style="object-position:center 40%" class="old" decoding="async" referrerpolicy="no-referrer"><span class="cimg-cap">Hồ Chí Minh, cố vấn Vĩnh Thụy (Bảo Đại) và Souphanouvong, 1945</span></div><div class="cbody"><h3 style="color:var(--accent2)">Đoàn kết thật sự</h3><p class="body">"Cầu đồng tồn dị": vừa đoàn kết, vừa đấu tranh, phê bình trên lập trường thân ái.</p><p class="src">Toàn tập, t.11, tr.362</p></div></div>
 </div></section>
 
 <!-- 18 -->
 <section class="slide " data-sec="pt" data-who="Hân">
 <div class="split l">
-  <figure class="photo tall a" style=""><img src="https://upload.wikimedia.org/wikipedia/commons/1/15/Ho_Chi_Minh_and_Vo_Nguyen_Giap_%281945%29.jpg" alt="Hồ Chí Minh và Võ Nguyên Giáp, 1945" style="object-position:center 30%" class="" decoding="async" referrerpolicy="no-referrer"><figcaption>Hồ Chí Minh và Võ Nguyên Giáp, 1945</figcaption></figure>
+  <figure class="photo tall a" style=""><img src="https://upload.wikimedia.org/wikipedia/commons/1/1f/L%C3%A2m-th%E1%BB%9Di_Li%C3%AAn-hi%E1%BB%87p_Ch%C3%ADnh-ph%E1%BB%A7_Vi%E1%BB%87t-nam_D%C3%A2n-ch%E1%BB%A7_C%E1%BB%99ng-h%C3%B2a_ra_m%E1%BA%AFt_Qu%E1%BB%91c-h%E1%BB%99i_ng%C3%A0y_02_th%C3%A1ng_03_n%C4%83m_1946.jpg" data-fb="https://upload.wikimedia.org/wikipedia/commons/1/15/Ho_Chi_Minh_and_Vo_Nguyen_Giap_%281945%29.jpg" alt="Chính phủ Liên hiệp ra mắt Quốc hội, 2/3/1946" style="object-position:center 45%" class="old" decoding="async" referrerpolicy="no-referrer"><figcaption>Chính phủ Liên hiệp ra mắt Quốc hội, 2/3/1946</figcaption></figure>
   <div class="txt">
     <p class="sec a">1.3 Phương thức Mặt trận</p>
     <h2 class="a">Mặt trận phải vừa rộng vừa chặt</h2>
     <blockquote class="sm a" style="font-size:27px">Mặt trận càng rộng rãi, càng chặt chẽ, càng thống nhất bao nhiêu thì khối đại đoàn kết càng mạnh mẽ, bền vững bấy nhiêu.<span class="src">Giáo trình Tư tưởng Hồ Chí Minh, tr.183</span></blockquote>
-    <p class="body a">Như một tấm lưới: nhiều mắt mà nút lỏng thì bung; nút chắc mà lưới nhỏ thì chẳng giữ được bao nhiêu.</p>
+    <div class="netrow a"><svg class="net loopnet" viewBox="0 0 150 110" width="150" height="110" aria-hidden="true"><g><line x1="15" y1="8" x2="15" y2="102"/><line x1="39" y1="8" x2="39" y2="102"/><line x1="63" y1="8" x2="63" y2="102"/><line x1="87" y1="8" x2="87" y2="102"/><line x1="111" y1="8" x2="111" y2="102"/><line x1="135" y1="8" x2="135" y2="102"/><line x1="8" y1="10" x2="142" y2="10"/><line x1="8" y1="33" x2="142" y2="33"/><line x1="8" y1="56" x2="142" y2="56"/><line x1="8" y1="79" x2="142" y2="79"/><line x1="8" y1="102" x2="142" y2="102"/><circle cx="15" cy="10" r="4.5"/><circle cx="15" cy="33" r="4.5"/><circle cx="15" cy="56" r="4.5"/><circle cx="15" cy="79" r="4.5"/><circle cx="15" cy="102" r="4.5"/><circle cx="39" cy="10" r="4.5"/><circle cx="39" cy="33" r="4.5"/><circle cx="39" cy="56" r="4.5"/><circle cx="39" cy="79" r="4.5"/><circle cx="39" cy="102" r="4.5"/><circle cx="63" cy="10" r="4.5"/><circle cx="63" cy="33" r="4.5"/><circle cx="63" cy="56" r="4.5"/><circle cx="63" cy="79" r="4.5"/><circle cx="63" cy="102" r="4.5"/><circle cx="87" cy="10" r="4.5"/><circle cx="87" cy="33" r="4.5"/><circle cx="87" cy="56" r="4.5"/><circle cx="87" cy="79" r="4.5"/><circle cx="87" cy="102" r="4.5"/><circle cx="111" cy="10" r="4.5"/><circle cx="111" cy="33" r="4.5"/><circle cx="111" cy="56" r="4.5"/><circle cx="111" cy="79" r="4.5"/><circle cx="111" cy="102" r="4.5"/><circle cx="135" cy="10" r="4.5"/><circle cx="135" cy="33" r="4.5"/><circle cx="135" cy="56" r="4.5"/><circle cx="135" cy="79" r="4.5"/><circle cx="135" cy="102" r="4.5"/></g></svg><p class="body">Như một tấm lưới: nhiều mắt mà nút lỏng thì bung; nút chắc mà lưới nhỏ thì chẳng giữ được bao nhiêu.</p></div>
     <div class="duo">
       <div class="panel hoe a"><h3>Xưa: Việt Minh</h3><p class="body">Lập năm 1941, gom các hội cứu quốc. Tháng 8/1945 giành chính quyền cả nước trong khoảng nửa tháng.</p></div>
       <div class="panel cham a"><h3>Nay: Hiến pháp sửa đổi 2025</h3><p class="body">Các tổ chức chính trị – xã hội trực thuộc Mặt trận Tổ quốc Việt Nam.</p></div>
@@ -507,29 +1253,34 @@ img{display:block}
 <div class="cols grow" style="grid-template-columns:.9fr 1.1fr; gap:40px">
   <div style="display:flex; flex-direction:column; gap:22px">
     <div class="panel cham a"><h3>Sợi dây phải giữ chắc cả hai đầu</h3><ul><li>Một đầu là đường lối đúng, đầu kia là lòng tin của dân</li><li>Đại hội XIII: giám sát, phản biện xã hội</li><li>18/11: Ngày hội Đại đoàn kết ở khu dân cư</li></ul></div>
+    <div class="rope-host"><svg class="rope19" viewBox="0 0 520 120" aria-hidden="true"><g class="ropeg loop"><path class="rope" d="M64 58 C150 44, 370 72, 456 58"/></g><rect class="post" x="20" y="34" width="44" height="48" rx="4"/><rect class="post" x="456" y="34" width="44" height="48" rx="4"/><text x="20" y="112" class="rl" text-anchor="start">Đường lối</text><text x="500" y="112" class="rl rle">Lòng tin của dân</text><g class="knot kn1"><circle cx="170" cy="58" r="15"/><text x="170" y="65" class="kl">1</text></g><g class="knot kn2"><circle cx="260" cy="58" r="15"/><text x="260" y="65" class="kl">2</text></g><g class="knot kn3"><circle cx="350" cy="58" r="15"/><text x="350" y="65" class="kl">3</text></g></svg></div>
     <p class="take accent a">Giữ được ba mối này thì bức tường không có vết nứt.</p>
   </div>
   <div class="mosaic">
-    <div class="ocard a m1"><img src="https://upload.wikimedia.org/wikipedia/commons/c/cd/M%C3%ADt_tinh_ch%C3%A0o_m%E1%BB%ABng_C%C3%A1ch_m%E1%BA%A1ng_Th%C3%A1ng_T%C3%A1m_n%C4%83m_1945_th%C3%A0nh_c%C3%B4ng_t%E1%BA%A1i_Nh%C3%A0_h%C3%A1t_L%E1%BB%9Bn_H%C3%A0_N%E1%BB%99i.jpg" alt="Mít tinh mừng Cách mạng Tháng Tám thành công, Nhà hát Lớn Hà Nội, 1945" style="object-position:center 40%" class="" decoding="async" referrerpolicy="no-referrer"><div class="ov"><b>Đảng phái, đoàn thể, nhân sĩ</b></div></div>
-    <div class="ocard a m2"><img src="https://upload.wikimedia.org/wikipedia/commons/4/4c/Khmer_Krom_in_Tr%C3%A0_Vinh.jpg" alt="Đồng bào Khmer ở Trà Vinh" style="object-position:center" class="" decoding="async" referrerpolicy="no-referrer"><div class="ov"><b>Các dân tộc anh em</b><span>Đồng bào Khmer ở Trà Vinh</span></div></div>
-    <div class="ocard a m3"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Nh%C3%A0_th%E1%BB%9D_Ph%C3%A1t_Di%E1%BB%87m%2C_Ninh_B%C3%ACnh.JPG" alt="Nhà thờ Phát Diệm, Ninh Bình" style="object-position:center" class="" decoding="async" referrerpolicy="no-referrer"><div class="ov"><b>Lương – giáo</b><span>Nhà thờ Phát Diệm, Ninh Bình</span></div></div>
-    <div class="ocard a m4"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/7/75/Temple_B%C3%A1i_%C4%90%C3%ADnh_%281%29.jpg/1920px-Temple_B%C3%A1i_%C4%90%C3%ADnh_%281%29.jpg" alt="Chùa Bái Đính, Ninh Bình" style="object-position:center" class="" decoding="async" referrerpolicy="no-referrer"><div class="ov"><span>Chùa Bái Đính, Ninh Bình</span></div></div>
+    <div class="ocard a m1"><span class="knum">1</span><img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Members_of_Vietnamese_Government_at_the_Independent_Holliday_Celebration_in_Hanoi_1946.jpg" data-fb="https://upload.wikimedia.org/wikipedia/commons/c/cd/M%C3%ADt_tinh_ch%C3%A0o_m%E1%BB%ABng_C%C3%A1ch_m%E1%BA%A1ng_Th%C3%A1ng_T%C3%A1m_n%C4%83m_1945_th%C3%A0nh_c%C3%B4ng_t%E1%BA%A1i_Nh%C3%A0_h%C3%A1t_L%E1%BB%9Bn_H%C3%A0_N%E1%BB%99i.jpg" alt="Thành viên Chính phủ trong lễ Quốc khánh, Hà Nội 1946" style="object-position:center 40%" class="old" decoding="async" referrerpolicy="no-referrer"><div class="ov"><b>Đảng phái, đoàn thể, nhân sĩ</b></div></div>
+    <div class="ocard a m2"><span class="knum">2</span><img src="https://upload.wikimedia.org/wikipedia/commons/4/4c/Khmer_Krom_in_Tr%C3%A0_Vinh.jpg" alt="Đồng bào Khmer ở Trà Vinh" style="object-position:center" class="" decoding="async" referrerpolicy="no-referrer"><div class="ov"><b>Các dân tộc anh em</b><span>Đồng bào Khmer ở Trà Vinh</span></div></div>
+    <div class="ocard a m3"><span class="knum">3</span><img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Nh%C3%A0_th%E1%BB%9D_Ph%C3%A1t_Di%E1%BB%87m%2C_Ninh_B%C3%ACnh.JPG" alt="Nhà thờ Phát Diệm, Ninh Bình" style="object-position:center" class="" decoding="async" referrerpolicy="no-referrer"><div class="ov"><b>Lương – giáo</b><span>Nhà thờ Phát Diệm, Ninh Bình</span></div></div>
+    <div class="ocard a m4"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Temple_B%C3%A1i_%C4%90%C3%ADnh_%281%29.jpg/1920px-Temple_B%C3%A1i_%C4%90%C3%ADnh_%281%29.jpg" alt="Chùa Bái Đính, Ninh Bình" style="object-position:center" class="" decoding="async" referrerpolicy="no-referrer"><div class="ov"><span>Chùa Bái Đính, Ninh Bình</span></div></div>
   </div>
 </div>
 <p class="src a" style="margin-top:-12px">Toàn tập, t.13, tr.453</p></section>
 
 <!-- 20 -->
-<section class="slide " data-sec="pt" data-who="Hân">
+<section class="slide recap7" data-sec="pt" data-who="Hân">
 <p class="sec a">Tổng kết Phần 1</p>
 <h2 class="a">Ba phương thức nối thành một quy trình</h2>
-<div class="cols c3 grow" style="align-items:end">
-  <div class="a"><div class="ocard recap"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b6/Ho-chi-Minh_with_children_%283%29.jpg" alt="Chủ tịch Hồ Chí Minh với thiếu nhi" style="object-position:center 30%" class="" decoding="async" referrerpolicy="no-referrer"></div><div class="wall build" aria-hidden="true"><div class="course"><span class="brick h"></span></div></div><h3 style="margin-top:22px; color:var(--hoe)">Dân vận</h3><p class="body">Đến với từng viên gạch, từng con người.</p></div>
-  <div class="a"><div class="ocard recap"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Ho-chi-Minh_and_Vietnam_Women_Union%27s_cadres_at_Vietbac_in_Feb_1949.jpg" alt="Hồ Chí Minh với cán bộ Hội Phụ nữ, Việt Bắc, 2/1949" style="object-position:center 35%" class="" decoding="async" referrerpolicy="no-referrer"></div><div class="wall build" aria-hidden="true"><div class="course"><span class="brick h"></span><span class="brick h"></span><span class="brick h"></span></div></div><h3 style="margin-top:22px">Đoàn thể</h3><p class="body">Xếp mọi người thành từng hàng theo giới của mình.</p></div>
-  <div class="a"><div class="ocard recap"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3e/Central_Committee_of_Vietnam_Fatherland_Front.jpg/1920px-Central_Committee_of_Vietnam_Fatherland_Front.jpg" alt="Trụ sở Ủy ban Trung ương MTTQ Việt Nam, Hà Nội" style="object-position:center" class="" decoding="async" referrerpolicy="no-referrer"></div><div class="wall build" aria-hidden="true"><div class="course"><span class="brick c"></span><span class="brick c"></span><span class="brick c"></span></div><div class="course off"><span class="brick "></span><span class="brick "></span><span class="brick "></span></div><div class="course"><span class="brick h"></span><span class="brick h"></span><span class="brick h"></span></div></div><h3 style="margin-top:22px; color:var(--accent2)">Mặt trận</h3><p class="body">Gắn tất cả các hàng thành một bức tường.</p></div>
+<div class="r7-grid grow">
+  <div class="r7-wall" aria-hidden="true"><svg class="wall20" viewBox="0 0 640 330" aria-hidden="true"><defs><linearGradient id="gsw" x1="0" x2="1"><stop offset="0" stop-color="#F3DFA8" stop-opacity="0"/><stop offset=".5" stop-color="#F3DFA8" stop-opacity=".35"/><stop offset="1" stop-color="#F3DFA8" stop-opacity="0"/></linearGradient></defs><g class="bricks20"><g class="bk-g w20b" style="--jx:31px;--jy:10px;--jr:7deg;--dd:0.00s"><rect class="bk t0" x="0" y="20" width="118" height="52" rx="2"/><rect class="sh" x="2" y="22" width="114" height="3"/></g><g class="bk-g w20b" style="--jx:-18px;--jy:7px;--jr:11deg;--dd:0.05s"><rect class="bk t1" x="125" y="20" width="118" height="52" rx="2"/><rect class="sh" x="127" y="22" width="114" height="3"/></g><g class="bk-g w20b" style="--jx:6px;--jy:-17px;--jr:-2deg;--dd:0.10s"><rect class="bk t0" x="250" y="20" width="118" height="52" rx="2"/><rect class="sh" x="252" y="22" width="114" height="3"/></g><g class="bk-g w20b" style="--jx:-30px;--jy:-9px;--jr:13deg;--dd:0.15s"><rect class="bk t1" x="375" y="20" width="95" height="52" rx="2"/><rect class="sh" x="377" y="22" width="91" height="3"/></g><g class="bk-g w20b" style="--jx:-7px;--jy:-16px;--jr:4deg;--dd:0.25s"><rect class="bk t2" x="0" y="79" width="59" height="52" rx="2"/><rect class="sh" x="2" y="81" width="55" height="3"/></g><g class="bk-g w20b" style="--jx:-12px;--jy:-4px;--jr:4deg;--dd:0.30s"><rect class="bk t1" x="66" y="79" width="118" height="52" rx="2"/><rect class="sh" x="68" y="81" width="114" height="3"/></g><g class="bk-g w20b" style="--jx:-7px;--jy:-15px;--jr:-7deg;--dd:0.35s"><rect class="bk t0" x="191" y="79" width="118" height="52" rx="2"/><rect class="sh" x="193" y="81" width="114" height="3"/></g><g class="bk-g w20b" style="--jx:-31px;--jy:-16px;--jr:5deg;--dd:0.40s"><rect class="bk t1" x="316" y="79" width="118" height="52" rx="2"/><rect class="sh" x="318" y="81" width="114" height="3"/></g><g class="bk-g w20b" style="--jx:-15px;--jy:-13px;--jr:3deg;--dd:0.45s"><rect class="bk t0" x="441" y="79" width="29" height="52" rx="2"/><rect class="sh" x="443" y="81" width="25" height="3"/></g><g class="bk-g w20b" style="--jx:-18px;--jy:-14px;--jr:10deg;--dd:0.50s"><rect class="bk t2" x="0" y="138" width="118" height="52" rx="2"/><rect class="sh" x="2" y="140" width="114" height="3"/></g><g class="bk-g w20b" style="--jx:-20px;--jy:-25px;--jr:4deg;--dd:0.55s"><rect class="bk t1" x="125" y="138" width="118" height="52" rx="2"/><rect class="sh" x="127" y="140" width="114" height="3"/></g><g class="bk-g w20b" style="--jx:-17px;--jy:10px;--jr:-5deg;--dd:0.60s"><rect class="bk t2" x="250" y="138" width="118" height="52" rx="2"/><rect class="sh" x="252" y="140" width="114" height="3"/></g><g class="bk-g w20b" style="--jx:-4px;--jy:-18px;--jr:4deg;--dd:0.65s"><rect class="bk t2" x="375" y="138" width="95" height="52" rx="2"/><rect class="sh" x="377" y="140" width="91" height="3"/></g><g class="bk-g w20b" style="--jx:25px;--jy:-18px;--jr:-3deg;--dd:0.75s"><rect class="bk t2" x="0" y="197" width="59" height="52" rx="2"/><rect class="sh" x="2" y="199" width="55" height="3"/></g><g class="bk-g w20b" style="--jx:28px;--jy:10px;--jr:14deg;--dd:0.80s"><rect class="bk t2" x="66" y="197" width="118" height="52" rx="2"/><rect class="sh" x="68" y="199" width="114" height="3"/></g><g class="bk-g w20b" style="--jx:-5px;--jy:-14px;--jr:11deg;--dd:0.85s"><rect class="bk t0" x="191" y="197" width="118" height="52" rx="2"/><rect class="sh" x="193" y="199" width="114" height="3"/></g><g class="bk-g w20b" style="--jx:1px;--jy:-3px;--jr:14deg;--dd:0.90s"><rect class="bk t0" x="316" y="197" width="118" height="52" rx="2"/><rect class="sh" x="318" y="199" width="114" height="3"/></g><g class="bk-g w20b" style="--jx:-29px;--jy:20px;--jr:-14deg;--dd:0.95s"><rect class="bk t2" x="441" y="197" width="29" height="52" rx="2"/><rect class="sh" x="443" y="199" width="25" height="3"/></g><g class="bk-g w20b" style="--jx:23px;--jy:9px;--jr:-3deg;--dd:1.00s"><rect class="bk t1" x="0" y="256" width="118" height="52" rx="2"/><rect class="sh" x="2" y="258" width="114" height="3"/></g><g class="bk-g w20b" style="--jx:2px;--jy:14px;--jr:-12deg;--dd:1.05s"><rect class="bk t2" x="125" y="256" width="118" height="52" rx="2"/><rect class="sh" x="127" y="258" width="114" height="3"/></g><g class="bk-g w20b" style="--jx:-26px;--jy:23px;--jr:2deg;--dd:1.10s"><rect class="bk t0" x="250" y="256" width="118" height="52" rx="2"/><rect class="sh" x="252" y="258" width="114" height="3"/></g><g class="bk-g w20b" style="--jx:-32px;--jy:13px;--jr:-11deg;--dd:1.15s"><rect class="bk t1" x="375" y="256" width="95" height="52" rx="2"/><rect class="sh" x="377" y="258" width="91" height="3"/></g></g><path class="mortar m20" d="M0 75.5 H470"/><path class="mortar m20" d="M0 134.5 H470"/><path class="mortar m20" d="M0 193.5 H470"/><path class="mortar m20" d="M0 252.5 H470"/><rect class="rim" x="-4" y="14" width="478" height="300" rx="4"/><g class="rl20"><text class="rowlab" x="488" y="53.0">Thanh niên</text><text class="rowlab" x="488" y="112.0">Phụ nữ</text><text class="rowlab" x="488" y="171.0">Trí thức</text><text class="rowlab" x="488" y="230.0">Nông dân</text><text class="rowlab" x="488" y="289.0">Công nhân</text></g><clipPath id="c20"><rect x="0" y="20" width="470" height="288"/></clipPath><g clip-path="url(#c20)"><rect class="sweep loop" x="-200" y="0" width="160" height="340"/></g></svg></div>
+  <div class="r7-rows">
+    <div class="rr r1"><span class="rk">01</span><div><h3>Dân vận</h3><p class="body">Đến với từng viên gạch, từng con người.</p></div></div>
+    <div class="rr r2"><span class="rk">02</span><div><h3>Đoàn thể</h3><p class="body">Xếp mọi người thành từng hàng theo giới của mình.</p></div></div>
+    <div class="rr r3"><span class="rk">03</span><div><h3>Mặt trận</h3><p class="body">Gắn tất cả các hàng thành một bức tường.</p></div></div>
+  </div>
 </div></section>
 
 <!-- 21 -->
-<section class="slide hero" data-sec="gp" data-who="Diệu Anh"><div class="bleed"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f6/Ho_Chi_Minh_City_Skyline_%28night%29.jpg/1920px-Ho_Chi_Minh_City_Skyline_%28night%29.jpg" alt="TP. Hồ Chí Minh về đêm" style="object-position:center" class="kb" decoding="async" referrerpolicy="no-referrer"></div><div class="shade b"></div><p class="bcap">Ảnh: TP. Hồ Chí Minh về đêm</p>
+<section class="slide hero" data-sec="gp" data-who="Diệu Anh"><div class="bleed"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Ho_Chi_Minh_City_Skyline_%28night%29.jpg/1920px-Ho_Chi_Minh_City_Skyline_%28night%29.jpg" alt="TP. Hồ Chí Minh về đêm" style="object-position:center" class="kb" decoding="async" referrerpolicy="no-referrer"></div><div class="shade b"></div><p class="bcap">Ảnh: TP. Hồ Chí Minh về đêm</p>
+<div class="wall21-host" aria-hidden="true"><svg class="wall21" viewBox="0 0 620 351.2" aria-hidden="true"><rect class="found" x="20" y="279.4" width="580" height="23.799999999999997" rx="2"/><g class="body21"><g class="bk-g "><rect class="bk t0" x="30" y="45.4" width="92" height="34" rx="2"/><rect class="sh" x="32" y="47.4" width="88" height="3"/></g><g class="bk-g "><rect class="bk t1" x="127" y="45.4" width="92" height="34" rx="2"/><rect class="sh" x="129" y="47.4" width="88" height="3"/></g><g class="bk-g "><rect class="bk t2" x="224" y="45.4" width="92" height="34" rx="2"/><rect class="sh" x="226" y="47.4" width="88" height="3"/></g><g class="bk-g "><rect class="bk t1" x="321" y="45.4" width="92" height="34" rx="2"/><rect class="sh" x="323" y="47.4" width="88" height="3"/></g><g class="bk-g "><rect class="bk t2" x="418" y="45.4" width="92" height="34" rx="2"/><rect class="sh" x="420" y="47.4" width="88" height="3"/></g><g class="bk-g "><rect class="bk t1" x="515" y="45.4" width="75" height="34" rx="2"/><rect class="sh" x="517" y="47.4" width="71" height="3"/></g><g class="bk-g "><rect class="bk t1" x="30" y="84.4" width="46" height="34" rx="2"/><rect class="sh" x="32" y="86.4" width="42" height="3"/></g><g class="bk-g "><rect class="bk t0" x="81" y="84.4" width="92" height="34" rx="2"/><rect class="sh" x="83" y="86.4" width="88" height="3"/></g><g class="bk-g "><rect class="bk t1" x="178" y="84.4" width="92" height="34" rx="2"/><rect class="sh" x="180" y="86.4" width="88" height="3"/></g><g class="bk-g "><rect class="bk t2" x="275" y="84.4" width="92" height="34" rx="2"/><rect class="sh" x="277" y="86.4" width="88" height="3"/></g><g class="bk-g "><rect class="bk t0" x="372" y="84.4" width="92" height="34" rx="2"/><rect class="sh" x="374" y="86.4" width="88" height="3"/></g><g class="bk-g "><rect class="bk t2" x="469" y="84.4" width="92" height="34" rx="2"/><rect class="sh" x="471" y="86.4" width="88" height="3"/></g><g class="bk-g "><rect class="bk t2" x="566" y="84.4" width="24" height="34" rx="2"/><rect class="sh" x="568" y="86.4" width="20" height="3"/></g><g class="bk-g "><rect class="bk t0" x="30" y="123.4" width="92" height="34" rx="2"/><rect class="sh" x="32" y="125.4" width="88" height="3"/></g><g class="bk-g "><rect class="bk t0" x="127" y="123.4" width="92" height="34" rx="2"/><rect class="sh" x="129" y="125.4" width="88" height="3"/></g><g class="bk-g "><rect class="bk t0" x="224" y="123.4" width="92" height="34" rx="2"/><rect class="sh" x="226" y="125.4" width="88" height="3"/></g><g class="bk-g "><rect class="bk t1" x="321" y="123.4" width="92" height="34" rx="2"/><rect class="sh" x="323" y="125.4" width="88" height="3"/></g><g class="bk-g "><rect class="bk t2" x="418" y="123.4" width="92" height="34" rx="2"/><rect class="sh" x="420" y="125.4" width="88" height="3"/></g><g class="bk-g "><rect class="bk t1" x="515" y="123.4" width="75" height="34" rx="2"/><rect class="sh" x="517" y="125.4" width="71" height="3"/></g><g class="bk-g "><rect class="bk t0" x="30" y="162.4" width="46" height="34" rx="2"/><rect class="sh" x="32" y="164.4" width="42" height="3"/></g><g class="bk-g "><rect class="bk t0" x="81" y="162.4" width="92" height="34" rx="2"/><rect class="sh" x="83" y="164.4" width="88" height="3"/></g><g class="bk-g "><rect class="bk t0" x="178" y="162.4" width="92" height="34" rx="2"/><rect class="sh" x="180" y="164.4" width="88" height="3"/></g><g class="bk-g "><rect class="bk t0" x="275" y="162.4" width="92" height="34" rx="2"/><rect class="sh" x="277" y="164.4" width="88" height="3"/></g><g class="bk-g "><rect class="bk t2" x="372" y="162.4" width="92" height="34" rx="2"/><rect class="sh" x="374" y="164.4" width="88" height="3"/></g><g class="bk-g "><rect class="bk t0" x="469" y="162.4" width="92" height="34" rx="2"/><rect class="sh" x="471" y="164.4" width="88" height="3"/></g><g class="bk-g "><rect class="bk t1" x="566" y="162.4" width="24" height="34" rx="2"/><rect class="sh" x="568" y="164.4" width="20" height="3"/></g><g class="bk-g "><rect class="bk t2" x="30" y="201.4" width="92" height="34" rx="2"/><rect class="sh" x="32" y="203.4" width="88" height="3"/></g><g class="bk-g "><rect class="bk t1" x="127" y="201.4" width="92" height="34" rx="2"/><rect class="sh" x="129" y="203.4" width="88" height="3"/></g><g class="bk-g "><rect class="bk t2" x="224" y="201.4" width="92" height="34" rx="2"/><rect class="sh" x="226" y="203.4" width="88" height="3"/></g><g class="bk-g "><rect class="bk t1" x="321" y="201.4" width="92" height="34" rx="2"/><rect class="sh" x="323" y="203.4" width="88" height="3"/></g><g class="bk-g "><rect class="bk t0" x="418" y="201.4" width="92" height="34" rx="2"/><rect class="sh" x="420" y="203.4" width="88" height="3"/></g><g class="bk-g "><rect class="bk t1" x="515" y="201.4" width="75" height="34" rx="2"/><rect class="sh" x="517" y="203.4" width="71" height="3"/></g><g class="bk-g "><rect class="bk t2" x="30" y="240.4" width="46" height="34" rx="2"/><rect class="sh" x="32" y="242.4" width="42" height="3"/></g><g class="bk-g "><rect class="bk t1" x="81" y="240.4" width="92" height="34" rx="2"/><rect class="sh" x="83" y="242.4" width="88" height="3"/></g><g class="bk-g "><rect class="bk t2" x="178" y="240.4" width="92" height="34" rx="2"/><rect class="sh" x="180" y="242.4" width="88" height="3"/></g><g class="bk-g "><rect class="bk t0" x="275" y="240.4" width="92" height="34" rx="2"/><rect class="sh" x="277" y="242.4" width="88" height="3"/></g><g class="bk-g sink"><rect class="bk t2" x="372" y="240.4" width="92" height="34" rx="2"/><rect class="sh" x="374" y="242.4" width="88" height="3"/></g><g class="bk-g sink"><rect class="bk t1" x="469" y="240.4" width="92" height="34" rx="2"/><rect class="sh" x="471" y="242.4" width="88" height="3"/></g><g class="bk-g sink"><rect class="bk t0" x="566" y="240.4" width="24" height="34" rx="2"/><rect class="sh" x="568" y="242.4" width="20" height="3"/></g></g><rect class="wcap" x="24" y="20" width="572" height="20.4" rx="2"/><g class="dmg d1"><rect class="fadebk" x="224" y="123.4" width="92" height="34" rx="2"/><text class="faded" x="270.0" y="146.4">ĐOÀN KẾT</text><g class="badge loop" style="--bd:0.4s"><circle cx="270" cy="109.4" r="17"/><text x="270" y="116.4">1</text></g></g><g class="dmg d2"><rect class="hole" x="140" y="279.4" width="150" height="23.799999999999997"/><g class="badge loop" style="--bd:0.8s"><circle cx="215" cy="325.2" r="17"/><text x="215" y="332.2">2</text></g></g><g class="dmg d3"><path class="sinkline" d="M398 278.4 L590 288.4"/><g class="badge loop" style="--bd:1.2s"><circle cx="550" cy="325.2" r="17"/><text x="550" y="332.2">3</text></g></g><g class="dmg d4"><rect class="gap4" x="300" y="40.4" width="230" height="7"/><g class="badge loop" style="--bd:1.6s"><circle cx="415" cy="8" r="17"/><text x="415" y="15">4</text></g></g><g class="dmg d5"><path class="crack" d="M118 49.4 L132 85.4 L116 123.4 L138 163.4 L124 205.4 L146 241.4"/><path class="chisel" d="M70 105.4 L100 125.4 L76 131.4Z"/><g class="badge loop" style="--bd:2.0s"><circle cx="60" cy="85.4" r="17"/><text x="60" y="92.4">5</text></g></g></svg></div>
 <div class="hero-in bottom">
   <p class="sec a">Phần 2. Thảo luận giải pháp</p>
   <h2 class="a" style="color:#F3EDE0; max-width:1250px">Trước đây chiến thắng giặc ngoại xâm, hiện nay chiến thắng nghèo nàn và lạc hậu</h2>
@@ -544,71 +1295,96 @@ img{display:block}
 </div></section>
 
 <!-- 22 -->
-<section class="slide gp" data-sec="gp" data-who="Diệu Anh">
-<div class="gp-head"><div class="big a">1</div><h2 class="a">Đẩy mạnh tuyên truyền</h2>
-  <div class="ocard banner a"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/1/11/Newone_-_people_relax_with_smartphone_at_cafe_in_Hanoi.jpg/1920px-Newone_-_people_relax_with_smartphone_at_cafe_in_Hanoi.jpg" alt="Người trẻ với điện thoại ở một quán cà phê Hà Nội" style="object-position:center 45%" class="" decoding="async" referrerpolicy="no-referrer"><div class="ov"><span>Người trẻ với điện thoại ở một quán cà phê Hà Nội</span></div></div></div>
-<div class="cols c3 grow">
-  <div class="panel a"><h3>Thực trạng</h3><ul><li>Người trẻ coi đoàn kết là chuyện thời chiến</li><li>Tuyên truyền nặng khẩu hiệu</li><li>Người trẻ xem video vài chục giây</li></ul></div>
-  <div class="panel hoe a"><h3>Giải pháp</h3><p>Đổi cách tuyên truyền, không chỉ tăng số lượng. Khẩu hiệu chỉ được nhìn thấy; câu chuyện thật mới được ghi nhớ.</p></div>
-  <div class="panel cham a"><h3>Việc cụ thể</h3><ul><li>Kể chuyện người thật việc thật</li><li>Video ngắn hợp từng nền tảng</li><li>Sinh viên làm dự án, cuộc thi nội dung</li></ul></div>
-</div>
-<blockquote class="sm a">Điểm này mà thực hiện tốt thì đẻ ra con cháu đều tốt: Đó là đoàn kết.<span class="src">Toàn tập, t.10, tr.589</span></blockquote></section>
+<section class="slide gp2" data-sec="gp" data-who="Diệu Anh">
+<div class="gp2-grid">
+  <div class="ocard gp-img a"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Newone_-_people_relax_with_smartphone_at_cafe_in_Hanoi.jpg/1920px-Newone_-_people_relax_with_smartphone_at_cafe_in_Hanoi.jpg" data-fb="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Newone_-_people_relax_with_smartphone_at_cafe_in_Hanoi.jpg/1920px-Newone_-_people_relax_with_smartphone_at_cafe_in_Hanoi.jpg" alt="Người trẻ với điện thoại ở một quán cà phê Hà Nội" style="object-position:center 45%" class="kb2" decoding="async" referrerpolicy="no-referrer"><div class="gp-num">1<small>GIẢI PHÁP 1 / 5</small></div><div class="ov"><span>Người trẻ với điện thoại ở một quán cà phê Hà Nội</span></div></div>
+  <div class="gp-right">
+    <p class="sec a">Phần 2 · Thảo luận giải pháp</p>
+    <h2 class="a">Đẩy mạnh tuyên truyền</h2>
+    <div class="steps3">
+      <div class="st a"><span class="dot"></span><div class="lbl">Thực trạng</div><div><ul><li>Người trẻ coi đoàn kết là chuyện thời chiến</li><li>Tuyên truyền nặng khẩu hiệu</li><li>Người trẻ xem video vài chục giây</li></ul></div></div>
+      <div class="st h a"><span class="dot"></span><div class="lbl">Giải pháp</div><p class="sol">Đổi cách tuyên truyền, không chỉ tăng số lượng. Khẩu hiệu chỉ được nhìn thấy; câu chuyện thật mới được ghi nhớ.</p></div>
+      <div class="st c a"><span class="dot"></span><div class="lbl">Việc cụ thể</div><div><ul><li>Kể chuyện người thật việc thật</li><li>Video ngắn hợp từng nền tảng</li><li>Sinh viên làm dự án, cuộc thi nội dung</li></ul></div></div>
+    </div>
+    <blockquote class="sm a">Điểm này mà thực hiện tốt thì đẻ ra con cháu đều tốt: Đó là đoàn kết.<span class="src">Toàn tập, t.10, tr.589</span></blockquote>
+  </div>
+</div></section>
 
 <!-- 23 -->
-<section class="slide gp" data-sec="gp" data-who="Diệu Anh">
-<div class="gp-head"><div class="big a">2</div><h2 class="a">Thể chế hóa đường lối</h2>
-  <div class="ocard banner a"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/a/af/H%E1%BB%99i_tr%C6%B0%E1%BB%9Dng_Di%C3%AAn_H%E1%BB%93ng%2C_Qu%E1%BB%91c_h%E1%BB%99i_Vi%E1%BB%87t_Nam.jpg/1920px-H%E1%BB%99i_tr%C6%B0%E1%BB%9Dng_Di%C3%AAn_H%E1%BB%93ng%2C_Qu%E1%BB%91c_h%E1%BB%99i_Vi%E1%BB%87t_Nam.jpg" alt="Hội trường Diên Hồng, Nhà Quốc hội" style="object-position:center 55%" class="" decoding="async" referrerpolicy="no-referrer"><div class="ov"><span>Hội trường Diên Hồng, Nhà Quốc hội</span></div></div></div>
-<div class="cols c3 grow">
-  <div class="panel a"><h3>Thực trạng</h3><ul><li>Nghị quyết 07 (1993), 23 (2003), Kết luận 43 (2019)</li><li>Còn khoảng cách giữa nghị quyết và cuộc sống</li></ul></div>
-  <div class="panel hoe a"><h3>Giải pháp</h3><p>Thể chế hóa là biến bản thiết kế thành công trình.</p></div>
-  <div class="panel cham a"><h3>Việc cụ thể</h3><ul><li>Tổng kết định kỳ, xét trách nhiệm người đứng đầu</li><li>Hoàn thiện pháp luật về dân tộc, tôn giáo, kiều bào</li><li>Kiểm tra chính sách đã đến nơi chưa</li></ul></div>
-</div>
-<p class="take a">Căn cứ: không bỏ sót một lực lượng nào. <span class="src" style="display:inline">Giáo trình, tr.173</span></p></section>
+<section class="slide gp2" data-sec="gp" data-who="Diệu Anh">
+<div class="gp2-grid">
+  <div class="ocard gp-img a"><img src="https://upload.wikimedia.org/wikipedia/commons/6/63/C%E1%BA%A3nh_chu%E1%BA%A9n_b%E1%BB%8B_b%E1%BA%A7u_c%E1%BB%AD_Qu%E1%BB%91c_h%E1%BB%99i_kh%C3%B3a_I_t%E1%BA%A1i_ng%C3%B5_Ph%E1%BA%A5t_L%E1%BB%99c_n%C4%83m_1946.jpg" data-fb="https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/H%E1%BB%99i_tr%C6%B0%E1%BB%9Dng_Di%C3%AAn_H%E1%BB%93ng%2C_Qu%E1%BB%91c_h%E1%BB%99i_Vi%E1%BB%87t_Nam.jpg/1920px-H%E1%BB%99i_tr%C6%B0%E1%BB%9Dng_Di%C3%AAn_H%E1%BB%93ng%2C_Qu%E1%BB%91c_h%E1%BB%99i_Vi%E1%BB%87t_Nam.jpg" alt="Chuẩn bị bầu cử Quốc hội khóa I, ngõ Phất Lộc, Hà Nội, 1946" style="object-position:center 45%" class="kb2 old" decoding="async" referrerpolicy="no-referrer"><div class="gp-num">2<small>GIẢI PHÁP 2 / 5</small></div><div class="ov"><span>Chuẩn bị bầu cử Quốc hội khóa I, ngõ Phất Lộc, Hà Nội, 1946</span></div></div>
+  <div class="gp-right">
+    <p class="sec a">Phần 2 · Thảo luận giải pháp</p>
+    <h2 class="a">Thể chế hóa đường lối</h2>
+    <div class="steps3">
+      <div class="st a"><span class="dot"></span><div class="lbl">Thực trạng</div><div><ul><li>Nghị quyết 07 (1993), 23 (2003), Kết luận 43 (2019)</li><li>Còn khoảng cách giữa nghị quyết và cuộc sống</li></ul></div></div>
+      <div class="st h a"><span class="dot"></span><div class="lbl">Giải pháp</div><p class="sol">Thể chế hóa là biến bản thiết kế thành công trình.</p></div>
+      <div class="st c a"><span class="dot"></span><div class="lbl">Việc cụ thể</div><div><ul><li>Tổng kết định kỳ, xét trách nhiệm người đứng đầu</li><li>Hoàn thiện pháp luật về dân tộc, tôn giáo, kiều bào</li><li>Kiểm tra chính sách đã đến nơi chưa</li></ul></div></div>
+    </div>
+    <p class="take a">Căn cứ: không bỏ sót một lực lượng nào. <span class="src" style="display:inline">Giáo trình, tr.173</span></p>
+  </div>
+</div></section>
 
 <!-- 24 -->
-<section class="slide gp" data-sec="gp" data-who="Ngọc">
-<div class="gp-head"><div class="big a">3</div><h2 class="a">Giải quyết tốt quan hệ lợi ích</h2>
-  <div class="ocard banner a"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Cao_toc_Cau_Gie_Ninh_Binh.JPG" alt="Cao tốc Cầu Giẽ – Ninh Bình" style="object-position:center 60%" class="" decoding="async" referrerpolicy="no-referrer"><div class="ov"><span>Cao tốc Cầu Giẽ – Ninh Bình</span></div></div></div>
-<div class="cols c3 grow">
-  <div class="panel a"><h3>Thực trạng</h3><ul><li>Doanh nghiệp và người lao động</li><li>Nông dân mất đất khi đô thị hóa</li><li>Bất bình dễ bị lợi dụng</li></ul></div>
-  <div class="panel hoe a"><h3>Giải pháp</h3><p>Lấy lợi ích chung làm điểm quy tụ, tôn trọng lợi ích riêng chính đáng.</p></div>
-  <div class="panel cham a"><h3>Việc cụ thể</h3><ul><li>Lấy ý kiến dân từ đầu</li><li>Công khai cách tính bồi thường</li><li>Chia sẻ lợi ích với vùng dự án</li></ul></div>
-</div>
-<p class="take a">Căn cứ: "mẫu số chung" và "vì ích lợi của họ".</p></section>
+<section class="slide gp2" data-sec="gp" data-who="Ngọc">
+<div class="gp2-grid">
+  <div class="ocard gp-img a"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/A_farmer_plies_the_waters_of_the_Mekong_Delta_in_southern_Vietnam_%289150050950%29.jpg/1280px-A_farmer_plies_the_waters_of_the_Mekong_Delta_in_southern_Vietnam_%289150050950%29.jpg" data-fb="https://upload.wikimedia.org/wikipedia/commons/6/6b/Cao_toc_Cau_Gie_Ninh_Binh.JPG" alt="Nông dân trên sông ở đồng bằng sông Cửu Long" style="object-position:center" class="kb2" decoding="async" referrerpolicy="no-referrer"><div class="gp-num">3<small>GIẢI PHÁP 3 / 5</small></div><div class="ov"><span>Nông dân trên sông ở đồng bằng sông Cửu Long</span></div></div>
+  <div class="gp-right">
+    <p class="sec a">Phần 2 · Thảo luận giải pháp</p>
+    <h2 class="a">Giải quyết tốt quan hệ lợi ích</h2>
+    <div class="steps3">
+      <div class="st a"><span class="dot"></span><div class="lbl">Thực trạng</div><div><ul><li>Doanh nghiệp và người lao động</li><li>Nông dân mất đất khi đô thị hóa</li><li>Bất bình dễ bị lợi dụng</li></ul></div></div>
+      <div class="st h a"><span class="dot"></span><div class="lbl">Giải pháp</div><p class="sol">Lấy lợi ích chung làm điểm quy tụ, tôn trọng lợi ích riêng chính đáng.</p></div>
+      <div class="st c a"><span class="dot"></span><div class="lbl">Việc cụ thể</div><div><ul><li>Lấy ý kiến dân từ đầu</li><li>Công khai cách tính bồi thường</li><li>Chia sẻ lợi ích với vùng dự án</li></ul></div></div>
+    </div>
+    <p class="take a">Căn cứ: "mẫu số chung" và "vì ích lợi của họ".</p>
+  </div>
+</div></section>
 
 <!-- 25 -->
-<section class="slide gp" data-sec="gp" data-who="Giang">
-<div class="gp-head"><div class="big a">4</div><h2 class="a">Gắn bó mật thiết giữa nhân dân với Đảng, Nhà nước</h2>
-  <div class="ocard banner a"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b6/Ho-chi-Minh_with_children_%283%29.jpg" alt="Chủ tịch Hồ Chí Minh với thiếu nhi" style="object-position:center 30%" class="" decoding="async" referrerpolicy="no-referrer"><div class="ov"><span>Chủ tịch Hồ Chí Minh với thiếu nhi</span></div></div></div>
-<div class="cols c3 grow">
-  <div class="panel a"><h3>Thực trạng</h3><ul><li>Bệnh quan liêu, xa dân vẫn còn</li><li>Đoàn thể còn hình thức</li></ul></div>
-  <div class="panel hoe a"><h3>Giải pháp</h3><p>Mối liên hệ phải thường xuyên, hai chiều và có thật.</p></div>
-  <div class="panel cham a"><h3>Việc cụ thể</h3><ul><li>Tiếp dân, đối thoại, trả lời đúng hạn</li><li>Chống tham nhũng, công khai kết quả</li><li>Đoàn thể lấy nhu cầu hội viên làm trung tâm</li></ul></div>
-</div>
-<blockquote class="sm a">cách xa dân chúng, không liên hệ chặt chẽ với dân chúng, cũng như đứng lơ lửng giữa trời, nhất định thất bại<span class="src">Toàn tập, t.5, tr.326</span></blockquote></section>
+<section class="slide gp2" data-sec="gp" data-who="Giang">
+<div class="gp2-grid">
+  <div class="ocard gp-img a"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Youth_Union_Members_at_the_World_TB_Day_Event_in_Hanoi_%288581057437%29.jpg/1280px-Youth_Union_Members_at_the_World_TB_Day_Event_in_Hanoi_%288581057437%29.jpg" data-fb="https://upload.wikimedia.org/wikipedia/commons/b/b6/Ho-chi-Minh_with_children_%283%29.jpg" alt="Đoàn viên thanh niên tại một sự kiện y tế cộng đồng ở Hà Nội" style="object-position:center 40%" class="kb2" decoding="async" referrerpolicy="no-referrer"><div class="gp-num">4<small>GIẢI PHÁP 4 / 5</small></div><div class="ov"><span>Đoàn viên thanh niên tại một sự kiện y tế cộng đồng ở Hà Nội</span></div></div>
+  <div class="gp-right">
+    <p class="sec a">Phần 2 · Thảo luận giải pháp</p>
+    <h2 class="a">Gắn bó mật thiết giữa nhân dân với Đảng, Nhà nước</h2>
+    <div class="steps3">
+      <div class="st a"><span class="dot"></span><div class="lbl">Thực trạng</div><div><ul><li>Bệnh quan liêu, xa dân vẫn còn</li><li>Đoàn thể còn hình thức</li></ul></div></div>
+      <div class="st h a"><span class="dot"></span><div class="lbl">Giải pháp</div><p class="sol">Mối liên hệ phải thường xuyên, hai chiều và có thật.</p></div>
+      <div class="st c a"><span class="dot"></span><div class="lbl">Việc cụ thể</div><div><ul><li>Tiếp dân, đối thoại, trả lời đúng hạn</li><li>Chống tham nhũng, công khai kết quả</li><li>Đoàn thể lấy nhu cầu hội viên làm trung tâm</li></ul></div></div>
+    </div>
+    <blockquote class="sm a">cách xa dân chúng, không liên hệ chặt chẽ với dân chúng, cũng như đứng lơ lửng giữa trời, nhất định thất bại<span class="src">Toàn tập, t.5, tr.326</span></blockquote>
+  </div>
+</div></section>
 
 <!-- 26 -->
-<section class="slide gp" data-sec="gp" data-who="Hân">
-<div class="gp-head"><div class="big a">5</div><h2 class="a">Đấu tranh với quan điểm sai trái, chia rẽ</h2>
-  <div class="ocard banner a"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/6/62/Typhoon_Yagi_damage_in_Hanoi.jpg/1920px-Typhoon_Yagi_damage_in_Hanoi.jpg" alt="Hà Nội sau bão Yagi, 9/2024" style="object-position:center" class="" decoding="async" referrerpolicy="no-referrer"><div class="ov"><span>Hà Nội sau bão Yagi, 9/2024</span></div></div></div>
-<div class="cols c3 grow">
-  <div class="panel a"><h3>Thực trạng</h3><ul><li>Tin giả lan nhanh hơn tin chính thức</li><li>Dân tộc, tôn giáo, vùng miền bị cắt ghép</li><li>Tin đồn về tiền ủng hộ</li></ul></div>
-  <div class="panel hoe a"><h3>Giải pháp</h3><p>Vạch trần kịp thời và chủ động minh bạch. Không quy chụp góp ý thẳng thắn thành thù địch.</p></div>
-  <div class="panel cham a"><h3>Việc cụ thể</h3><ul><li>Thông tin chính thức nhanh, chính xác</li><li>Sao kê công khai, như sau bão Yagi 2024</li><li>Sinh viên kiểm chứng trước khi chia sẻ</li></ul></div>
-</div>
-<p class="take a">Căn cứ: "vừa đoàn kết, vừa đấu tranh" trên lập trường thân ái.</p></section>
+<section class="slide gp2" data-sec="gp" data-who="Hân">
+<div class="gp2-grid">
+  <div class="ocard gp-img a"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Typhoon_Yagi_damage_in_Hanoi.jpg/1920px-Typhoon_Yagi_damage_in_Hanoi.jpg" data-fb="https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Typhoon_Yagi_damage_in_Hanoi.jpg/1920px-Typhoon_Yagi_damage_in_Hanoi.jpg" alt="Hà Nội sau bão Yagi, 9/2024" style="object-position:center" class="kb2" decoding="async" referrerpolicy="no-referrer"><div class="gp-num">5<small>GIẢI PHÁP 5 / 5</small></div><div class="ov"><span>Hà Nội sau bão Yagi, 9/2024</span></div></div>
+  <div class="gp-right">
+    <p class="sec a">Phần 2 · Thảo luận giải pháp</p>
+    <h2 class="a">Đấu tranh với quan điểm sai trái, chia rẽ</h2>
+    <div class="steps3">
+      <div class="st a"><span class="dot"></span><div class="lbl">Thực trạng</div><div><ul><li>Tin giả lan nhanh hơn tin chính thức</li><li>Dân tộc, tôn giáo, vùng miền bị cắt ghép</li><li>Tin đồn về tiền ủng hộ</li></ul></div></div>
+      <div class="st h a"><span class="dot"></span><div class="lbl">Giải pháp</div><p class="sol">Vạch trần kịp thời và chủ động minh bạch. Không quy chụp góp ý thẳng thắn thành thù địch.</p></div>
+      <div class="st c a"><span class="dot"></span><div class="lbl">Việc cụ thể</div><div><ul><li>Thông tin chính thức nhanh, chính xác</li><li>Sao kê công khai, như sau bão Yagi 2024</li><li>Sinh viên kiểm chứng trước khi chia sẻ</li></ul></div></div>
+    </div>
+    <p class="take a">Căn cứ: "vừa đoàn kết, vừa đấu tranh" trên lập trường thân ái.</p>
+  </div>
+</div></section>
 
 <!-- 27 -->
-<section class="slide " data-sec="gp" data-who="Cả nhóm">
+<section class="slide open27" data-sec="gp" data-who="Cả nhóm">
 <p class="sec a">Tranh luận mở</p>
-<h2 class="a">Nếu chỉ được làm một việc trước, nhóm chọn giải pháp nào?</h2>
-<div class="vs grow">
-  <div class="v a"><span class="who2">Ngọc</span><b>GP3 · Lợi ích</b><p>Không công bằng thì tuyên truyền hay đến mấy cũng không ai tin.</p></div>
-  <div class="v a h"><span class="who2">Giang</span><b>GP4 · Lòng tin</b><p>Lòng tin xây rất lâu mà mất rất nhanh.</p></div>
-  <div class="v a c"><span class="who2">Hân</span><b>GP5 · Chống chia rẽ</b><p>Tin giả lan trong vài giờ, phải chặn vết nứt trước.</p></div>
-  <div class="v a"><span class="who2">Diệu Anh</span><b>GP1 · Tuyên truyền</b><p>Sinh viên làm được ngay từ hôm nay.</p></div>
-</div>
-<p class="take accent a">Không biểu quyết ai thắng: tìm điểm chung, tôn trọng điểm khác.</p></section>
+<h2 class="a q27">Nếu chỉ được làm một việc trước, nhóm chọn giải pháp nào?</h2>
+<div class="chips27 a">
+  <div class="c27"><b>1</b><span>Đẩy mạnh tuyên truyền</span></div>
+  <div class="c27"><b>2</b><span>Thể chế hóa đường lối</span></div>
+  <div class="c27"><b>3</b><span>Giải quyết quan hệ lợi ích</span></div>
+  <div class="c27"><b>4</b><span>Gắn bó dân với Đảng, Nhà nước</span></div>
+  <div class="c27"><b>5</b><span>Đấu tranh với chia rẽ</span></div>
+</div></section>
 
 <!-- 28 -->
 <section class="slide hero" data-sec="kl" data-who="Diệu Anh"><div class="bleed"><img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Vietnamese_people_celebrate_when_Vietnam_won_the_2018_aff_cup_01.jpg" alt="Người dân xuống đường mừng chiến thắng AFF Cup, 12/2018" style="object-position:center" class="kb bright" decoding="async" referrerpolicy="no-referrer"></div><div class="shade b2"></div><p class="bcap">Ảnh: Người dân xuống đường mừng chiến thắng AFF Cup, 12/2018</p>
@@ -628,15 +1404,15 @@ img{display:block}
 <h2 class="a">Mỗi việc nhỏ là một viên gạch đặt đúng chỗ</h2>
 <div class="cols grow" style="grid-template-columns:1fr 1fr 360px; gap:32px">
   <div class="panel cham a"><h3>Năm giải pháp</h3><ul><li>Tuyên truyền để hiểu</li><li>Thể chế hóa để có chỗ dựa</li><li>Lợi ích công bằng</li><li>Giữ lòng tin</li><li>Chống chia rẽ bằng minh bạch</li></ul></div>
-  <div class="panel a"><h3>Với sinh viên</h3><ul><li>Tham gia Đoàn, Hội bằng hoạt động có thật</li><li>Góp ý chính sách liên quan đến mình</li><li>Kiểm chứng trước khi chia sẻ</li><li>Không miệt thị vùng miền, tôn giáo</li></ul></div>
-  <div class="ocard a"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7b/Flower_Hmongs_market%2C_Vietnam.jpg/1920px-Flower_Hmongs_market%2C_Vietnam.jpg" alt="Chợ phiên của đồng bào H&#x27;Mông Hoa" style="object-position:center" class="" decoding="async" referrerpolicy="no-referrer"><div class="ov"><span>Chợ phiên của đồng bào H'Mông Hoa</span></div></div>
+  <div class="panel a"><h3>Với sinh viên</h3><ul><li>Tham gia Đoàn, Hội bằng hoạt động có thật</li><li>Góp ý chính sách liên quan đến mình</li><li>Kiểm chứng trước khi chia sẻ</li><li>Không miệt thị vùng miền, tôn giáo</li></ul><div class="last-host"><svg class="last29" viewBox="0 0 300 113" aria-hidden="true"><g class="body"><g class="bk-g "><rect class="bk t2" x="0" y="6" width="74" height="30" rx="2"/><rect class="sh" x="2" y="8" width="70" height="3"/></g><g class="bk-g "><rect class="bk t0" x="79" y="6" width="74" height="30" rx="2"/><rect class="sh" x="81" y="8" width="70" height="3"/></g><g class="bk-g "><rect class="bk t1" x="237" y="6" width="63" height="30" rx="2"/><rect class="sh" x="239" y="8" width="59" height="3"/></g><g class="bk-g "><rect class="bk t2" x="0" y="41" width="37" height="30" rx="2"/><rect class="sh" x="2" y="43" width="33" height="3"/></g><g class="bk-g "><rect class="bk t2" x="42" y="41" width="74" height="30" rx="2"/><rect class="sh" x="44" y="43" width="70" height="3"/></g><g class="bk-g "><rect class="bk t1" x="121" y="41" width="74" height="30" rx="2"/><rect class="sh" x="123" y="43" width="70" height="3"/></g><g class="bk-g "><rect class="bk t0" x="200" y="41" width="74" height="30" rx="2"/><rect class="sh" x="202" y="43" width="70" height="3"/></g><g class="bk-g "><rect class="bk t2" x="279" y="41" width="21" height="30" rx="2"/><rect class="sh" x="281" y="43" width="17" height="3"/></g><g class="bk-g "><rect class="bk t1" x="0" y="76" width="74" height="30" rx="2"/><rect class="sh" x="2" y="78" width="70" height="3"/></g><g class="bk-g "><rect class="bk t1" x="79" y="76" width="74" height="30" rx="2"/><rect class="sh" x="81" y="78" width="70" height="3"/></g><g class="bk-g "><rect class="bk t1" x="158" y="76" width="74" height="30" rx="2"/><rect class="sh" x="160" y="78" width="70" height="3"/></g><g class="bk-g "><rect class="bk t0" x="237" y="76" width="63" height="30" rx="2"/><rect class="sh" x="239" y="78" width="59" height="3"/></g></g><g class="lastb loop"><g class="bk-g lastbk"><rect class="bk t1" x="158" y="6" width="74" height="30" rx="2"/><rect class="sh" x="160" y="8" width="70" height="3"/></g></g></svg></div></div>
+  <div class="ocard a"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Flower_Hmongs_market%2C_Vietnam.jpg/1920px-Flower_Hmongs_market%2C_Vietnam.jpg" alt="Chợ phiên của đồng bào H&#x27;Mông Hoa" style="object-position:center" class="" decoding="async" referrerpolicy="no-referrer"><div class="ov"><span>Chợ phiên của đồng bào H'Mông Hoa</span></div></div>
 </div>
 <blockquote class="a">Đoàn kết là sức mạnh, là then chốt của thành công.<span class="src">Hồ Chí Minh, Toàn tập, t.14, tr.186</span></blockquote></section>
 
 <!-- 30 -->
 <section class="slide " data-sec="kl" data-who="Diệu Anh">
 <p class="sec a">Tài liệu tham khảo</p>
-<ul class="a" style="font-size:21px; line-height:1.5; max-width:1350px">
+<ul class="a" style="font-size:25px; line-height:1.55; max-width:1380px; margin-top:20px">
   <li>Bộ Giáo dục và Đào tạo (2021), <i>Giáo trình Tư tưởng Hồ Chí Minh</i>, Nxb. Chính trị quốc gia Sự thật, Hà Nội.</li>
   <li>Hồ Chí Minh (2011), <i>Toàn tập</i>, Nxb. Chính trị quốc gia Sự thật, Hà Nội.</li>
   <li>Đảng Cộng sản Việt Nam (2016), <i>Văn kiện Đại hội đại biểu toàn quốc lần thứ XII</i>, Văn phòng Trung ương Đảng, Hà Nội.</li>
@@ -648,17 +1424,18 @@ img{display:block}
 </ul></section>
 
 <!-- 31 -->
-<section class="slide " data-sec="kl" data-who="Diệu Anh"><p class="sec a">Nguồn ảnh</p><h2 class="a" style="font-size:40px">Ảnh minh họa từ Wikimedia Commons</h2><ol class="credits a"><li>Mít tinh mừng Cách mạng Tháng Tám thành công, Nhà hát Lớn Hà Nội, 1945 — Không rõ tác giả · Public domain</li><li>Tranh thờ Hưng Đạo Đại vương Trần Quốc Tuấn (vẽ thời Nguyễn) — Không rõ tác giả · Public domain</li><li>Chủ tịch Hồ Chí Minh, 1946 — Không rõ tác giả · Public domain</li><li>Hà Nội sau bão Yagi, 9/2024 — T1980 · CC BY 4.0</li><li>Người trẻ với điện thoại ở một quán cà phê Hà Nội — Newone · CC BY-SA 4.0</li><li>Dân công thồ lương thực ra mặt trận — TTXVN · Public domain</li><li>TP. Hồ Chí Minh về đêm — Jim 陳 · CC BY-SA 2.0</li><li>Đình Tân Trào, Tuyên Quang — Bùi Thụy Đào Nguyên · CC BY-SA 4.0</li><li>Chủ tịch Hồ Chí Minh và cụ Nguyễn Văn Tố, nhân sĩ ngoài Đảng — Quốc hội Việt Nam · Public domain</li><li>Biểu ngữ &quot;Độc lập hay là chết&quot;, 1945 — OSS, Quân đội Mỹ · Public domain</li><li>Cao tốc Cầu Giẽ – Ninh Bình — Kien1980v · Public domain</li><li>Phụ nữ H&#x27;Mông ở chợ Cốc Ly, Lào Cai — Brian Snelson · CC BY 2.0</li><li>Người dân xuống đường mừng chiến thắng AFF Cup, 12/2018 — Sáng Tốt Bụng · CC BY 3.0</li><li>Mùa gặt ở Cần Thơ — Dragfyre · CC BY-SA 3.0</li><li>Hồ Chí Minh và Võ Nguyên Giáp, 1945 — An Ninh Võ · Public domain</li><li>Hồ Chí Minh với cán bộ Hội Phụ nữ, Việt Bắc, 2/1949 — Musée Annam · Public domain</li><li>Chủ tịch Hồ Chí Minh giữa thiếu nhi — Musée Annam · Public domain</li><li>Trụ sở Ủy ban Trung ương MTTQ Việt Nam, Hà Nội — Christophe95 · CC BY-SA 4.0</li><li>Dân công các dân tộc vận chuyển hàng ra mặt trận — TTXVN · Public domain</li><li>Hội trường Diên Hồng, Nhà Quốc hội — Windrain · CC BY-SA 4.0</li><li>Hồ Chí Minh, cố vấn Vĩnh Thụy (Bảo Đại) và Souphanouvong, 1945 — Không rõ tác giả · Public domain</li><li>Đồng bào Khmer ở Trà Vinh — Dongson.v · CC BY-SA 3.0</li><li>Nhà thờ Phát Diệm, Ninh Bình — Thỏ nâu · CC BY-SA 3.0</li><li>Chùa Bái Đính, Ninh Bình — Guerinf · CC BY-SA 4.0</li><li>Chủ tịch Hồ Chí Minh với thiếu nhi — Musée Annam · Public domain</li><li>Người dân xuống đường mừng chiến thắng AFF Cup, 12/2018 — Sáng Tốt Bụng · CC BY 3.0</li><li>Chợ phiên của đồng bào H&#x27;Mông Hoa — Peter Olshevsky · CC BY-SA 4.0</li></ol></section>
+<section class="slide " data-sec="kl" data-who="Diệu Anh"><p class="sec a">Nguồn ảnh</p><h2 class="a" style="font-size:40px">Ảnh minh họa từ Wikimedia Commons</h2><ol class="credits a"><li>Mít tinh mừng Cách mạng Tháng Tám thành công, Nhà hát Lớn Hà Nội, 1945 — Không rõ tác giả · Public domain</li><li>Tranh thờ Hưng Đạo Đại vương Trần Quốc Tuấn (vẽ thời Nguyễn) — Không rõ tác giả · Public domain</li><li>Chủ tịch Hồ Chí Minh, 1946 — Không rõ tác giả · Public domain</li><li>Hà Nội sau bão Yagi, 9/2024 — T1980 · CC BY 4.0</li><li>Người trẻ với điện thoại ở một quán cà phê Hà Nội — Newone · CC BY-SA 4.0</li><li>Chủ tịch Hồ Chí Minh với thiếu nhi — Musée Annam · Public domain</li><li>Giờ tan tầm trên phố Hà Nội — Benjamin Arnold · CC BY 3.0</li><li>Chiến thắng Điện Biên Phủ, 1954 — Quân đội nhân dân Việt Nam · Public domain</li><li>Chủ tịch Hồ Chí Minh và cụ Nguyễn Văn Tố, nhân sĩ ngoài Đảng — Quốc hội Việt Nam · Public domain</li><li>Biểu ngữ "Độc lập hay là chết", 1945 — OSS, Quân đội Mỹ · Public domain</li><li>Cao tốc Cầu Giẽ – Ninh Bình — Kien1980v · Public domain</li><li>Phụ nữ H'Mông ở chợ Cốc Ly, Lào Cai — Brian Snelson · CC BY 2.0</li><li>Người dân xuống đường mừng chiến thắng AFF Cup, 12/2018 — Sáng Tốt Bụng · CC BY 3.0</li><li>Mùa gặt ở Cần Thơ — Dragfyre · CC BY-SA 3.0</li><li>Hồ Chí Minh và Võ Nguyên Giáp, 1945 — An Ninh Võ · Public domain</li><li>Hồ Chí Minh với cán bộ Hội Phụ nữ, Việt Bắc, 2/1949 — Musée Annam · Public domain</li><li>Dân công thồ lương thực ra mặt trận — TTXVN · Public domain</li><li>Đoàn viên thanh niên tại một sự kiện cộng đồng ở Hà Nội — USAID Vietnam · Public domain</li><li>Trụ sở Ủy ban Trung ương MTTQ Việt Nam, Hà Nội — Christophe95 · CC BY-SA 4.0</li><li>Đình Tân Trào, Tuyên Quang — Bùi Thụy Đào Nguyên · CC BY-SA 4.0</li><li>Quảng trường Ba Đình, 2/9/1945 — Không rõ tác giả · Public domain</li><li>Dân công các dân tộc vận chuyển hàng ra mặt trận — TTXVN · Public domain</li><li>Hội trường Diên Hồng, Nhà Quốc hội — Windrain · CC BY-SA 4.0</li><li>Hồ Chí Minh, cố vấn Vĩnh Thụy (Bảo Đại) và Souphanouvong, 1945 — Không rõ tác giả · Public domain</li><li>Chính phủ Liên hiệp ra mắt Quốc hội, 2/3/1946 — Musée Annam · Public domain</li><li>Thành viên Chính phủ trong lễ Quốc khánh, Hà Nội 1946 — Musée Annam · Public domain</li><li>Đồng bào Khmer ở Trà Vinh — Dongson.v · CC BY-SA 3.0</li><li>Nhà thờ Phát Diệm, Ninh Bình — Thỏ nâu · CC BY-SA 3.0</li><li>Chùa Bái Đính, Ninh Bình — Guerinf · CC BY-SA 4.0</li><li>TP. Hồ Chí Minh về đêm — Jim 陳 · CC BY-SA 2.0</li><li>Chuẩn bị bầu cử Quốc hội khóa I, ngõ Phất Lộc, Hà Nội, 1946 — Musée Annam · Public domain</li><li>Nông dân trên sông ở đồng bằng sông Cửu Long — USAID Vietnam · Public domain</li><li>Đoàn viên thanh niên tại một sự kiện y tế cộng đồng ở Hà Nội — USAID Vietnam · Public domain</li><li>Chợ phiên của đồng bào H'Mông Hoa — Peter Olshevsky · CC BY-SA 4.0</li></ol></section>
 
 <!-- 32 -->
-<section class="slide hero cover" data-sec="kl" data-who="Cả nhóm"><div class="bleed"><img src="https://upload.wikimedia.org/wikipedia/commons/c/cd/M%C3%ADt_tinh_ch%C3%A0o_m%E1%BB%ABng_C%C3%A1ch_m%E1%BA%A1ng_Th%C3%A1ng_T%C3%A1m_n%C4%83m_1945_th%C3%A0nh_c%C3%B4ng_t%E1%BA%A1i_Nh%C3%A0_h%C3%A1t_L%E1%BB%9Bn_H%C3%A0_N%E1%BB%99i.jpg" alt="Mít tinh mừng Cách mạng Tháng Tám thành công, Nhà hát Lớn Hà Nội, 1945" style="object-position:center 40%" class="kb" decoding="async" referrerpolicy="no-referrer"></div><div class="shade l"></div><p class="bcap">Ảnh: Mít tinh mừng Cách mạng Tháng Tám thành công, Nhà hát Lớn Hà Nội, 1945</p>
+<section class="slide hero cover finale" data-sec="kl" data-who="Cả nhóm"><div class="bleed"><img src="https://upload.wikimedia.org/wikipedia/commons/c/cd/M%C3%ADt_tinh_ch%C3%A0o_m%E1%BB%ABng_C%C3%A1ch_m%E1%BA%A1ng_Th%C3%A1ng_T%C3%A1m_n%C4%83m_1945_th%C3%A0nh_c%C3%B4ng_t%E1%BA%A1i_Nh%C3%A0_h%C3%A1t_L%E1%BB%9Bn_H%C3%A0_N%E1%BB%99i.jpg" alt="Mít tinh mừng Cách mạng Tháng Tám thành công, Nhà hát Lớn Hà Nội, 1945" style="object-position:center 40%" class="kb old" decoding="async" referrerpolicy="no-referrer"></div><div class="shade l"></div><p class="bcap">Ảnh: Mít tinh mừng Cách mạng Tháng Tám thành công, Nhà hát Lớn Hà Nội, 1945</p>
+<div class="wall32-host" aria-hidden="true"><svg class="wall32" viewBox="0 0 560 364" aria-hidden="true"><defs><linearGradient id="gsw2" x1="0" x2="1"><stop offset="0" stop-color="#F3DFA8" stop-opacity="0"/><stop offset=".5" stop-color="#F3DFA8" stop-opacity=".32"/><stop offset="1" stop-color="#F3DFA8" stop-opacity="0"/></linearGradient><clipPath id="c32"><rect x="14" y="20" width="532" height="306"/></clipPath></defs><rect class="found" x="10" y="326" width="540" height="28.0" rx="2"/><g class="body"><g class="bk-g "><rect class="bk t0" x="20" y="50" width="104" height="40" rx="2"/><rect class="sh" x="22" y="52" width="100" height="3"/></g><g class="bk-g "><rect class="bk t0" x="130" y="50" width="104" height="40" rx="2"/><rect class="sh" x="132" y="52" width="100" height="3"/></g><g class="bk-g "><rect class="bk t0" x="240" y="50" width="104" height="40" rx="2"/><rect class="sh" x="242" y="52" width="100" height="3"/></g><g class="bk-g "><rect class="bk t1" x="350" y="50" width="104" height="40" rx="2"/><rect class="sh" x="352" y="52" width="100" height="3"/></g><g class="bk-g "><rect class="bk t2" x="460" y="50" width="80" height="40" rx="2"/><rect class="sh" x="462" y="52" width="76" height="3"/></g><g class="bk-g "><rect class="bk t0" x="20" y="96" width="52" height="40" rx="2"/><rect class="sh" x="22" y="98" width="48" height="3"/></g><g class="bk-g "><rect class="bk t1" x="78" y="96" width="104" height="40" rx="2"/><rect class="sh" x="80" y="98" width="100" height="3"/></g><g class="bk-g "><rect class="bk t0" x="188" y="96" width="104" height="40" rx="2"/><rect class="sh" x="190" y="98" width="100" height="3"/></g><g class="bk-g "><rect class="bk t2" x="298" y="96" width="104" height="40" rx="2"/><rect class="sh" x="300" y="98" width="100" height="3"/></g><g class="bk-g "><rect class="bk t0" x="408" y="96" width="104" height="40" rx="2"/><rect class="sh" x="410" y="98" width="100" height="3"/></g><g class="bk-g "><rect class="bk t0" x="518" y="96" width="22" height="40" rx="2"/><rect class="sh" x="520" y="98" width="18" height="3"/></g><g class="bk-g "><rect class="bk t1" x="20" y="142" width="104" height="40" rx="2"/><rect class="sh" x="22" y="144" width="100" height="3"/></g><g class="bk-g "><rect class="bk t2" x="130" y="142" width="104" height="40" rx="2"/><rect class="sh" x="132" y="144" width="100" height="3"/></g><g class="bk-g "><rect class="bk t1" x="240" y="142" width="104" height="40" rx="2"/><rect class="sh" x="242" y="144" width="100" height="3"/></g><g class="bk-g "><rect class="bk t0" x="350" y="142" width="104" height="40" rx="2"/><rect class="sh" x="352" y="144" width="100" height="3"/></g><g class="bk-g "><rect class="bk t2" x="460" y="142" width="80" height="40" rx="2"/><rect class="sh" x="462" y="144" width="76" height="3"/></g><g class="bk-g "><rect class="bk t2" x="20" y="188" width="52" height="40" rx="2"/><rect class="sh" x="22" y="190" width="48" height="3"/></g><g class="bk-g "><rect class="bk t1" x="78" y="188" width="104" height="40" rx="2"/><rect class="sh" x="80" y="190" width="100" height="3"/></g><g class="bk-g "><rect class="bk t1" x="188" y="188" width="104" height="40" rx="2"/><rect class="sh" x="190" y="190" width="100" height="3"/></g><g class="bk-g "><rect class="bk t2" x="298" y="188" width="104" height="40" rx="2"/><rect class="sh" x="300" y="190" width="100" height="3"/></g><g class="bk-g "><rect class="bk t0" x="408" y="188" width="104" height="40" rx="2"/><rect class="sh" x="410" y="190" width="100" height="3"/></g><g class="bk-g "><rect class="bk t2" x="518" y="188" width="22" height="40" rx="2"/><rect class="sh" x="520" y="190" width="18" height="3"/></g><g class="bk-g "><rect class="bk t0" x="20" y="234" width="104" height="40" rx="2"/><rect class="sh" x="22" y="236" width="100" height="3"/></g><g class="bk-g "><rect class="bk t2" x="130" y="234" width="104" height="40" rx="2"/><rect class="sh" x="132" y="236" width="100" height="3"/></g><g class="bk-g "><rect class="bk t0" x="240" y="234" width="104" height="40" rx="2"/><rect class="sh" x="242" y="236" width="100" height="3"/></g><g class="bk-g "><rect class="bk t1" x="350" y="234" width="104" height="40" rx="2"/><rect class="sh" x="352" y="236" width="100" height="3"/></g><g class="bk-g "><rect class="bk t2" x="460" y="234" width="80" height="40" rx="2"/><rect class="sh" x="462" y="236" width="76" height="3"/></g><g class="bk-g "><rect class="bk t0" x="20" y="280" width="52" height="40" rx="2"/><rect class="sh" x="22" y="282" width="48" height="3"/></g><g class="bk-g "><rect class="bk t1" x="78" y="280" width="104" height="40" rx="2"/><rect class="sh" x="80" y="282" width="100" height="3"/></g><g class="bk-g "><rect class="bk t0" x="188" y="280" width="104" height="40" rx="2"/><rect class="sh" x="190" y="282" width="100" height="3"/></g><g class="bk-g "><rect class="bk t1" x="298" y="280" width="104" height="40" rx="2"/><rect class="sh" x="300" y="282" width="100" height="3"/></g><g class="bk-g "><rect class="bk t0" x="408" y="280" width="104" height="40" rx="2"/><rect class="sh" x="410" y="282" width="100" height="3"/></g><g class="bk-g "><rect class="bk t1" x="518" y="280" width="22" height="40" rx="2"/><rect class="sh" x="520" y="282" width="18" height="3"/></g></g><rect class="wcap" x="14" y="20" width="532" height="24.0" rx="2"/><g clip-path="url(#c32)"><rect class="sweep loop" x="-200" y="0" width="180" height="364"/></g></svg></div>
 <div class="hero-in">
   <p class="sec a">Đề tài 8 · Nhóm SS003</p>
   <h1 class="a">Cảm ơn thầy cô và các bạn đã lắng nghe</h1>
   <p class="sub a">Nguyễn Lý Diệu Anh · Trần Hoàng Khánh Ngọc · Phan Mai Trà Giang · Huỳnh Hồng Hân</p>
 </div></section>
 
-<div class="rail" aria-hidden="true"><div class="row" id="row"></div><div class="num" id="num"></div></div>
+<div class="rail" aria-hidden="true"><div class="row" id="row"></div><div class="mini-host"><svg class="mini" viewBox="0 0 120 58" aria-hidden="true"><rect class="mb" data-o="0" x="0" y="44" width="22" height="10" rx="1"/><rect class="mb" data-o="1" x="24" y="44" width="22" height="10" rx="1"/><rect class="mb" data-o="2" x="48" y="44" width="22" height="10" rx="1"/><rect class="mb" data-o="3" x="72" y="44" width="22" height="10" rx="1"/><rect class="mb" data-o="4" x="96" y="44" width="22" height="10" rx="1"/><rect class="mb" data-o="5" x="0" y="32" width="11" height="10" rx="1"/><rect class="mb" data-o="6" x="13" y="32" width="22" height="10" rx="1"/><rect class="mb" data-o="7" x="37" y="32" width="22" height="10" rx="1"/><rect class="mb" data-o="8" x="61" y="32" width="22" height="10" rx="1"/><rect class="mb" data-o="9" x="85" y="32" width="22" height="10" rx="1"/><rect class="mb" data-o="10" x="109" y="32" width="11" height="10" rx="1"/><rect class="mb" data-o="11" x="0" y="20" width="22" height="10" rx="1"/><rect class="mb" data-o="12" x="24" y="20" width="22" height="10" rx="1"/><rect class="mb" data-o="13" x="48" y="20" width="22" height="10" rx="1"/><rect class="mb" data-o="14" x="72" y="20" width="22" height="10" rx="1"/><rect class="mb" data-o="15" x="96" y="20" width="22" height="10" rx="1"/><rect class="mb" data-o="16" x="0" y="8" width="11" height="10" rx="1"/><rect class="mb" data-o="17" x="13" y="8" width="22" height="10" rx="1"/><rect class="mb" data-o="18" x="37" y="8" width="22" height="10" rx="1"/><rect class="mb" data-o="19" x="61" y="8" width="22" height="10" rx="1"/><rect class="mb" data-o="20" x="85" y="8" width="22" height="10" rx="1"/><rect class="mb" data-o="21" x="109" y="8" width="11" height="10" rx="1"/><path class="mm" d="M0 55 H120"/><path class="mm" d="M0 43 H120"/><path class="mm" d="M0 31 H120"/><circle class="md md1" cx="30" cy="18" r="3.2"/><circle class="md md2" cx="60" cy="56" r="3.2"/><circle class="md md3" cx="100" cy="54" r="3.2"/><circle class="md md4" cx="80" cy="8" r="3.2"/><circle class="md md5" cx="16" cy="40" r="3.2"/></svg></div><div class="num" id="num"></div></div>
 </div></div>
 <div class="ctrl" id="ctrl">
   <button id="prev" aria-label="Slide trước">Trước</button>
@@ -666,7 +1443,7 @@ img{display:block}
   <button id="fs" aria-label="Toàn màn hình">Toàn màn hình</button>
   <button id="theme" aria-label="Đổi nền sáng tối">Sáng / tối</button>
 </div>
-<script>window.__IMGS=["https://upload.wikimedia.org/wikipedia/commons/c/cd/M%C3%ADt_tinh_ch%C3%A0o_m%E1%BB%ABng_C%C3%A1ch_m%E1%BA%A1ng_Th%C3%A1ng_T%C3%A1m_n%C4%83m_1945_th%C3%A0nh_c%C3%B4ng_t%E1%BA%A1i_Nh%C3%A0_h%C3%A1t_L%E1%BB%9Bn_H%C3%A0_N%E1%BB%99i.jpg", "https://upload.wikimedia.org/wikipedia/commons/5/5f/Painting_of_Tr%E1%BA%A7n_H%C6%B0ng_%C4%90%E1%BA%A1o_%281228_-_1300%29%2C_Nguy%E1%BB%85n_dynasty%2C_Vietnam.jpg", "https://upload.wikimedia.org/wikipedia/commons/1/1c/Ho_Chi_Minh_1946.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/62/Typhoon_Yagi_damage_in_Hanoi.jpg/1920px-Typhoon_Yagi_damage_in_Hanoi.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/11/Newone_-_people_relax_with_smartphone_at_cafe_in_Hanoi.jpg/1920px-Newone_-_people_relax_with_smartphone_at_cafe_in_Hanoi.jpg", "https://upload.wikimedia.org/wikipedia/commons/4/45/Dan_cong_tho_luong_thuc.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f6/Ho_Chi_Minh_City_Skyline_%28night%29.jpg/1920px-Ho_Chi_Minh_City_Skyline_%28night%29.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3b/%C4%90%C3%ACnh_T%C3%A2n_Tr%C3%A0o.jpg/1920px-%C4%90%C3%ACnh_T%C3%A2n_Tr%C3%A0o.jpg", "https://upload.wikimedia.org/wikipedia/commons/4/43/Ch%E1%BB%A7_t%E1%BB%8Bch_H%E1%BB%93_Ch%C3%AD_Minh_v%C3%A0_c%E1%BB%A5_Nguy%E1%BB%85n_V%C4%83n_T%E1%BB%91.jpg", "https://upload.wikimedia.org/wikipedia/commons/2/20/1945_Vietnam_Independence_or_Death.png", "https://upload.wikimedia.org/wikipedia/commons/6/6b/Cao_toc_Cau_Gie_Ninh_Binh.JPG", "https://upload.wikimedia.org/wikipedia/commons/b/b9/Hmong_women_at_Coc_Ly_market%2C_Sapa%2C_Vietnam.jpg", "https://upload.wikimedia.org/wikipedia/commons/e/e2/Vietnamese_people_celebrate_when_Vietnam_won_the_2018_aff_cup_03.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d6/Rice_harvesting_in_Can_Tho.JPG/1920px-Rice_harvesting_in_Can_Tho.JPG", "https://upload.wikimedia.org/wikipedia/commons/1/15/Ho_Chi_Minh_and_Vo_Nguyen_Giap_%281945%29.jpg", "https://upload.wikimedia.org/wikipedia/commons/b/b3/Ho-chi-Minh_and_Vietnam_Women_Union%27s_cadres_at_Vietbac_in_Feb_1949.jpg", "https://upload.wikimedia.org/wikipedia/commons/2/2e/Ho-chi-Minh_with_children_%286%29.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3e/Central_Committee_of_Vietnam_Fatherland_Front.jpg/1920px-Central_Committee_of_Vietnam_Fatherland_Front.jpg", "https://upload.wikimedia.org/wikipedia/commons/f/f6/D%C3%A2n_c%C3%B4ng_d%C3%A2n_t%E1%BB%99c_v%E1%BA%ADn_chuy%E1%BB%83n_h%C3%A0ng_ra_m%E1%BA%B7t_tr%E1%BA%ADn.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/af/H%E1%BB%99i_tr%C6%B0%E1%BB%9Dng_Di%C3%AAn_H%E1%BB%93ng%2C_Qu%E1%BB%91c_h%E1%BB%99i_Vi%E1%BB%87t_Nam.jpg/1920px-H%E1%BB%99i_tr%C6%B0%E1%BB%9Dng_Di%C3%AAn_H%E1%BB%93ng%2C_Qu%E1%BB%91c_h%E1%BB%99i_Vi%E1%BB%87t_Nam.jpg", "https://upload.wikimedia.org/wikipedia/commons/b/b6/Ho_Chi_Minh%2C_Bao_Dai%2C_Siphanouvong_1945.png", "https://upload.wikimedia.org/wikipedia/commons/4/4c/Khmer_Krom_in_Tr%C3%A0_Vinh.jpg", "https://upload.wikimedia.org/wikipedia/commons/3/3d/Nh%C3%A0_th%E1%BB%9D_Ph%C3%A1t_Di%E1%BB%87m%2C_Ninh_B%C3%ACnh.JPG", "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/75/Temple_B%C3%A1i_%C4%90%C3%ADnh_%281%29.jpg/1920px-Temple_B%C3%A1i_%C4%90%C3%ADnh_%281%29.jpg", "https://upload.wikimedia.org/wikipedia/commons/b/b6/Ho-chi-Minh_with_children_%283%29.jpg", "https://upload.wikimedia.org/wikipedia/commons/5/5c/Vietnamese_people_celebrate_when_Vietnam_won_the_2018_aff_cup_01.jpg", "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7b/Flower_Hmongs_market%2C_Vietnam.jpg/1920px-Flower_Hmongs_market%2C_Vietnam.jpg"];</script>
+<script>window.__IMGS=["https://upload.wikimedia.org/wikipedia/commons/c/cd/M%C3%ADt_tinh_ch%C3%A0o_m%E1%BB%ABng_C%C3%A1ch_m%E1%BA%A1ng_Th%C3%A1ng_T%C3%A1m_n%C4%83m_1945_th%C3%A0nh_c%C3%B4ng_t%E1%BA%A1i_Nh%C3%A0_h%C3%A1t_L%E1%BB%9Bn_H%C3%A0_N%E1%BB%99i.jpg", "https://upload.wikimedia.org/wikipedia/commons/5/5f/Painting_of_Tr%E1%BA%A7n_H%C6%B0ng_%C4%90%E1%BA%A1o_%281228_-_1300%29%2C_Nguy%E1%BB%85n_dynasty%2C_Vietnam.jpg", "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Ho_Chi_Minh_-_1946_Portrait.jpg/1280px-Ho_Chi_Minh_-_1946_Portrait.jpg", "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Typhoon_Yagi_damage_in_Hanoi.jpg/1920px-Typhoon_Yagi_damage_in_Hanoi.jpg", "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Newone_-_people_relax_with_smartphone_at_cafe_in_Hanoi.jpg/1920px-Newone_-_people_relax_with_smartphone_at_cafe_in_Hanoi.jpg", "https://upload.wikimedia.org/wikipedia/commons/2/2e/Ho-chi-Minh_with_children_%286%29.jpg", "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Hanoi_Traffic_%28174818911%29.jpeg/1280px-Hanoi_Traffic_%28174818911%29.jpeg", "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Victory_in_Battle_of_Dien_Bien_Phu.jpg/1280px-Victory_in_Battle_of_Dien_Bien_Phu.jpg", "https://upload.wikimedia.org/wikipedia/commons/4/43/Ch%E1%BB%A7_t%E1%BB%8Bch_H%E1%BB%93_Ch%C3%AD_Minh_v%C3%A0_c%E1%BB%A5_Nguy%E1%BB%85n_V%C4%83n_T%E1%BB%91.jpg", "https://upload.wikimedia.org/wikipedia/commons/2/20/1945_Vietnam_Independence_or_Death.png", "https://upload.wikimedia.org/wikipedia/commons/6/6b/Cao_toc_Cau_Gie_Ninh_Binh.JPG", "https://upload.wikimedia.org/wikipedia/commons/b/b9/Hmong_women_at_Coc_Ly_market%2C_Sapa%2C_Vietnam.jpg", "https://upload.wikimedia.org/wikipedia/commons/e/e2/Vietnamese_people_celebrate_when_Vietnam_won_the_2018_aff_cup_03.jpg", "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Rice_harvesting_in_Can_Tho.JPG/1920px-Rice_harvesting_in_Can_Tho.JPG", "https://upload.wikimedia.org/wikipedia/commons/1/15/Ho_Chi_Minh_and_Vo_Nguyen_Giap_%281945%29.jpg", "https://upload.wikimedia.org/wikipedia/commons/b/b3/Ho-chi-Minh_and_Vietnam_Women_Union%27s_cadres_at_Vietbac_in_Feb_1949.jpg", "https://upload.wikimedia.org/wikipedia/commons/4/45/Dan_cong_tho_luong_thuc.jpg", "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Youth_Union_Members_at_the_World_TB_Day_Event_in_Hanoi_%288581055659%29.jpg/1280px-Youth_Union_Members_at_the_World_TB_Day_Event_in_Hanoi_%288581055659%29.jpg", "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Central_Committee_of_Vietnam_Fatherland_Front.jpg/1920px-Central_Committee_of_Vietnam_Fatherland_Front.jpg", "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/%C4%90%C3%ACnh_T%C3%A2n_Tr%C3%A0o.jpg/1920px-%C4%90%C3%ACnh_T%C3%A2n_Tr%C3%A0o.jpg", "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Ba_Dinh_Square_September_2nd%2C_1945.jpg/1280px-Ba_Dinh_Square_September_2nd%2C_1945.jpg", "https://upload.wikimedia.org/wikipedia/commons/f/f6/D%C3%A2n_c%C3%B4ng_d%C3%A2n_t%E1%BB%99c_v%E1%BA%ADn_chuy%E1%BB%83n_h%C3%A0ng_ra_m%E1%BA%B7t_tr%E1%BA%ADn.jpg", "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/H%E1%BB%99i_tr%C6%B0%E1%BB%9Dng_Di%C3%AAn_H%E1%BB%93ng%2C_Qu%E1%BB%91c_h%E1%BB%99i_Vi%E1%BB%87t_Nam.jpg/1920px-H%E1%BB%99i_tr%C6%B0%E1%BB%9Dng_Di%C3%AAn_H%E1%BB%93ng%2C_Qu%E1%BB%91c_h%E1%BB%99i_Vi%E1%BB%87t_Nam.jpg", "https://upload.wikimedia.org/wikipedia/commons/b/b6/Ho_Chi_Minh%2C_Bao_Dai%2C_Siphanouvong_1945.png", "https://upload.wikimedia.org/wikipedia/commons/1/1f/L%C3%A2m-th%E1%BB%9Di_Li%C3%AAn-hi%E1%BB%87p_Ch%C3%ADnh-ph%E1%BB%A7_Vi%E1%BB%87t-nam_D%C3%A2n-ch%E1%BB%A7_C%E1%BB%99ng-h%C3%B2a_ra_m%E1%BA%AFt_Qu%E1%BB%91c-h%E1%BB%99i_ng%C3%A0y_02_th%C3%A1ng_03_n%C4%83m_1946.jpg", "https://upload.wikimedia.org/wikipedia/commons/1/18/Members_of_Vietnamese_Government_at_the_Independent_Holliday_Celebration_in_Hanoi_1946.jpg", "https://upload.wikimedia.org/wikipedia/commons/4/4c/Khmer_Krom_in_Tr%C3%A0_Vinh.jpg", "https://upload.wikimedia.org/wikipedia/commons/3/3d/Nh%C3%A0_th%E1%BB%9D_Ph%C3%A1t_Di%E1%BB%87m%2C_Ninh_B%C3%ACnh.JPG", "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Temple_B%C3%A1i_%C4%90%C3%ADnh_%281%29.jpg/1920px-Temple_B%C3%A1i_%C4%90%C3%ADnh_%281%29.jpg", "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Ho_Chi_Minh_City_Skyline_%28night%29.jpg/1920px-Ho_Chi_Minh_City_Skyline_%28night%29.jpg", "https://upload.wikimedia.org/wikipedia/commons/6/63/C%E1%BA%A3nh_chu%E1%BA%A9n_b%E1%BB%8B_b%E1%BA%A7u_c%E1%BB%AD_Qu%E1%BB%91c_h%E1%BB%99i_kh%C3%B3a_I_t%E1%BA%A1i_ng%C3%B5_Ph%E1%BA%A5t_L%E1%BB%99c_n%C4%83m_1946.jpg", "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/A_farmer_plies_the_waters_of_the_Mekong_Delta_in_southern_Vietnam_%289150050950%29.jpg/1280px-A_farmer_plies_the_waters_of_the_Mekong_Delta_in_southern_Vietnam_%289150050950%29.jpg", "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Youth_Union_Members_at_the_World_TB_Day_Event_in_Hanoi_%288581057437%29.jpg/1280px-Youth_Union_Members_at_the_World_TB_Day_Event_in_Hanoi_%288581057437%29.jpg", "https://upload.wikimedia.org/wikipedia/commons/5/5c/Vietnamese_people_celebrate_when_Vietnam_won_the_2018_aff_cup_01.jpg", "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Flower_Hmongs_market%2C_Vietnam.jpg/1920px-Flower_Hmongs_market%2C_Vietnam.jpg"];</script>
 <script>
 (function(){
   var stage=document.getElementById('stage');
@@ -741,6 +1518,236 @@ img{display:block}
   window.addEventListener('resize',fit);
   window.addEventListener('hashchange',function(){show(fromHash())});
   fit(); show(fromHash()); wake();
+})();
+</script>
+<script>
+/* ===== v7: bấm từng bước · tường nhỏ ở góc · chuyển động lặp có kiểm soát ===== */
+(function(){
+  var stage=document.getElementById('stage');
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var N=slides.length;
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce) stage.classList.add('noloop');
+
+  // ảnh dự phòng: ảnh mới lỗi thì quay về ảnh cũ
+  [].slice.call(document.querySelectorAll('img[data-fb]')).forEach(function(im){
+    im.addEventListener('error',function(){ if(im.dataset.fb && im.src!==im.dataset.fb){ im.classList.remove('noimg'); im.src=im.dataset.fb; im.dataset.fb=''; } },true);
+  });
+  // độ trễ vẽ lưới slide 18
+  [].slice.call(document.querySelectorAll('.net')).forEach(function(n){
+    [].slice.call(n.querySelectorAll('line,circle')).forEach(function(e,k){e.style.setProperty('--k',k)});
+  });
+
+  // ----- căn hàng: các ô đứng cạnh nhau có tiêu đề, nội dung, trích dẫn, chú thích nằm cùng một hàng -----
+  var ROWS=['media','tag','h','b','q','s'];
+  function slotOf(e){
+    if(e.classList.contains('cimg')) return 'media';
+    if(e.classList.contains('tag')) return 'tag';
+    if(e.tagName==='H3') return 'h';
+    if(e.classList.contains('src')) return 's';
+    if(e.tagName==='BLOCKQUOTE' || e.classList.contains('take') || e.classList.contains('last-host') || e.classList.contains('drop-host')) return 'q';
+    return 'b';
+  }
+  function alignGroup(g){
+    var items=[].slice.call(g.children).filter(function(c){ return c.matches('.panel,.card:not(.row-card),.glass > div'); });
+    if(items.length<2) return;
+    var hasMedia=false;
+    items.forEach(function(it){
+      it.classList.add('al-item');
+      [].slice.call(it.querySelectorAll('blockquote .src')).forEach(function(s){
+        var p=document.createElement('p'); p.className='src'; p.innerHTML=s.innerHTML; s.closest('blockquote').after(p); s.remove();
+      });
+      var kids=[];
+      [].slice.call(it.children).forEach(function(c){ if(c.classList.contains('cbody')){ c.classList.add('al-flat'); kids=kids.concat([].slice.call(c.children)); } else kids.push(c); });
+      var sls=kids.map(slotOf);
+      if(sls.indexOf('b')<0 && sls.indexOf('q')>=0) sls[sls.indexOf('q')]='b';
+      kids.forEach(function(c,i){ var sl=sls[i]; if(sl==='media') hasMedia=true; c.style.gridRow=(ROWS.indexOf(sl)+1); c.classList.add('al-'+sl); });
+    });
+    [].slice.call(g.children).forEach(function(c){ if(!c.classList.contains('al-item')) c.style.gridRow='1 / span 6'; });
+    g.classList.add('al-grid');
+    g.style.gridTemplateRows=(hasMedia && g.classList.contains('grow') ? 'minmax(140px,1fr)' : 'auto')+' auto auto auto auto auto';
+  }
+  [].slice.call(document.querySelectorAll('.duo, .cols, .glass')).forEach(alignGroup);
+
+  // ----- nhịp bấm: [bộ chọn, bước bắt đầu, kiểu] ; kiểu 'each' = mỗi phần tử một bước, 'g3' = mỗi 3 phần tử một bước, '@' = chỉ khai báo số bước
+  var STEPS={
+    2:[['.team .m',1,'each']],
+    3:[['.danh',1],['blockquote',2]],
+    4:[['.duo .panel',1,'each']],
+    5:[['.pile-host',1],['.lead',2],['.card',3,'each'],['.take',5]],
+    6:[['.card',1,'each']],
+    7:[['.steps-cap',1],['.steps',1]],
+    8:[['.row',1,'each']],
+    9:[['.lead',1],['.duo .panel',2,'each'],['.take',4]],
+    10:[['blockquote',1],['.cols.c3 > *',2,'each']],
+    11:[['.lead',1],['.duo .panel',2,'each'],['.take',4]],
+    12:[['.cols.c3 > .card',1,'each']],
+    13:[['.tl .i',1],['.cols > .ocard',2],['.cols > .panel',3]],
+    14:[['.flow .ln.r',1],['.flow polygon:nth-of-type(1)',1],['.flow .ln.l',2],['.flow polygon:nth-of-type(2)',2],['.lead',3],['.cols.grow > .card',4,'each']],
+    15:[['@',1]],
+    16:[['.tl .i',1],['.strip',2]],
+    17:[['.cols.c3 > .card',1,'each']],
+    18:[['blockquote',1],['.netrow',2],['.duo .panel',3,'each']],
+    19:[['.cols > div:first-child > .panel',1],['.rope-host',1],['.mosaic .m1',2],['.mosaic .m2',3],['.mosaic .m3',4],['.mosaic .m4',4],['.take',5]],
+    20:[['.rr',1,'each']],
+    21:[['.map .g',1,'each']],
+    22:[['.st',1,'each'],['.gp-right > blockquote, .gp-right > .take',4]],
+    23:[['.st',1,'each'],['.gp-right > blockquote, .gp-right > .take',4]],
+    24:[['.st',1,'each'],['.gp-right > blockquote, .gp-right > .take',4]],
+    25:[['.st',1,'each'],['.gp-right > blockquote, .gp-right > .take',4]],
+    26:[['.st',1,'each'],['.gp-right > blockquote, .gp-right > .take',4]],
+    28:[['.glass > div',1,'each']],
+    29:[['.cols > .panel.cham',1],['.cols > .panel:not(.cham)',2],['@',3],['blockquote',4]]
+  };
+  // slide có tranh luận đi kèm: tới bước cuối thì mọi chuyển động dừng
+  var DEBATE={11:1,14:1,20:1,22:1,23:1,24:1,25:1,26:1,27:1};
+
+  var MAX=[];
+  slides.forEach(function(s,i){
+    var cfg=STEPS[i+1]||[], mx=0;
+    cfg.forEach(function(c){
+      var sel=c[0], st=c[1], mode=c[2];
+      if(sel==='@'){ mx=Math.max(mx,st); return; }
+      [].slice.call(s.querySelectorAll(sel)).forEach(function(e,j){
+        var n = mode==='each' ? st+j : mode==='g3' ? st+Math.floor(j/3) : st;
+        e.setAttribute('data-step',n); e.classList.remove('a'); e.classList.add('stp'); mx=Math.max(mx,n);
+      });
+    });
+    MAX[i]=mx;
+  });
+
+  window.__V7={max:MAX};
+  var cur=-1, k=0, goingBack=false;
+  function idx(){ return slides.findIndex(function(s){return s.classList.contains('active')}); }
+  function setK(n){
+    var s=slides[cur]; if(!s) return; k=n;
+    [].slice.call(s.querySelectorAll('[data-step]')).forEach(function(e){ e.classList.toggle('on', +e.getAttribute('data-step')<=k); });
+    for(var i=1;i<=9;i++) s.classList.toggle('k'+i, k>=i);
+    var still = !!DEBATE[cur+1] && k>=MAX[cur];
+    s.classList.toggle('still', still); stage.classList.toggle('hush', still);
+  }
+
+  // ----- tường nhỏ ở góc -----
+  var mini=document.querySelector('.mini'), MB=mini?[].slice.call(mini.querySelectorAll('.mb')):[];
+  var JIT=MB.map(function(_,i){ return 'translate('+(((i*37)%11)-5)+'px,'+(((i*53)%9)-4)+'px) rotate('+(((i*29)%31)-15)+'deg)'; });
+  function miniState(n){ // n: 1-based slide
+    if(!mini) return;
+    var on=0, jit=false, mort=false, dmg=0, fixed=0, done=false;
+    if(n>=5 && n<=6){ on=8; jit=true; }
+    else if(n>=7 && n<=11){ on=6; }
+    else if(n>=12 && n<=14){ on=MB.length; }
+    else if(n>=15){ on=MB.length; mort=true; }
+    if(n>=21) dmg=5;
+    if(n>=22) fixed=Math.min(5,n-21);
+    if(n>=29) done=true;
+    MB.forEach(function(b,i){
+      b.classList.toggle('on', i<on); b.classList.remove('cur');
+      b.style.transform = (jit && i<on) ? JIT[i] : '';
+    });
+    var curB = done ? MB[MB.length-1] : (on>0 && !dmg ? MB[on-1] : null);
+    if(curB) curB.classList.add('cur');
+    mini.classList.toggle('mt', mort); mini.classList.toggle('done', done);
+    [].slice.call(mini.querySelectorAll('.md')).forEach(function(d,i){ d.classList.toggle('show', i<dmg); d.classList.toggle('fixed', i<fixed); d.classList.toggle('now', i===fixed-1 && n<=26); });
+  }
+
+  // ----- đếm số 1284 -----
+  function counter(s){
+    [].slice.call(s.querySelectorAll('.big[data-count]')).forEach(function(el){
+      var to=+el.dataset.count; if(reduce){el.textContent=to; return;}
+      var t0=null, dur=1300; el.textContent='0';
+      function step(t){ if(!t0) t0=t; var p=Math.min(1,(t-t0)/dur); p=1-Math.pow(1-p,3); el.textContent=Math.round(to*p); if(p<1) requestAnimationFrame(step); }
+      setTimeout(function(){requestAnimationFrame(step)},250);
+    });
+  }
+
+  function onSlide(i){
+    var prev=cur; cur=i; var s=slides[i];
+    if(prev>=0 && slides[prev] && slides[prev].getAttribute('data-sec')!==s.getAttribute('data-sec')){
+      s.classList.remove('secin'); void s.offsetWidth; s.classList.add('secin');
+    }
+    setK(goingBack ? MAX[i] : 0); goingBack=false;
+    miniState(i+1); counter(s);
+    if(i!==0) stage.classList.remove('attract');
+  }
+  var mo=new MutationObserver(function(){ var i=idx(); if(i!==-1 && i!==cur) onSlide(i); });
+  slides.forEach(function(s){ mo.observe(s,{attributes:true,attributeFilter:['class']}); });
+  var i0=idx(); if(i0>=0) onSlide(i0);
+
+  // ----- chế độ chờ ở bìa: tường tự xây cho tới khi bấm phím -----
+  if(cur===0 && !reduce) stage.classList.add('attract');
+  function stopAttract(e){ if(stage.classList.contains('attract')){ stage.classList.remove('attract'); if(e){ e.preventDefault(); e.stopImmediatePropagation(); } return true; } return false; }
+
+  function fwd(e){
+    if(stopAttract(e)) return;
+    if(k<MAX[cur]){ e.preventDefault(); e.stopImmediatePropagation(); setK(k+1); }
+  }
+  function back(e){
+    if(stopAttract(e)) return;
+    if(k>0){ e.preventDefault(); e.stopImmediatePropagation(); setK(k-1); }
+    else if(cur>0) goingBack=true;
+  }
+  document.addEventListener('keydown',function(e){
+    var key=e.key;
+    if(key==='ArrowRight'||key==='PageDown'||key===' '||key==='Enter') fwd(e);
+    else if(key==='ArrowLeft'||key==='PageUp'||key==='Backspace') back(e);
+    else if(key==='l'||key==='L'){ stage.classList.toggle('noloop'); }
+    else if(key==='Home'||key==='End'){ stopAttract(); }
+  },true);
+  var nb=document.getElementById('next'), pb=document.getElementById('prev');
+  if(nb) nb.addEventListener('click',fwd,true);
+  if(pb) pb.addEventListener('click',back,true);
+  stage.addEventListener('mousedown',function(){ stopAttract(); });
+})();
+
+/* ===== Lưu bản chạy không cần mạng: chạy trên máy người dùng khi đang có mạng ===== */
+(function(){
+  var ctrl=document.getElementById('ctrl'); if(!ctrl) return;
+  var btn=document.createElement('button'); btn.id='offline'; btn.textContent='Lưu bản không cần mạng'; ctrl.appendChild(btn);
+  var toast=document.createElement('div'); toast.className='toast7'; document.body.appendChild(toast);
+  function say(t){ toast.textContent=t; toast.classList.add('show'); }
+  function toData(blob){ return new Promise(function(res,rej){ var r=new FileReader(); r.onload=function(){res(r.result)}; r.onerror=rej; r.readAsDataURL(blob); }); }
+  async function grab(u){ var r=await fetch(u,{mode:'cors',referrerPolicy:'no-referrer'}); if(!r.ok) throw new Error(r.status+' '+u); return toData(await r.blob()); }
+  btn.addEventListener('click', async function(e){
+    e.stopPropagation(); btn.disabled=true;
+    try{
+      var doc=document.documentElement.cloneNode(true);
+      // dọn các phần do script tạo ra để lần mở sau chạy lại sạch sẽ
+      [].slice.call(doc.querySelectorAll('.who,.toast7')).forEach(function(n){ n.remove(); });
+      var row=doc.querySelector('#row'); if(row) row.innerHTML='';
+      var off=doc.querySelector('#offline'); if(off) off.remove();
+      [].slice.call(doc.querySelectorAll('*')).forEach(function(n){
+        ['active','stp','on','still','secin','noimg','hush','attract','noloop','on-dark','hide','cur','mt','done','show','fixed','now'].forEach(function(c){ n.classList && n.classList.remove(c); });
+        for(var i=1;i<=9;i++) n.classList && n.classList.remove('k'+i);
+        n.removeAttribute && n.removeAttribute('data-step');
+      });
+      [].slice.call(doc.querySelectorAll('.mb')).forEach(function(n){ n.removeAttribute('style'); });
+      var st=doc.querySelector('#stage'); if(st) st.removeAttribute('style');
+      // ảnh
+      var imgs=[].slice.call(doc.querySelectorAll('img[src^="http"]')), cache={}, k=0;
+      for(var i=0;i<imgs.length;i++){
+        var u=imgs[i].getAttribute('src'); say('Đang tải ảnh '+(i+1)+'/'+imgs.length+'…');
+        try{ if(!cache[u]) cache[u]=await grab(u); }
+        catch(err){ var fb=imgs[i].getAttribute('data-fb'); if(fb){ if(!cache[fb]) cache[fb]=await grab(fb); cache[u]=cache[fb]; } else throw err; }
+        imgs[i].setAttribute('src',cache[u]); imgs[i].removeAttribute('data-fb'); k++;
+      }
+      [].slice.call(doc.querySelectorAll('script')).forEach(function(s){ if(s.textContent.indexOf('window.__IMGS=')===0) s.textContent='window.__IMGS=[];'; });
+      // font
+      say('Đang tải font…');
+      var link=doc.querySelector('link[href*="fonts.googleapis.com/css2"]');
+      if(link){
+        var css=await (await fetch(link.getAttribute('href'))).text();
+        var urls=css.match(/url\((https:[^)]+)\)/g)||[];
+        for(var j=0;j<urls.length;j++){ var fu=urls[j].slice(4,-1); css=css.split(fu).join(await grab(fu)); }
+        var style=doc.ownerDocument.createElement('style'); style.textContent=css; link.parentNode.insertBefore(style,link); link.remove();
+        [].slice.call(doc.querySelectorAll('link[rel="preconnect"]')).forEach(function(n){ n.remove(); });
+      }
+      var html='<!DOCTYPE html>\n'+doc.outerHTML;
+      var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));
+      a.download='slide-de-tai-8-tthcm (khong can mang).html'; document.body.appendChild(a); a.click(); a.remove();
+      say('Xong: đã lưu '+k+' ảnh và font vào file mới.');
+    }catch(err){ say('Chưa lưu được: '+err.message+'. Kiểm tra mạng rồi thử lại.'); }
+    btn.disabled=false; setTimeout(function(){ toast.classList.remove('show'); },6000);
+  });
 })();
 </script>
 </body>
